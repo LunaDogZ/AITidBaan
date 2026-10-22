@@ -196,10 +196,12 @@ const notes = [
   let copyGone = false;
   let heroCtaSeen = true;
   let finalSeen = false;
+  let showcaseSeen = false;
 
   const updateFloat = () => {
     const morphs = root.classList.contains('morph');
-    const show = (morphs ? copyGone : !heroCtaSeen) && !finalSeen;
+    // ซ่อนระหว่างอ่านตัวอย่างคำตอบ ไม่ให้บังการ์ด
+    const show = (morphs ? copyGone : !heroCtaSeen) && !finalSeen && !showcaseSeen;
     float.toggleAttribute('data-show', show);
     float.setAttribute('aria-hidden', String(!show));
     floatLink.tabIndex = show ? 0 : -1;
@@ -216,6 +218,14 @@ const notes = [
     finalSeen = e.isIntersecting;
     updateFloat();
   }).observe(finalCta);
+  // นับว่ากำลังอ่านตัวอย่าง เมื่อส่วนนั้นคลุมเส้นกลางจอ
+  new IntersectionObserver(
+    ([e]) => {
+      showcaseSeen = e.isIntersecting;
+      updateFloat();
+    },
+    { rootMargin: '-50% 0px -50% 0px' },
+  ).observe(document.getElementById('examples')!);
 
   // แบบ fastwork: อ่านความคืบหน้าการเลื่อนแล้วตั้ง --p ให้ CSS คำนวณท่าทางเอง
   scroll(

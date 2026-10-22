@@ -12,18 +12,10 @@ const model = MODELS.find((m) => m.id === 'gemma-4-e4b')!;
 const answers = (examples.answers as Record<string, Record<Task, string>>)[model.rawId];
 const prompts = examples.prompts as Record<Task, string>;
 
-// ตัดที่ขึ้นบรรทัดใหม่ใกล้ความยาวที่ต้องการ จะได้ไม่ขาดกลางคำหรือกลางแถวตาราง
-const excerpt = (s: string, max: number) => {
-  const t = s.trim();
-  if (t.length <= max) return t;
-  const cut = t.lastIndexOf('\n', max);
-  return t.slice(0, cut > max / 2 ? cut : max).trim();
-};
-
 const items = TASKS.map((t) => ({
   ...t,
   instruction: prompts[t.id].split('\n')[0],
-  answer: renderMd(excerpt(answers[t.id], 900)),
+  answer: renderMd(answers[t.id]),
   good: model.ratings[t.id]?.good ?? 0,
   total: Object.values(model.ratings[t.id] ?? {}).reduce((a, b) => a + b, 0),
 }));
@@ -31,15 +23,14 @@ const items = TASKS.map((t) => ({
 
 <section id="examples" class="showcase-track relative">
   <div class="showcase-stage mx-auto max-w-5xl px-4 py-20">
-    <div data-reveal>
-      <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">ดูคำตอบจริงทีละงาน</h2>
-      <p class="mt-3 text-lg text-muted">
-        คำตอบจาก {model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ {TEST_DATE}
-      </p>
-    </div>
-
-    <div class="mt-10 grid gap-10 lg:grid-cols-[15rem_1fr] lg:gap-14">
-      <nav aria-label="งานทดสอบ" class="showcase-nav hidden lg:block">
+    <div class="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-12">
+      <!-- หัวข้ออยู่คอลัมน์ซ้ายเหนือเมนู การ์ดทางขวาจะได้สูงเกือบเต็มจอ -->
+      <div>
+        <div data-reveal>
+          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl lg:text-3xl">ดูคำตอบจริงทีละงาน</h2>
+          <p class="mt-3 text-muted">คำตอบจาก {model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ {TEST_DATE}</p>
+        </div>
+        <nav aria-label="งานทดสอบ" class="showcase-nav mt-8 hidden lg:block">
         <ol class="space-y-1">
           {
             items.map((it, i) => (
@@ -55,7 +46,8 @@ const items = TASKS.map((t) => ({
             ))
           }
         </ol>
-      </nav>
+        </nav>
+      </div>
 
       <div class="showcase-cards grid gap-6">
         {
@@ -63,7 +55,7 @@ const items = TASKS.map((t) => ({
             <article
               id={`example-${it.id}`}
               data-index={i}
-              class="showcase-card scroll-mt-28 rounded-2xl border border-line bg-surface p-6 shadow-[0_24px_60px_-34px_oklch(0.3_0.04_255/0.4)] sm:p-8"
+              class="showcase-card flex scroll-mt-28 flex-col rounded-2xl border border-line bg-surface p-6 shadow-[0_24px_60px_-34px_oklch(0.3_0.04_255/0.4)] sm:p-8"
             >
               <div class="flex flex-wrap items-baseline justify-between gap-2">
                 <h3 class="text-2xl font-bold">{it.label}</h3>
@@ -71,11 +63,18 @@ const items = TASKS.map((t) => ({
               </div>
               <div class="mt-5 rounded-xl bg-sunk p-4">
                 <p class="text-sm font-medium text-muted">คำสั่งที่ใช้ทดสอบ</p>
-                <p class="mt-1">{it.instruction}</p>
+                <p class="mt-1 line-clamp-2" title={it.instruction}>{it.instruction}</p>
               </div>
-              <div class="mt-4">
-                <p class="text-sm font-medium text-muted">คำตอบจริงจาก {model.name} (ตัดมาบางส่วน)</p>
-                <div class="answer md mt-2" set:html={it.answer} />
+              <div class="answer-wrap mt-4 flex min-h-0 flex-col">
+                <p class="text-sm font-medium text-muted">คำตอบจริงจาก {model.name}</p>
+                {/* คำตอบยาว: เลื่อนอ่านในกรอบได้ อ่านจนสุดแล้วล้อเมาส์จะเลื่อนหน้าต่อเอง */}
+                <div
+                  class="answer md mt-2 max-h-[26rem] min-h-0 overflow-y-auto overscroll-auto rounded-xl border border-line p-4"
+                  tabindex="0"
+                  aria-label={`คำตอบเต็มของงาน${it.label}`}
+                  set:html={it.answer}
+                />
+                <p class="scroll-hint mt-2 text-sm text-muted">เลื่อนในกรอบเพื่ออ่านคำตอบต่อ</p>
               </div>
               <p class="mt-5 flex flex-wrap items-center gap-3">
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-good-soft px-3 py-1 font-semibold text-good">
@@ -116,6 +115,14 @@ const items = TASKS.map((t) => ({
     return top + ((i + 0.5) / cards.length) * distance;
   };
 
+  // คำบอก "เลื่อนในกรอบ" กับเงาไล่จางด้านล่าง แสดงเฉพาะตอนที่ยังอ่านไม่จบ
+  for (const box of document.querySelectorAll<HTMLElement>('.showcase-card .answer')) {
+    const update = () =>
+      box.toggleAttribute('data-more', box.scrollTop + box.clientHeight < box.scrollHeight - 4);
+    box.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(box);
+  }
+
   if (track && mode.matches) {
     setActive(0);
     scroll(
@@ -135,6 +142,16 @@ const items = TASKS.map((t) => ({
 </script>
 
 <style>
+  .scroll-hint {
+    visibility: hidden;
+  }
+  .answer[data-more] {
+    mask-image: linear-gradient(to bottom, black 80%, transparent);
+  }
+  .answer[data-more] + .scroll-hint {
+    visibility: visible;
+  }
+
   .showcase-tab[data-active] {
     color: var(--ink);
     font-size: 1.75rem;
@@ -150,8 +167,8 @@ const items = TASKS.map((t) => ({
       position: sticky;
       top: 0;
       min-height: 100dvh;
-      padding-top: 6.5rem;
-      padding-bottom: 2rem;
+      padding-top: 6rem;
+      padding-bottom: 1.5rem;
     }
     .showcase-cards {
       display: grid;
@@ -171,11 +188,21 @@ const items = TASKS.map((t) => ({
       transform: none;
       pointer-events: auto;
     }
-    /* การ์ดต้องพอดีจอ ตัดคำตอบยาวด้วยการไล่จาง */
+    /* การ์ดสูงพอดีจอ ส่วนคำตอบยืดเต็มที่ที่เหลือแล้วเลื่อนอ่านในกรอบ */
+    .showcase-cards {
+      height: calc(100dvh - 7.5rem);
+      /* แถวเดียวสูงเท่ากรอบ ไม่ให้ขยายตามความยาวคำตอบ */
+      grid-template-rows: minmax(0, 1fr);
+    }
+    .showcase-card {
+      min-height: 0;
+    }
+    .showcase-card .answer-wrap {
+      flex: 1;
+    }
     .showcase-card .answer {
-      max-height: 15rem;
-      overflow: hidden;
-      mask-image: linear-gradient(to bottom, black 65%, transparent);
+      flex: 1;
+      max-height: none;
     }
   }
 </style>
