@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { toMachine, type Answers } from './answers';
 import { Progress } from './Progress';
 import { CheckMachine } from './CheckMachine';
@@ -60,8 +60,12 @@ export default function Wizard() {
   const go = (n: number) => {
     setResume(null);
     location.hash = `step-${n}`;
-    scrollTo({ top: 0 });
   };
+  // เลื่อนขึ้นบนหลังขั้นใหม่แสดงแล้ว และไม่ใช้แบบนุ่มนวล: ถ้าสั่งก่อนเนื้อหาเปลี่ยน
+  // Firefox จะหยุดการเลื่อนแบบนุ่มนวลกลางทาง หน้าค้างอยู่ด้านล่าง
+  useLayoutEffect(() => {
+    scrollTo({ top: 0, behavior: 'instant' });
+  }, [shown, resume]);
   const restart = () => {
     clearProgress();
     setAnswers({ tasks: [] });
