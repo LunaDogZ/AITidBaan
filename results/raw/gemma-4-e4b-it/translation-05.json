@@ -1,0 +1,34 @@
+{
+  "id": "translation-05",
+  "model": "gemma-4-e4b-it",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "แปลเป็นภาษาอังกฤษให้หน่อยค่ะ ลูกค้าเป็นโรงงานของบริษัทญี่ปุ่น ผู้จัดการเขาอ่านไทยไม่ได้ ตารางราคาขอให้คงเป็นตารางเหมือนเดิม\n\nสรุปข้อเสนอ: ติดตั้งระบบกล้องวงจรปิด โรงงานบางปะกง 2\nเสนอต่อ: บริษัท ทาคาฮาชิ พรีซิชั่น (ประเทศไทย) จำกัด\nจัดทำโดย: บริษัท เซฟการ์ด ซิสเต็มส์ จำกัด\n\n1. ความเป็นมา\nจากการสำรวจพื้นที่เมื่อวันที่ 8 ตุลาคม กล้องเดิมเป็นระบบอนาล็อกที่ภาพไม่ชัดในเวลากลางคืน และยังมีจุดอับบริเวณลานจอดรถบรรทุกและประตูทางออกด้านหลัง เราจึงเสนอให้เปลี่ยนเป็นกล้อง IP ทั้งระบบ และเพิ่มกล้องในจุดอับดังกล่าว\n\n2. รายการและราคา\n\n| รายการ | จำนวน | ราคาต่อหน่วย (บาท) | รวม (บาท) |\n|---|---|---|---|\n| กล้อง IP ความละเอียด 4 ล้านพิกเซล มีอินฟราเรด | 24 ตัว | 4,200 | 100,800 |\n| เครื่องบันทึกภาพ NVR 32 ช่อง | 1 เครื่อง | 28,500 | 28,500 |\n| ฮาร์ดดิสก์ 8TB สำหรับงานกล้องวงจรปิด | 2 ลูก | 7,900 | 15,800 |\n| ค่าเดินสาย LAN และค่าติดตั้ง (เหมา) | 1 งาน | 45,000 | 45,000 |\n| รวม | | | 190,100 |\n| ภาษีมูลค่าเพิ่ม 7% | | | 13,307 |\n| รวมทั้งสิ้น | | | 203,407 |\n\n3. ระยะเวลาและเงื่อนไข\n- ติดตั้งแล้วเสร็จภายใน 15 วันทำการ นับจากวันที่ได้รับใบสั่งซื้อ\n- ทีมช่างจะเข้าติดตั้งในวันอาทิตย์หรือนอกเวลากะผลิต เพื่อไม่ให้กระทบสายการผลิต\n- แบ่งชำระ 2 งวด: งวดแรก 40% เมื่อออกใบสั่งซื้อ งวดที่สอง 60% เมื่อส่งมอบงานและตรวจรับเรียบร้อย\n- รับประกันอุปกรณ์ 2 ปี รับประกันงานติดตั้ง 1 ปี\n- ราคานี้ยืนราคา 30 วัน",
+  "answer": "Here are a few options, depending on the level of formality you need. Since this is for a Japanese company's manager who cannot read Thai, **Option 1 (Professional & Direct)** is recommended as it maintains a very formal business tone suitable for international B2B communication.\n\n---\n\n## Option 1: Professional and Formal (Recommended)\n\n**Subject: CCTV System Upgrade Proposal - Bangpakong Factory 2**\n\n**To:** Takahashi Precision (Thailand) Co., Ltd.\n**From:** SafeGuard Systems Co., Ltd.\n\n**Summary of Proposal:** Installation of a new Closed-Circuit Television (CCTV) system at the Bangpakong Factory 2 site.\n\n**1. Background/Project Overview**\nDuring our site survey conducted on October 8th, we observed that the existing CCTV system uses analog cameras, resulting in poor image clarity, especially at night. Furthermore, there are current blind spots identified in the truck parking area and the rear exit gate. Therefore, we propose a complete upgrade to an IP camera system and the addition of new cameras to cover these blind spots.\n\n**2. Equipment List and Pricing**\n*(Please ensure this remains in table format)*\n\n| Item | Quantity | Unit Price (THB) | Total (THB) |\n| :--- | :---: | :---: | :---: |\n| 4MP IP Camera with Infrared | 24 Units | 4,200 | 100,800 |\n| NVR Recorder (32 Channels) | 1 Unit | 28,500 | 28,500 |\n| 8TB Hard Drive for CCTV System | 2 Units | 7,900 | 15,800 |\n| LAN Cabling & Installation Fee (Lump Sum) | 1 Job | 45,000 | 45,000 |\n| **Subtotal** | | | **190,100** |\n| VAT (7%) | | | 13,307 |\n| **Grand Total** | | | **203,407** |\n\n**3. Timeline and Terms & Conditions**\n*   **Completion Time:** Installation will be completed within 15 working days from the date of receiving the Purchase Order (PO).\n*   **Installation Schedule:** Our technicians will conduct installation on Sundays or outside of regular production hours to ensure no disruption to your manufacturing line.\n*   **Payment Terms:** Payment is structured in two installments:\n    *   First Installment: 40% upon issuance of the Purchase Order.\n    *   Second Installment: 60% upon successful completion and final acceptance testing.\n*   **Warranty:** Equipment warranty for 2 years; Installation workmanship warranty for 1 year.\n*   **Pricing Validity:** This quoted price is valid for 30 days.\n\n---\n\n## Option 2: Slightly More Conversational (Good if the relationship is established)\n\n**Subject: Proposal for CCTV System Upgrade at Bangpakong Factory 2**\n\nDear Takahashi Precision Team,\n\nPlease find below our proposal to upgrade your security system at the Bangpakong Factory 2 site.\n\n**Background:**\nFollowing our survey on October 8th, we noted that the current analog cameras provide poor night-time clarity. Additionally, there are several blind spots in the truck yard and the rear exit gate area. We recommend upgrading to a full IP camera system and adding necessary cameras to cover these gaps.\n\n**(Keep the table exactly as provided)**\n\n**Key Terms:**\n*   **Timeline:** Completion within 15 working days after receiving your PO.\n*   **Work Schedule:** Installation will be scheduled on Sundays or outside of production hours to avoid interrupting your operations.\n*   **Payment:** 40% upon PO issuance, and the remaining 60% upon final handover and acceptance.\n*   **Warranty:** 2 years for equipment / 1 year for installation labor.\n*   **Price Validity:** This quote is valid for 30 days.\n\n---\n\n### Key Translation Notes:\n\n*   **\"สรุปข้อเสนอ\"**: Translated as \"Summary of Proposal\" or simply the subject line.\n*   **\"ผู้จัดการเขาอ่านไทยไม่ได้\"**: This dictates the need for clear, professional English terminology and avoiding any Thai cultural nuances in the writing style.\n*   **\"คงเป็นตารางเหมือนเดิม\"**: Emphasized that the table structure **must not change**.\n*   **\"ค่าเดินสาย LAN และค่าติดตั้ง (เหมา)\"**: Translated as \"LAN Cabling & Installation Fee (Lump Sum)\" to convey that it is a fixed, all-inclusive cost.",
+  "stats": {
+    "tokens_per_second": 34.78749941413268,
+    "time_to_first_token": 3.773625,
+    "generation_time": 32.577075,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma4",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

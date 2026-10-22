@@ -1,0 +1,8 @@
+# ห้ามขึ้น GitHub: เฉลยชื่อโมเดลของชีตให้คะแนนแบบซ่อนชื่อ
+results/blind/key.json
+results/blind_for_raters.zip
+
+scripts/__pycache__/
+site/node_modules/
+site/dist/
+site/.astro/

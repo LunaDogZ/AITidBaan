@@ -1,0 +1,33 @@
+{
+  "id": "translation-06",
+  "model": "typhoon2.5-qwen3-4b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42
+  },
+  "prompt": "ช่วยแปลเป็นภาษาอังกฤษให้หน่อยครับ จะส่งให้สำนักงานใหญ่ของลูกค้าที่สิงคโปร์อ่าน ปีขอเป็น ค.ศ. นะ\n\nสรุปข้อเสนอโครงการระบบบริหารงานบุคคล (HRMS)\nเสนอต่อ: บริษัท เอเชียไบรท์ โลจิสติกส์ (ประเทศไทย) จำกัด\nวันที่: 16 ตุลาคม 2569\n\nบริษัท พีเพิลแพลน ซอฟต์แวร์ จำกัด ขอขอบพระคุณที่ให้โอกาสนำเสนอระบบ HRMS สำหรับพนักงานประมาณ 650 คน ใน 4 คลังสินค้า ระบบจะครอบคลุมการบันทึกเวลาเข้า-ออกงาน การลา การคำนวณเงินเดือน และการจัดทำแบบ ภ.ง.ด.1 และ สปส.1-10 ส่งหน่วยงานราชการ\n\nค่าใช้จ่าย (ยังไม่รวมภาษีมูลค่าเพิ่ม 7%)\n- ค่าลิขสิทธิ์ซอฟต์แวร์ 1,250,000 บาท\n- ค่าพัฒนาส่วนเพิ่มเติมตามความต้องการเฉพาะ 480,000 บาท\n- ค่าฝึกอบรมผู้ใช้งาน 3 รุ่น 90,000 บาท\nรวม 1,820,000 บาท\n\nค่าบำรุงรักษาระบบ (MA) ตั้งแต่ปีที่ 2 เป็นต้นไป คิดร้อยละ 18 ของค่าลิขสิทธิ์ต่อปี หรือ 225,000 บาทต่อปี ปีแรกไม่มีค่าใช้จ่าย\n\nการแบ่งงวดชำระ\n- งวดที่ 1 ร้อยละ 30 เมื่อลงนามในสัญญา\n- งวดที่ 2 ร้อยละ 40 เมื่อติดตั้งระบบและผ่านการทดสอบโดยผู้ใช้ (UAT)\n- งวดที่ 3 ร้อยละ 30 เมื่อเปิดใช้งานจริงและอบรมครบทุกรุ่น\n\nทั้งนี้ ผู้ว่าจ้างมีหน้าที่หักภาษี ณ ที่จ่ายร้อยละ 3 ในส่วนของค่าบริการตามที่กฎหมายกำหนด\n\nกำหนดการ: เริ่มโครงการวันที่ 4 มกราคม 2570 และเปิดใช้งานจริงภายในวันที่ 30 มิถุนายน 2570 หากบริษัทฯ ส่งมอบงานล่าช้ากว่ากำหนดโดยมิใช่ความผิดของผู้ว่าจ้าง ยินดีชำระค่าปรับวันละร้อยละ 0.1 ของมูลค่างวดที่ล่าช้า แต่รวมไม่เกินร้อยละ 10 ของมูลค่าสัญญา\n\nข้อเสนอนี้ยืนราคา 45 วันนับจากวันที่ในเอกสาร",
+  "answer": "Summary of Proposal for HRMS System  \nSubmitted to: Asia Bright Logistics (Thailand) Co., Ltd.  \nDate: October 16, 2026  \n\nPeoplePlan Software Public Company Limited would like to thank you for the opportunity to present our Human Resource Management System (HRMS) solution for approximately 650 employees across four warehouses. The system will cover time clock in/out records, leave management, salary calculation, and preparation of forms BHD-1 and SPSP-1 through SPSP-10 for submission to government authorities.\n\nCosts (excluding VAT at 7%)  \n– Software licensing fee: THB 1,250,000  \n– Customized development according to specific requirements: THB 480,000  \n– User training sessions (3 cohorts): THB 90,000  \nTotal: THB 1,820,000  \n\nMaintenance & Support (MA) from Year 2 onwards will be charged at 18% of the software licensing cost annually, or THB 225,000 per year. No maintenance fee is applicable in Year 1.\n\nPayment Schedule  \n– Payment Installment #1: 30% upon signing the contract  \n– Payment Installment #2: 40% upon system deployment and successful User Acceptance Testing (UAT)  \n– Payment Installment #3: 30% upon full operational launch and completion of all training cohorts  \n\nThe client is responsible for withholding tax at a rate of 3% on the service fees as stipulated by law.\n\nTimeline  \nProject commencement date: January 4, 2070; Go-live target date: June 30, 2070. Should delivery be delayed beyond the agreed schedule due to reasons not attributable to the client, we are willing to accept a daily penalty of 0.1% of the affected installment amount, capped at no more than 10% of the total contract value.\n\nThis proposal is fixed in price for 45 days from the date stated herein.",
+  "stats": {
+    "tokens_per_second": 25.10606737639293,
+    "time_to_first_token": 6.2775680000000005,
+    "generation_time": 23.643888,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen3",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

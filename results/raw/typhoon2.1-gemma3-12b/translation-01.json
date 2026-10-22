@@ -1,0 +1,34 @@
+{
+  "id": "translation-01",
+  "model": "typhoon2.1-gemma3-12b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ช่วยแปลอีเมลนี้เป็นภาษาไทยหน่อยครับ\n\nSubject: Delivery date for PO #MT-20419\n\nHi Khun Ploy,\n\nThank you for sending the quotation last week. We have now issued Purchase Order #MT-20419 for 500 units of the stainless steel water bottles (model SB-750).\n\nCould you please confirm the expected delivery date? Our warehouse in Penang will be closed from 24 to 26 December, so we would prefer delivery before 22 December if possible.\n\nAlso, please send the invoice to accounts@meritrade-asia.example instead of my personal email.\n\nBest regards,\nDaniel Lim\nProcurement Manager\nMeritrade Asia Sdn. Bhd.",
+  "answer": "หัวเรื่อง: วันที่ส่งมอบสำหรับ PO #MT-20419\n\nเรียน คุณPLOY,\n\nขอบคุณสำหรับการส่งใบเสนอราคาเมื่อสัปดาห์ที่แล้ว เราได้ออก Purchase Order #MT-20419 สำหรับผลิตภัณฑ์กระติกน้ำสแตนเลส 500 หน่วย (รุ่น SB-750) แล้ว\n\nรบกวนคุณช่วยยืนยันวันที่คาดว่าจะสามารถจัดส่งได้หรือไม่? เนื่องจากคลังสินค้าของเราในปีนังจะปิดทำการตั้งแต่วันที่ 24 ถึง 26 ธันวาคม เราจึงขอความกรุณาจัดส่งก่อนวันที่ 22 ธันวาคม หากเป็นไปได้\n\nและรบกวนคุณส่งใบแจ้งหนี้ไปยัง accounts@meritrade-asia.example แทนที่จะใช้อีเมลส่วนตัวของฉันด้วย\n\nขอแสดงความนับถือ,\nDaniel Lim\nผู้จัดการฝ่ายจัดซื้อ\nMeritrade Asia Sdn. Bhd.",
+  "stats": {
+    "tokens_per_second": 5.974710609888159,
+    "time_to_first_token": 5.470014,
+    "generation_time": 39.446555000000004,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma3",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

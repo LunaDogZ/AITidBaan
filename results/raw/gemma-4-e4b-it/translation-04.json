@@ -1,0 +1,34 @@
+{
+  "id": "translation-04",
+  "model": "gemma-4-e4b-it",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ช่วยแปลสรุปข้อเสนอนี้เป็นภาษาอังกฤษหน่อยครับ จะส่งให้ผู้จัดการฝั่งลูกค้าที่เป็นชาวต่างชาติ\n\nสรุปข้อเสนอโครงการปรับปรุงเว็บไซต์ บริษัท บ้านสวนออร์แกนิค จำกัด\n\nทางเราเสนอให้ปรับปรุงเว็บไซต์เดิมให้รองรับการแสดงผลบนมือถือ และเพิ่มระบบสั่งซื้อสินค้าออนไลน์ เพื่อให้ลูกค้าสั่งผักและผลไม้ได้เองโดยไม่ต้องโทรสั่งผ่านพนักงาน\n\nขอบเขตงานหลัก ได้แก่ ออกแบบหน้าเว็บใหม่ทั้งหมด 8 หน้า ทำระบบตะกร้าสินค้าที่รับชำระเงินผ่านพร้อมเพย์และบัตรเครดิต และทำหน้าหลังบ้านให้พนักงานอัปเดตราคาและสต็อกสินค้าได้เอง\n\nใช้เวลาดำเนินงานประมาณ 10 สัปดาห์ ค่าใช้จ่ายรวม 185,000 บาท (ยังไม่รวมภาษีมูลค่าเพิ่ม) รวมดูแลเว็บไซต์และแก้ไขปัญหาฟรี 3 เดือนหลังเปิดใช้งาน",
+  "answer": "Here are a few options for translating your proposal summary into English, depending on the tone you want to convey (Professional/Formal vs. Direct/Concise).\n\n---\n\n## Option 1: Professional and Detailed (Recommended for initial presentation)\n\nThis option is polished and clearly outlines the benefits and scope.\n\n**Subject: Proposal Summary: Website Enhancement Project for Baan Suan Organic Co., Ltd.**\n\nDear [Manager's Name],\n\nWe are pleased to present our proposal to upgrade the existing website for Baan Suan Organic Co., Ltd. The core objective of this project is to modernize the online presence and significantly improve customer convenience by implementing a fully functional e-commerce system.\n\n**Key Improvements & Scope:**\n\n1. **Mobile Responsiveness:** Redesigning the entire website structure to ensure optimal viewing and usability on all mobile devices.\n2. **Online Ordering System:** Implementing a self-service e-commerce checkout system, allowing customers to order fresh vegetables and fruits directly without needing to call us.\n3. **Website Redesign (8 Pages):** Complete redesign of 8 key website pages for an enhanced user experience.\n4. **E-commerce Functionality:** Developing a shopping cart system integrated with major payment gateways, including **PromptPay and Credit Card payments.**\n5. **Admin Backend System:** Creating a dedicated backend dashboard that allows your staff to independently update product pricing and inventory stock levels in real-time.\n\n**Project Details:**\n\n* **Timeline:** Approximately 10 weeks for completion.\n* **Investment:** Total cost of **THB 185,000** (Excluding VAT).\n* **Post-Launch Support:** We include **3 months of complimentary website maintenance and troubleshooting** after the launch date.\n\nWe are confident that this upgrade will significantly enhance customer satisfaction and streamline your sales process.\n\n---\n\n## Option 2: Direct and Concise (Good for a quick follow-up email)\n\nThis option gets straight to the point while remaining professional.\n\n**Subject: Proposal Summary: Baan Suan Organic Website Upgrade**\n\nDear [Manager's Name],\n\nWe propose upgrading the current website for Baan Suan Organic Co., Ltd. The goal is twofold: **ensure mobile compatibility** and **implement a full online ordering system** so customers can purchase produce directly without calling us.\n\n**Scope of Work Includes:**\n* Complete redesign of 8 key web pages.\n* Building an e-commerce shopping cart integrated with PromptPay and Credit Card payments.\n* Developing an admin backend for staff to manage pricing and stock inventory independently.\n\n**Investment & Timeline:**\n* **Duration:** Approx. 10 weeks.\n* **Cost:** THB 185,000 (Excl. VAT).\n* **Bonus:** Includes 3 months of free maintenance and support post-launch.\n\n---\n\n## Key Vocabulary Breakdown:\n\n| Thai Term | English Translation(s) | Notes |\n| :--- | :--- | :--- |\n| สรุปข้อเสนอ | Proposal Summary / Executive Summary | Use this as the title. |\n| ปรับปรุงเว็บไซต์ | Website Enhancement / Upgrade | \"Enhancement\" sounds more professional than just \"Improvement.\" |\n| รองรับการแสดงผลบนมือถือ | Mobile Responsiveness / Optimized for Mobile Devices | This is the industry term you should use. |\n| ระบบสั่งซื้อสินค้าออนไลน์ | Online Ordering System / E-commerce Functionality | \"E-commerce\" is the most recognized term. |\n| ไม่ต้องโทรสั่งผ่านพนักงาน | Without needing to call us / Self-service ordering | Focus on the *benefit* (self-service). |\n| ออกแบบหน้าเว็บใหม่ทั้งหมด 8 หน้า | Complete redesign of 8 key web pages | Clear and specific. |\n| ระบบตะกร้าสินค้าที่รับชำระเงินผ่าน... | Shopping cart system integrated with payment gateways (PromptPay & Credit Card) | Listing the methods is crucial. |\n| หน้าหลังบ้าน | Admin Backend / Dashboard | \"Backend\" or \"Admin Panel\" are common terms. |\n| อัปเดตราคาและสต็อกสินค้าได้เอง | Independently update pricing and inventory stock levels | Emphasize that *they* can do it themselves (autonomy). |\n| ค่าใช้จ่ายรวม... (ยังไม่รวมภาษีมูลค่าเพิ่ม) | Total cost of THB 185,000 (Excluding VAT) | Always clarify tax status. |\n| ดูแลเว็บไซต์และแก้ไขปัญหาฟรี 3 เดือนหลังเปิดใช้งาน | 3 months of complimentary website maintenance and support post-launch | \"Complimentary\" sounds more premium than \"free.\" |",
+  "stats": {
+    "tokens_per_second": 36.32234402182324,
+    "time_to_first_token": 1.5605550000000001,
+    "generation_time": 28.376005,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma4",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

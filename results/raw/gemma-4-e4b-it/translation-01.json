@@ -1,0 +1,34 @@
+{
+  "id": "translation-01",
+  "model": "gemma-4-e4b-it",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ช่วยแปลอีเมลนี้เป็นภาษาไทยหน่อยครับ\n\nSubject: Delivery date for PO #MT-20419\n\nHi Khun Ploy,\n\nThank you for sending the quotation last week. We have now issued Purchase Order #MT-20419 for 500 units of the stainless steel water bottles (model SB-750).\n\nCould you please confirm the expected delivery date? Our warehouse in Penang will be closed from 24 to 26 December, so we would prefer delivery before 22 December if possible.\n\nAlso, please send the invoice to accounts@meritrade-asia.example instead of my personal email.\n\nBest regards,\nDaniel Lim\nProcurement Manager\nMeritrade Asia Sdn. Bhd.",
+  "answer": "นี่คือฉบับแปลอีเมลเป็นภาษาไทยครับ:\n\n**หัวเรื่อง:** วันที่จัดส่งสำหรับใบสั่งซื้อเลขที่ MT-20419\n\nเรียน คุณพลอย,\n\nขอบคุณมากที่คุณได้ส่งใบเสนอราคามาให้เมื่อสัปดาห์ที่แล้ว ขณะนี้เราได้ออกใบสั่งซื้อ (Purchase Order) เลขที่ **MT-20419** สำหรับขวดน้ำสแตนเลสจำนวน 500 ชิ้น (รุ่น SB-750) เรียบร้อยแล้วค่ะ/ครับ\n\nรบกวนคุณช่วยยืนยันวันที่จะสามารถจัดส่งสินค้าให้เราได้ด้วยนะคะ/ครับ? เนื่องจากคลังสินค้าของเราที่ปีนังจะปิดทำการตั้งแต่วันที่ 24 ถึง 26 ธันวาคม ดังนั้น หากเป็นไปได้ เราขอความกรุณาให้จัดส่งสินค้าก่อนวันที่ 22 ธันวาคมค่ะ/ครับ\n\nนอกจากนี้ รบกวนคุณช่วยส่งใบแจ้งหนี้ (invoice) ไปยังอีเมล **accounts@meritrade-asia.example** แทนการส่งมาที่อีเมลส่วนตัวของฉันด้วยนะคะ/ครับ\n\nขอแสดงความนับถืออย่างสูง,\nแดเนียล ลิม\nผู้จัดการฝ่ายจัดซื้อ\nMeritrade Asia Sdn. Bhd.\n\n***\n\n**ข้อแนะนำเพิ่มเติม:**\n\n* **คำลงท้าย (ค่ะ/ครับ):** กรุณาเลือกใช้ตามเพศของผู้ส่งอีเมล (ถ้าคุณเป็นผู้หญิงให้ใช้ \"ค่ะ\" ถ้าเป็นผู้ชายให้ใช้ \"ครับ\")\n* **ความเป็นทางการ:** การแปลนี้คงระดับความเป็นทางการของต้นฉบับไว้ เหมาะสำหรับการติดต่อทางธุรกิจครับ",
+  "stats": {
+    "tokens_per_second": 36.33878252411883,
+    "time_to_first_token": 1.349058,
+    "generation_time": 10.980641,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma4",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

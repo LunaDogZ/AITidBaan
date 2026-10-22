@@ -1,0 +1,34 @@
+{
+  "id": "translation-05",
+  "model": "qwen3.5-9b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "แปลเป็นภาษาอังกฤษให้หน่อยค่ะ ลูกค้าเป็นโรงงานของบริษัทญี่ปุ่น ผู้จัดการเขาอ่านไทยไม่ได้ ตารางราคาขอให้คงเป็นตารางเหมือนเดิม\n\nสรุปข้อเสนอ: ติดตั้งระบบกล้องวงจรปิด โรงงานบางปะกง 2\nเสนอต่อ: บริษัท ทาคาฮาชิ พรีซิชั่น (ประเทศไทย) จำกัด\nจัดทำโดย: บริษัท เซฟการ์ด ซิสเต็มส์ จำกัด\n\n1. ความเป็นมา\nจากการสำรวจพื้นที่เมื่อวันที่ 8 ตุลาคม กล้องเดิมเป็นระบบอนาล็อกที่ภาพไม่ชัดในเวลากลางคืน และยังมีจุดอับบริเวณลานจอดรถบรรทุกและประตูทางออกด้านหลัง เราจึงเสนอให้เปลี่ยนเป็นกล้อง IP ทั้งระบบ และเพิ่มกล้องในจุดอับดังกล่าว\n\n2. รายการและราคา\n\n| รายการ | จำนวน | ราคาต่อหน่วย (บาท) | รวม (บาท) |\n|---|---|---|---|\n| กล้อง IP ความละเอียด 4 ล้านพิกเซล มีอินฟราเรด | 24 ตัว | 4,200 | 100,800 |\n| เครื่องบันทึกภาพ NVR 32 ช่อง | 1 เครื่อง | 28,500 | 28,500 |\n| ฮาร์ดดิสก์ 8TB สำหรับงานกล้องวงจรปิด | 2 ลูก | 7,900 | 15,800 |\n| ค่าเดินสาย LAN และค่าติดตั้ง (เหมา) | 1 งาน | 45,000 | 45,000 |\n| รวม | | | 190,100 |\n| ภาษีมูลค่าเพิ่ม 7% | | | 13,307 |\n| รวมทั้งสิ้น | | | 203,407 |\n\n3. ระยะเวลาและเงื่อนไข\n- ติดตั้งแล้วเสร็จภายใน 15 วันทำการ นับจากวันที่ได้รับใบสั่งซื้อ\n- ทีมช่างจะเข้าติดตั้งในวันอาทิตย์หรือนอกเวลากะผลิต เพื่อไม่ให้กระทบสายการผลิต\n- แบ่งชำระ 2 งวด: งวดแรก 40% เมื่อออกใบสั่งซื้อ งวดที่สอง 60% เมื่อส่งมอบงานและตรวจรับเรียบร้อย\n- รับประกันอุปกรณ์ 2 ปี รับประกันงานติดตั้ง 1 ปี\n- ราคานี้ยืนราคา 30 วัน",
+  "answer": "**Proposal Summary: CCTV System Installation for Bang Pa Tong Factory No. 2**  \nSubmitted to: Takahashi Precision (Thailand) Co., Ltd.  \nPrepared by: Safeguard Systems Co., Ltd.  \n\n---\n\n### 1. Background  \nFollowing a site survey conducted on October 8, it was identified that the existing analog CCTV system suffers from poor image quality at night and has blind spots in the truck loading/unloading yard and the rear exit gate area. To address these issues, we propose upgrading to a full IP-based CCTV system and installing additional cameras at the previously uncovered locations.\n\n---\n\n### 2. Equipment List and Pricing  \n\n| Item Description | Quantity | Unit Price (THB) | Total (THB) |\n|------------------|----------|------------------|-------------|\n| 4-Megapixel IP Cameras with Infrared | 24 units | 4,200 | 100,800 |\n| 32-Channel NVR (Network Video Recorder) | 1 unit | 28,500 | 28,500 |\n| 8TB Hard Disk Drives for CCTV Surveillance | 2 units | 7,900 | 15,800 |\n| LAN Cabling and Installation (Lump Sum) | 1 lot | 45,000 | 45,000 |\n| **Subtotal** | | | **190,100** |\n| Value-Added Tax (VAT) 7% | | | 13,307 |\n| **Grand Total** | | | **203,407** |\n\n*(Note: The original Thai pricing table is retained exactly as provided.)*\n\n---\n\n### 3. Timeline and Terms  \n- Installation to be completed within 15 working days from the date of purchase order issuance.  \n- Technicians will schedule installation on Sundays or outside production hours to avoid disrupting factory operations.  \n- Payment terms: Two installments – 40% upon issuance of purchase order, and 60% upon project completion and acceptance inspection.  \n- Warranty: 2 years for equipment; 1 year for installation workmanship.  \n- Price validity: This quotation is valid for 30 days from the date of issue.  \n\n---",
+  "stats": {
+    "tokens_per_second": 9.178548309740838,
+    "time_to_first_token": 7.130083,
+    "generation_time": 61.387029000000005,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen35",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

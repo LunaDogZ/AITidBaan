@@ -1,0 +1,33 @@
+{
+  "id": "translation-05",
+  "model": "openthaigpt1.5-7b-instruct",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42
+  },
+  "prompt": "แปลเป็นภาษาอังกฤษให้หน่อยค่ะ ลูกค้าเป็นโรงงานของบริษัทญี่ปุ่น ผู้จัดการเขาอ่านไทยไม่ได้ ตารางราคาขอให้คงเป็นตารางเหมือนเดิม\n\nสรุปข้อเสนอ: ติดตั้งระบบกล้องวงจรปิด โรงงานบางปะกง 2\nเสนอต่อ: บริษัท ทาคาฮาชิ พรีซิชั่น (ประเทศไทย) จำกัด\nจัดทำโดย: บริษัท เซฟการ์ด ซิสเต็มส์ จำกัด\n\n1. ความเป็นมา\nจากการสำรวจพื้นที่เมื่อวันที่ 8 ตุลาคม กล้องเดิมเป็นระบบอนาล็อกที่ภาพไม่ชัดในเวลากลางคืน และยังมีจุดอับบริเวณลานจอดรถบรรทุกและประตูทางออกด้านหลัง เราจึงเสนอให้เปลี่ยนเป็นกล้อง IP ทั้งระบบ และเพิ่มกล้องในจุดอับดังกล่าว\n\n2. รายการและราคา\n\n| รายการ | จำนวน | ราคาต่อหน่วย (บาท) | รวม (บาท) |\n|---|---|---|---|\n| กล้อง IP ความละเอียด 4 ล้านพิกเซล มีอินฟราเรด | 24 ตัว | 4,200 | 100,800 |\n| เครื่องบันทึกภาพ NVR 32 ช่อง | 1 เครื่อง | 28,500 | 28,500 |\n| ฮาร์ดดิสก์ 8TB สำหรับงานกล้องวงจรปิด | 2 ลูก | 7,900 | 15,800 |\n| ค่าเดินสาย LAN และค่าติดตั้ง (เหมา) | 1 งาน | 45,000 | 45,000 |\n| รวม | | | 190,100 |\n| ภาษีมูลค่าเพิ่ม 7% | | | 13,307 |\n| รวมทั้งสิ้น | | | 203,407 |\n\n3. ระยะเวลาและเงื่อนไข\n- ติดตั้งแล้วเสร็จภายใน 15 วันทำการ นับจากวันที่ได้รับใบสั่งซื้อ\n- ทีมช่างจะเข้าติดตั้งในวันอาทิตย์หรือนอกเวลากะผลิต เพื่อไม่ให้กระทบสายการผลิต\n- แบ่งชำระ 2 งวด: งวดแรก 40% เมื่อออกใบสั่งซื้อ งวดที่สอง 60% เมื่อส่งมอบงานและตรวจรับเรียบร้อย\n- รับประกันอุปกรณ์ 2 ปี รับประกันงานติดตั้ง 1 ปี\n- ราคานี้ยืนราคา 30 วัน",
+  "answer": "Here's the English translation:\n\nSummary Proposal: Install a surveillance system for Bangkok Pakong Factory, Japan Company. The manager cannot read Thai language, so please keep the price list in the same format.\n\n1. Background\nAfter conducting a site survey on October 8th, it was found that the old cameras were analog systems with unclear images at night and there were blind spots in the truck parking lot and the rear exit area. Therefore, we propose changing all the cameras to IP systems and adding more cameras in these blind spots.\n\n2. Items and Prices\n\n| Item | Quantity | Unit Price (Baht) | Total (Baht) |\n|---|---|---|---|\n| 4MP IP camera with infrared | 24 units | 4,200 | 100,800 |\n| NVR recorder with 32 channels | 1 unit | 28,500 | 28,500 |\n| 8TB hard drive for surveillance cameras | 2 units | 7,900 | 15,800 |\n| LAN cabling and installation cost (all-inclusive) | 1 job | 45,000 | 45,000 |\n| Total | | | 190,100 |\n| Value-added tax at 7% | | | 13,307 |\n| Grand total | | | 203,407 |\n\n3. Timeframe and Conditions\n- Installation to be completed within 15 working days from the date of receiving the purchase order.\n- The technician team will install on Sundays or outside production hours to avoid disrupting production lines.\n- Two installment payments: First payment of 40% upon issuing the purchase order, second payment of 60% after delivery and acceptance.\n- Equipment warranty for 2 years, installation work warranty for 1 year.\n- This price is valid for 30 days.",
+  "stats": {
+    "tokens_per_second": 13.813938748188935,
+    "time_to_first_token": 9.801148,
+    "generation_time": 39.553705,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen2",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

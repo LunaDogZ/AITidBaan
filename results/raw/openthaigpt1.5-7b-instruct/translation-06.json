@@ -1,0 +1,33 @@
+{
+  "id": "translation-06",
+  "model": "openthaigpt1.5-7b-instruct",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42
+  },
+  "prompt": "ช่วยแปลเป็นภาษาอังกฤษให้หน่อยครับ จะส่งให้สำนักงานใหญ่ของลูกค้าที่สิงคโปร์อ่าน ปีขอเป็น ค.ศ. นะ\n\nสรุปข้อเสนอโครงการระบบบริหารงานบุคคล (HRMS)\nเสนอต่อ: บริษัท เอเชียไบรท์ โลจิสติกส์ (ประเทศไทย) จำกัด\nวันที่: 16 ตุลาคม 2569\n\nบริษัท พีเพิลแพลน ซอฟต์แวร์ จำกัด ขอขอบพระคุณที่ให้โอกาสนำเสนอระบบ HRMS สำหรับพนักงานประมาณ 650 คน ใน 4 คลังสินค้า ระบบจะครอบคลุมการบันทึกเวลาเข้า-ออกงาน การลา การคำนวณเงินเดือน และการจัดทำแบบ ภ.ง.ด.1 และ สปส.1-10 ส่งหน่วยงานราชการ\n\nค่าใช้จ่าย (ยังไม่รวมภาษีมูลค่าเพิ่ม 7%)\n- ค่าลิขสิทธิ์ซอฟต์แวร์ 1,250,000 บาท\n- ค่าพัฒนาส่วนเพิ่มเติมตามความต้องการเฉพาะ 480,000 บาท\n- ค่าฝึกอบรมผู้ใช้งาน 3 รุ่น 90,000 บาท\nรวม 1,820,000 บาท\n\nค่าบำรุงรักษาระบบ (MA) ตั้งแต่ปีที่ 2 เป็นต้นไป คิดร้อยละ 18 ของค่าลิขสิทธิ์ต่อปี หรือ 225,000 บาทต่อปี ปีแรกไม่มีค่าใช้จ่าย\n\nการแบ่งงวดชำระ\n- งวดที่ 1 ร้อยละ 30 เมื่อลงนามในสัญญา\n- งวดที่ 2 ร้อยละ 40 เมื่อติดตั้งระบบและผ่านการทดสอบโดยผู้ใช้ (UAT)\n- งวดที่ 3 ร้อยละ 30 เมื่อเปิดใช้งานจริงและอบรมครบทุกรุ่น\n\nทั้งนี้ ผู้ว่าจ้างมีหน้าที่หักภาษี ณ ที่จ่ายร้อยละ 3 ในส่วนของค่าบริการตามที่กฎหมายกำหนด\n\nกำหนดการ: เริ่มโครงการวันที่ 4 มกราคม 2570 และเปิดใช้งานจริงภายในวันที่ 30 มิถุนายน 2570 หากบริษัทฯ ส่งมอบงานล่าช้ากว่ากำหนดโดยมิใช่ความผิดของผู้ว่าจ้าง ยินดีชำระค่าปรับวันละร้อยละ 0.1 ของมูลค่างวดที่ล่าช้า แต่รวมไม่เกินร้อยละ 10 ของมูลค่าสัญญา\n\nข้อเสนอนี้ยืนราคา 45 วันนับจากวันที่ในเอกสาร",
+  "answer": "Here's the English translation:\n\nSummary of Proposal for Human Resource Management System (HRMS)\nTo: Asia Bright Logistics (Thailand) Co., Ltd.\nDate: October 16, 2022\n\nPipplan Software Co., Ltd. would like to thank you for providing us with the opportunity to present our HRMS solution for approximately 650 employees across four warehouses. The system will cover time attendance recording, leave management, payroll calculation, and the preparation of forms PH1 and SP1-10 for submission to government agencies.\n\nCosts (excluding VAT at 7%)\n- Software license fee: THB 1,250,000\n- Custom development charges: THB 480,000\n- Training fees for three user groups: THB 90,000\nTotal: THB 1,820,000\n\nSystem maintenance costs (MA) from the second year onwards will be 18% of the software license fee annually or THB 225,000 per year. There are no charges in the first year.\n\nPayment schedule:\n- First installment: 30% upon signing the contract\n- Second installment: 40% after system installation and successful user acceptance testing (UAT)\n- Third installment: 30% upon actual go-live and completion of all training sessions\n\nThe employer is responsible for withholding tax at source at a rate of 3% on the service fees as per legal requirements.\n\nSchedule: The project will commence on January 4, 2023, with full system activation by June 30, 2023. If our company fails to deliver work ahead of schedule without fault from the employer, we are willing to pay a daily penalty of 0.1% of the outstanding installment value but not exceeding 10% of the contract amount.\n\nThis proposal is firm for 45 days from the date stated in this document.",
+  "stats": {
+    "tokens_per_second": 13.864752860780257,
+    "time_to_first_token": 9.812066000000002,
+    "generation_time": 39.599831,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen2",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

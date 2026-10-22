@@ -1,0 +1,33 @@
+{
+  "id": "translation-03",
+  "model": "typhoon2.5-qwen3-4b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42
+  },
+  "prompt": "แปลเป็นไทยให้หน่อยค่ะ อ่านแล้วงงหลายสำนวน อยากรู้ว่าเขาต้องการอะไรจากเราแน่ๆ\n\nSubject: Re: Renewal – Annual maintenance contract\n\nHi Khun Nattaya,\n\nThanks for getting back to me so quickly. Just to circle back on our call on Tuesday – we're keen to renew, but I'll be honest, the 12% increase caught us off guard. Our budget for next year is pretty much locked in, so there isn't a lot of wiggle room on our end.\n\nA couple of thoughts:\n\n- If you could meet us halfway on the price, we'd be open to moving from a one-year to a two-year term. That would give you some certainty on your side as well.\n- We'd also like to drop the on-site support for the Chiang Mai branch, as that office is being wound down by Q2. Happy to take that off the table if it brings the number down.\n- Payment terms of net 30 still work for us.\n\nCould you give me a ballpark figure for the two-year option by end of next week? I'll need to loop in our CFO before anything gets signed off, and she's out of office from the 14th.\n\nNo rush on the formal quote – a rough number is fine for now.\n\nCheers,\nMark Ellison\nIT Operations Lead\nHarrowfield Retail Group",
+  "answer": "หัวข้อ: Re: การปรับปรุงสัญญาบำรุงรักษาประจำปี\n\nสวัสดีคุณนตย์เอ๋ย,\n\nขอบคุณที่ตอบกลับเร็วมากนะคะ ขอสรุปประเด็นจากบทสนทนาเมื่อวันอังคารของเราใหม่หน่อยนะครับ ผมก็อยากขยายสัญญาอยู่แน่นอน แต่ผมขอเปิดใจตรงนี้เลยว่า การเพิ่มขึ้นถึง 12% เรานึกไม่ถึงเลยครับ ส่วนงบประมาณปีหน้าของเราแทบไม่มีช่องว่างให้ออกแบบใหม่แล้ว\n\nผมขอเสนอแนวทางสองสามอย่างดังนี้นะครับ:\n\n- หากคุณสามารถเจรจากันครึ่งทางเรื่องราคา ผมก็โอเคที่จะย้ายจากรูปแบบประจำปีหนึ่งปี เป็นสองปีพร้อมกัน ซึ่งจะช่วยให้คุณมั่นใจได้ว่าเราจะไม่ยกเลิกสัญญาไปอีกต่อไป\n- ผมขอถอนการสนับสนุนบริการที่สำนักงานจางเมย์ออก เพราะสำนักงานนี้จะปิดตัวในไตรมาสที่สองของปีหน้าครับ หากการลบรายการนี้ช่วยลดราคาได้ ก็โอเคแล้วครับ\n- เงื่อนไขการชำระเงินแบบ net 30 ผมยังคงใช้ได้อยู่ตามเดิม\n\nขอให้ผมทราบประมาณการราคาสำหรับตัวเลือกสองปีนี้ภายในสุดสัปดาห์หน้าได้นะครับ ผมจำเป็นต้องแจ้ง CFO ก่อนที่จะลงนามอย่างเป็นทางการ และเธอจะลาออกจากการทำงานในวันที่ 14 เป็นต้นไป\n\nไม่เร่งด่วนในการขอราคาแบบเต็มรูปแบบนะครับ อ้างอิงราคาประมาณๆ ก็พอใช้ชั่วคราวได้แล้วครับ\n\nขอแสดงความนับถือ  \nMark Ellison  \nหัวหน้าฝ่ายการดำเนินงานด้านไอที  \nบริษัท Harrowfield Retail Group",
+  "stats": {
+    "tokens_per_second": 26.76663838392295,
+    "time_to_first_token": 2.6438710000000003,
+    "generation_time": 22.519359,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen3",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

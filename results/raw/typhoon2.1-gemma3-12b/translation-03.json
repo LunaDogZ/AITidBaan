@@ -1,0 +1,34 @@
+{
+  "id": "translation-03",
+  "model": "typhoon2.1-gemma3-12b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "แปลเป็นไทยให้หน่อยค่ะ อ่านแล้วงงหลายสำนวน อยากรู้ว่าเขาต้องการอะไรจากเราแน่ๆ\n\nSubject: Re: Renewal – Annual maintenance contract\n\nHi Khun Nattaya,\n\nThanks for getting back to me so quickly. Just to circle back on our call on Tuesday – we're keen to renew, but I'll be honest, the 12% increase caught us off guard. Our budget for next year is pretty much locked in, so there isn't a lot of wiggle room on our end.\n\nA couple of thoughts:\n\n- If you could meet us halfway on the price, we'd be open to moving from a one-year to a two-year term. That would give you some certainty on your side as well.\n- We'd also like to drop the on-site support for the Chiang Mai branch, as that office is being wound down by Q2. Happy to take that off the table if it brings the number down.\n- Payment terms of net 30 still work for us.\n\nCould you give me a ballpark figure for the two-year option by end of next week? I'll need to loop in our CFO before anything gets signed off, and she's out of office from the 14th.\n\nNo rush on the formal quote – a rough number is fine for now.\n\nCheers,\nMark Ellison\nIT Operations Lead\nHarrowfield Retail Group",
+  "answer": "หัวข้อ: ตอบกลับ: การต่ออายุ - สัญญาบำรุงรักษาประจำปี\n\nสวัสดีคุณณัฐยา,\n\nขอบคุณที่ตอบกลับเร็วมากค่ะ เพียงเพื่อย้อนกลับไปในการโทรศัพท์เมื่อวันอังคาร – เราต้องการต่ออายุสัญญา แต่ต้องบอกตามตรงว่าการขึ้นราคา 12% ทำให้เราตกใจพอสมควร งบประมาณของเราสำหรับปีหน้าค่อนข้างแน่นอนแล้ว ดังนั้นจึงไม่มีความยืดหยุ่นมากนักในส่วนของเรา\n\nมีข้อคิดเห็นสองสามอย่าง:\n\n- หากคุณสามารถเจอกับเราที่จุดกึ่งกลางของราคาได้ เรายินดีที่จะเปลี่ยนจากสัญญาหนึ่งปีเป็นสัญญา สองปี ซึ่งจะช่วยให้คุณมีความแน่นอนในด้านของคุณด้วย\n- นอกจากนี้ เรายังต้องการยกเลิกการสนับสนุน ณ จุด (on-site support) สำหรับสาขาเชียงใหม่ เนื่องจากสำนักงานนั้นกำลังจะถูกปิดตัวลงภายในไตรมาสที่ 2 ยินดีที่จะนำสิ่งนี้ออกไปหากมันช่วยลดจำนวนเงินได้\n- เงื่อนไขการชำระเงินแบบเครดิต 30 วันยังคงใช้ได้กับเรา\n\nคุณสามารถให้ตัวเลขโดยประมาณสำหรับทางเลือกสองปีภายในสิ้นสัปดาห์หน้าได้ไหม ฉันจะต้องแจ้งให้ CFO ของเราทราบก่อนที่จะมีการลงนามในสัญญาใดๆ และเธอกำลังลาพักร้อนตั้งแต่วันที่ 14\n\nไม่ต้องรีบร้อนกับการเสนอราคาอย่างเป็นทางการ – ตัวเลขโดยประมาณก็เพียงพอสำหรับตอนนี้\n\nขอแสดงความนับถือ,\nMark Ellison\nIT Operations Lead\nHarrowfield Retail Group\n\n**สรุปสิ่งที่ Mark ต้องการจากคุณณัฐยา:**\n\n*   **การต่ออายุสัญญา:** เขาต้องการต่ออายุสัญญารักษาการ แต่มีข้อกังวลเรื่องราคาที่สูงขึ้น 12%\n*   **ข้อเสนอแนะเพื่อลดค่าใช้จ่าย:**\n    *   **เจรจาต่อรองราคา:** ขอให้คุณลดราคาลงครึ่งหนึ่ง เพื่อแลกกับการทำสัญญาสองปี\n    *   **ยกเลิกการสนับสนุน ณ จุด (on-site support) ในสาขาเชียงใหม่:** เนื่องจากสาขานั้นกำลังจะปิดตัวลง\n*   **ขอตัวเลขโดยประมาณ:** ต้องการทราบราคาโดยประมาณสำหรับสัญญา สองปีภายในสิ้นสัปดาห์หน้า เพื่อนำเสนอต่อ CFO ของเขา\n\nหวังว่าคำแปลนี้จะช่วยให้คุณเข้าใจความต้องการของ Mark ได้ชัดเจนขึ้นนะคะ",
+  "stats": {
+    "tokens_per_second": 5.843968473918234,
+    "time_to_first_token": 8.254007,
+    "generation_time": 97.063521,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma3",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

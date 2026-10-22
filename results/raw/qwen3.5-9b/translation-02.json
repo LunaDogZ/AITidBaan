@@ -1,0 +1,34 @@
+{
+  "id": "translation-02",
+  "model": "qwen3.5-9b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ลูกค้าต่างชาติส่งอีเมลมาร้องเรียน แปลเป็นไทยให้หน่อย จะส่งต่อให้ฝ่ายผลิตอ่าน\n\nSubject: Defective units in shipment received 3 November\n\nDear Khun Surachai,\n\nI am writing regarding the shipment of LED panel lights (SKU: LP-6060-40W) that arrived at our Melbourne warehouse on 3 November.\n\nDuring our incoming inspection, our QC team found that 37 out of 400 units had flickering issues within the first two hours of testing. A further 12 units had cracked diffuser covers, which appears to be caused by insufficient packaging rather than a manufacturing fault. Photos and the full inspection report are attached.\n\nThis defect rate is well above the 2% tolerance stated in our supply agreement. We would therefore like to request the following:\n\n1. A credit note for the 37 flickering units, at the invoiced price of USD 18.50 per unit.\n2. Replacement of the 12 units with cracked covers, to be included in our next scheduled order rather than shipped separately.\n3. A brief root cause analysis for the flickering issue by 20 November, so we can decide whether to proceed with the December order.\n\nWe have been happy with your products so far and would like to resolve this quickly. Please let me know if your team needs any of the defective units returned for analysis.\n\nKind regards,\nSarah Whitfield\nQuality & Supplier Manager\nBrightline Lighting Pty Ltd",
+  "answer": "**หัวข้อ: แจ้งเรื่องสินค้าชำรุดใน lô ที่ได้รับวันที่ 3 พฤศจิกายน**\n\nเรียน คุณสุรชัย,\n\nผมเขียนอีเมลฉบับนี้เพื่อแจ้งความคืบหน้าเกี่ยวกับ lô สินค้าโคมไฟ LED (รหัส SKU: LP-6060-40W) ซึ่งได้เดินทางมาถึงคลังสินค้าของเราที่เมืองเมลเบิร์นเมื่อวันที่ 3 พฤศจิกายนที่ผ่านมา\n\nระหว่างกระบวนการตรวจสอบรับเข้า (Incoming Inspection) ทีมงาน QC ของ我方 พบปัญหาดังนี้:\n1. มีสินค้าจำนวน 37 หน่วยจากทั้งหมด 400 หน่วย เกิดอาการกระพริบ (Flickering) ภายในระยะเวลาการทดสอบเพียง 2 ชั่วโมงแรก\n2. มีอีก 12 หน่วยที่มีแผ่นกระจายแสง (Diffuser cover) แตกหัก ซึ่งจากการตรวจสอบเบื้องต้น น่าจะเกิดจากความไม่เพียงพอของบรรจุภัณฑ์มากกว่าความบกพร่องในการผลิต (มีรูปถ่ายและรายงานผลการตรวจสอบฉบับเต็มแนบมาพร้อมอีเมลนี้ครับ)\n\nอัตราการเสียสินค้าในครั้งนี้อยู่เหนือเกณฑ์ยอมรับ (Tolerance) ที่ตกลงไว้ในสัญญาซื้อขายของเราซึ่งกำหนดไว้ที่ 2% ดังนั้น我方 จึงขออนุญาตดำเนินการตามประเด็นดังนี้:\n1. ขอใบลดหนี้ (Credit Note) สำหรับสินค้าจำนวน 37 หน่วยที่มีอาการกระพริบ โดยอ้างอิงราคาใบแจ้งหนี้เดิมคือ 18.50 ดอลลาร์สหรัฐต่อหน่วย\n2. ขอเปลี่ยนสินค้าใหม่สำหรับอีก 12 หน่วยที่แผ่นกระจายแสงแตกหัก โดยให้รวมอยู่ในคำสั่งซื้อรอบถัดไปแทนที่จะจัดส่งแยกต่างหาก\n3. ขอให้ออกเอกสารวิเคราะห์สาเหตุรากเหง้า (Root Cause Analysis) ของปัญหาอาการกระพริบภายในวันที่ 20 พฤศจิกายน เพื่อให้我方สามารถตัดสินใจว่าจะดำเนินการสั่งซื้อในเดือนธันวาคมต่อไปหรือไม่\n\nจนถึงขณะนี้我方 ยังคงพอใจกับคุณภาพสินค้าจากท่านและต้องการให้แก้ไขปัญหานี้ให้เร็วที่สุด โปรดแจ้งกลับหากทีมของท่านต้องการคืนสินค้าชำรุดเหล่านี้เพื่อทำการวิเคราะห์เพิ่มเติมครับ\n\nขอแสดงความนับถือ,\nซาร่าห์ ไวท์ฟิลด์ (Sarah Whitfield)\nผู้จัดการฝ่ายคุณภาพและผู้จัดซื้อ (Quality & Supplier Manager)\nบริษัท บราวท์ไลน์ แลइटติ้ง จำกัด (Brightline Lighting Pty Ltd)",
+  "stats": {
+    "tokens_per_second": 9.620006885738565,
+    "time_to_first_token": 4.945153,
+    "generation_time": 50.683166,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen35",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

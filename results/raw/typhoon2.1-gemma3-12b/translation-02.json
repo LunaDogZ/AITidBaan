@@ -1,0 +1,34 @@
+{
+  "id": "translation-02",
+  "model": "typhoon2.1-gemma3-12b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ลูกค้าต่างชาติส่งอีเมลมาร้องเรียน แปลเป็นไทยให้หน่อย จะส่งต่อให้ฝ่ายผลิตอ่าน\n\nSubject: Defective units in shipment received 3 November\n\nDear Khun Surachai,\n\nI am writing regarding the shipment of LED panel lights (SKU: LP-6060-40W) that arrived at our Melbourne warehouse on 3 November.\n\nDuring our incoming inspection, our QC team found that 37 out of 400 units had flickering issues within the first two hours of testing. A further 12 units had cracked diffuser covers, which appears to be caused by insufficient packaging rather than a manufacturing fault. Photos and the full inspection report are attached.\n\nThis defect rate is well above the 2% tolerance stated in our supply agreement. We would therefore like to request the following:\n\n1. A credit note for the 37 flickering units, at the invoiced price of USD 18.50 per unit.\n2. Replacement of the 12 units with cracked covers, to be included in our next scheduled order rather than shipped separately.\n3. A brief root cause analysis for the flickering issue by 20 November, so we can decide whether to proceed with the December order.\n\nWe have been happy with your products so far and would like to resolve this quickly. Please let me know if your team needs any of the defective units returned for analysis.\n\nKind regards,\nSarah Whitfield\nQuality & Supplier Manager\nBrightline Lighting Pty Ltd",
+  "answer": "หัวข้อ: หน่วยสินค้ามีตำหนิในสินค้าที่ได้รับเมื่อวันที่ 3 พฤศจิกายน\n\nเรียน คุณสุรชัย\n\nฉันเขียนอีเมลนี้เกี่ยวกับสินค้า LED panel lights (SKU: LP-6060-40W) ที่มาถึงคลังของเราในเมลเบิร์นเมื่อวันที่ 3 พฤศจิกายน\n\nระหว่างการตรวจสอบสินค้าที่เข้ามา ทีม QC ของเราพบว่ามี 37 จาก 400 หน่วยที่มีปัญหาไฟกระพริบภายในสองชั่วโมงแรกของการทดสอบ นอกจากนี้ยังมีหน่วยอีก 12 หน่วยที่มีฝาครอบ diffuser แตก ซึ่งดูเหมือนเกิดจากการบรรจุที่ไม่เพียงพอมากกว่าข้อบกพร่องในการผลิต รูปภาพและรายงานการตรวจสอบฉบับเต็มได้แนบมาแล้ว\n\nอัตราความผิดพลาดนี้สูงกว่าค่าเผื่อ 2% ที่ระบุไว้ในข้อตกลงจัดหาของเรา ดังนั้นเราจึงขอให้ดำเนินการดังต่อไปนี้:\n\n1.  เครดิตโน้ตสำหรับหน่วยที่มีปัญหาไฟกระพริบ 37 หน่วย ในราคาที่ออกใบแจ้งหนี้คือ USD 18.50 ต่อหน่วย\n2.  เปลี่ยนหน่วยที่มีฝาครอบแตก 12 หน่วย โดยรวมไว้ในการสั่งซื้อครั้งถัดไปตามกำหนดเวลา แทนที่จะจัดส่งแยกต่างหาก\n3.  การวิเคราะห์สาเหตุหลักของปัญหาไฟกระพริบโดยย่อภายในวันที่ 20 พฤศจิกายน เพื่อให้เราสามารถตัดสินใจว่าจะดำเนินการกับคำสั่งซื้อเดือนธันวาคมต่อไปหรือไม่\n\nเรามีความสุขกับผลิตภัณฑ์ของคุณจนถึงตอนนี้และต้องการแก้ไขปัญหานี้อย่างรวดเร็ว โปรดแจ้งให้เราทราบหากทีมงานของคุณต้องการหน่วยสินค้าที่มีตำหนิเหล่านี้คืนเพื่อทำการวิเคราะห์\n\nขอแสดงความนับถือ\nSarah Whitfield\nผู้จัดการด้านคุณภาพและการจัดหา\nBrightline Lighting Pty Ltd",
+  "stats": {
+    "tokens_per_second": 5.871309872478559,
+    "time_to_first_token": 9.085831,
+    "generation_time": 76.53245000000001,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma3",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

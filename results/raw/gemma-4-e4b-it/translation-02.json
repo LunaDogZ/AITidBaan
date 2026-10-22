@@ -1,0 +1,34 @@
+{
+  "id": "translation-02",
+  "model": "gemma-4-e4b-it",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ลูกค้าต่างชาติส่งอีเมลมาร้องเรียน แปลเป็นไทยให้หน่อย จะส่งต่อให้ฝ่ายผลิตอ่าน\n\nSubject: Defective units in shipment received 3 November\n\nDear Khun Surachai,\n\nI am writing regarding the shipment of LED panel lights (SKU: LP-6060-40W) that arrived at our Melbourne warehouse on 3 November.\n\nDuring our incoming inspection, our QC team found that 37 out of 400 units had flickering issues within the first two hours of testing. A further 12 units had cracked diffuser covers, which appears to be caused by insufficient packaging rather than a manufacturing fault. Photos and the full inspection report are attached.\n\nThis defect rate is well above the 2% tolerance stated in our supply agreement. We would therefore like to request the following:\n\n1. A credit note for the 37 flickering units, at the invoiced price of USD 18.50 per unit.\n2. Replacement of the 12 units with cracked covers, to be included in our next scheduled order rather than shipped separately.\n3. A brief root cause analysis for the flickering issue by 20 November, so we can decide whether to proceed with the December order.\n\nWe have been happy with your products so far and would like to resolve this quickly. Please let me know if your team needs any of the defective units returned for analysis.\n\nKind regards,\nSarah Whitfield\nQuality & Supplier Manager\nBrightline Lighting Pty Ltd",
+  "answer": "นี่คือฉบับแปลภาษาไทยที่คุณสามารถส่งต่อให้ฝ่ายผลิตได้ค่ะ:\n\n***\n\n**หัวเรื่อง:** สินค้าชำรุดในล็อตที่ได้รับเมื่อวันที่ 3 พฤศจิกายน\n\nเรียน คุณสุรชัย,\n\nดิฉันเขียนมาเพื่อแจ้งเกี่ยวกับสินค้าโคมไฟแผง LED (SKU: LP-6060-40W) ที่ได้มาถึงคลังสินค้าของเราที่เมลเบิร์น เมื่อวันที่ 3 พฤศจิกายนที่ผ่านมา\n\nในระหว่างการตรวจสอบขาเข้า ทีมควบคุมคุณภาพ (QC) ของเราพบว่า **โคมไฟจำนวน 37 ชิ้น จากทั้งหมด 400 ชิ้น มีปัญหาไฟกระพริบ** ภายในสองชั่วโมงแรกของการทดสอบ นอกจากนี้ ยังพบว่ามีโคมไฟอีก **12 ชิ้น ที่ฝาครอบกระจายแสงเกิดรอยแตก** ซึ่งดูเหมือนว่าจะเกิดจากบรรจุภัณฑ์ที่ไม่เพียงพอ มากกว่าที่จะเป็นข้อบกพร่องจากการผลิต ทางเราได้แนบรูปถ่ายและรายงานการตรวจสอบฉบับเต็มมาพร้อมกับอีเมลนี้แล้วค่ะ\n\nอัตราความชำรุดนี้สูงเกินกว่าเกณฑ์ที่ยอมรับได้ 2% ตามที่ระบุไว้ในข้อตกลงการจัดหาของเรา ดังนั้น เราจึงขอร้องให้ดำเนินการดังต่อไปนี้:\n\n1. **ออกใบลดหนี้ (Credit Note)** สำหรับโคมไฟจำนวน 37 ชิ้นที่มีปัญหาไฟกระพริบ โดยคิดราคาตามใบแจ้งหนี้ คือ **ชิ้นละ 18.50 ดอลลาร์สหรัฐฯ**\n2. **เปลี่ยนสินค้าทดแทน** สำหรับโคมไฟ 12 ชิ้นที่มีฝาครอบแตก โดยขอให้รวมไปกับคำสั่งซื้อครั้งถัดไปของเรา แทนการจัดส่งแยกต่างหาก\n3. ขอให้มีการวิเคราะห์หาสาเหตุหลัก (Root Cause Analysis) ของปัญหาไฟกระพริบ **ภายในวันที่ 20 พฤศจิกายน** เพื่อให้เราสามารถตัดสินใจได้ว่าจะดำเนินการสั่งซื้อสำหรับเดือนธันวาคมต่อไปหรือไม่\n\nโดยรวมแล้ว เราพอใจกับผลิตภัณฑ์ของท่านมาโดยตลอด และต้องการแก้ไขปัญหานี้อย่างรวดเร็วค่ะ หากทางทีมงานของท่านต้องการให้เราส่งคืนสินค้าที่ชำรุดใดๆ เพื่อทำการวิเคราะห์ โปรดแจ้งให้เราทราบด้วยนะคะ\n\nขอแสดงความนับถือ,\nSarah Whitfield\nผู้จัดการฝ่ายคุณภาพและซัพพลายเออร์\nBrightline Lighting Pty Ltd\n\n***\n\n**ข้อแนะนำเพิ่มเติมสำหรับคุณ:**\n\n1. **เน้นจุดที่ต้องดำเนินการ (Action Items):** เมื่อส่งต่อให้ฝ่ายผลิต ควรวงกลมหรือทำเครื่องหมายส่วนที่เป็น \"คำขอ\" ของลูกค้า (Credit Note, เปลี่ยนสินค้า, วิเคราะห์สาเหตุ) ให้ชัดเจน เพื่อให้ฝ่ายผลิตทราบว่านี่คือสิ่งที่ต้องตอบกลับและแก้ไข\n2. **การแปลศัพท์เทคนิค:** คำว่า \"Root Cause Analysis\" แปลเป็น \"การวิเคราะห์หาสาเหตุหลัก\" ซึ่งเป็นคำที่ใช้ในโรงงานได้เลยค่ะ",
+  "stats": {
+    "tokens_per_second": 36.292207215162136,
+    "time_to_first_token": 2.3962600000000003,
+    "generation_time": 20.086008000000003,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma4",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

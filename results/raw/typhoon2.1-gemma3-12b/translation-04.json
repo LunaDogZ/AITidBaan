@@ -1,0 +1,34 @@
+{
+  "id": "translation-04",
+  "model": "typhoon2.1-gemma3-12b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ช่วยแปลสรุปข้อเสนอนี้เป็นภาษาอังกฤษหน่อยครับ จะส่งให้ผู้จัดการฝั่งลูกค้าที่เป็นชาวต่างชาติ\n\nสรุปข้อเสนอโครงการปรับปรุงเว็บไซต์ บริษัท บ้านสวนออร์แกนิค จำกัด\n\nทางเราเสนอให้ปรับปรุงเว็บไซต์เดิมให้รองรับการแสดงผลบนมือถือ และเพิ่มระบบสั่งซื้อสินค้าออนไลน์ เพื่อให้ลูกค้าสั่งผักและผลไม้ได้เองโดยไม่ต้องโทรสั่งผ่านพนักงาน\n\nขอบเขตงานหลัก ได้แก่ ออกแบบหน้าเว็บใหม่ทั้งหมด 8 หน้า ทำระบบตะกร้าสินค้าที่รับชำระเงินผ่านพร้อมเพย์และบัตรเครดิต และทำหน้าหลังบ้านให้พนักงานอัปเดตราคาและสต็อกสินค้าได้เอง\n\nใช้เวลาดำเนินงานประมาณ 10 สัปดาห์ ค่าใช้จ่ายรวม 185,000 บาท (ยังไม่รวมภาษีมูลค่าเพิ่ม) รวมดูแลเว็บไซต์และแก้ไขปัญหาฟรี 3 เดือนหลังเปิดใช้งาน",
+  "answer": "Okay, here's a translation of the proposal summary into English, suitable for sending to your international client manager:\n\n**Proposal Summary: Website Enhancement Project - Baan Suan Organic Co., Ltd.**\n\nWe propose enhancing your existing website to be mobile-responsive and incorporating an online ordering system. This will allow customers to directly order fruits and vegetables without needing to call in orders through our staff.\n\n**Key Scope of Work:**\n\n*   Design a complete redesign of 8 web pages\n*   Develop a shopping cart system with payment options including PromptPay and credit cards\n*   Create a backend interface for your staff to easily update product prices and inventory levels\n\n**Timeline & Budget:**\n\nThe project is estimated to take approximately 10 weeks. The total cost is 185,000 THB (excluding VAT). We will also provide free website maintenance and troubleshooting support for 3 months after the launch.\n\nLet me know if you'd like any adjustments or further details added!",
+  "stats": {
+    "tokens_per_second": 5.973225845571308,
+    "time_to_first_token": 5.974133,
+    "generation_time": 40.293947,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "gemma3",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "translation-04",
+  "model": "qwen3.5-9b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42,
+    "reasoning_effort": "none"
+  },
+  "prompt": "ช่วยแปลสรุปข้อเสนอนี้เป็นภาษาอังกฤษหน่อยครับ จะส่งให้ผู้จัดการฝั่งลูกค้าที่เป็นชาวต่างชาติ\n\nสรุปข้อเสนอโครงการปรับปรุงเว็บไซต์ บริษัท บ้านสวนออร์แกนิค จำกัด\n\nทางเราเสนอให้ปรับปรุงเว็บไซต์เดิมให้รองรับการแสดงผลบนมือถือ และเพิ่มระบบสั่งซื้อสินค้าออนไลน์ เพื่อให้ลูกค้าสั่งผักและผลไม้ได้เองโดยไม่ต้องโทรสั่งผ่านพนักงาน\n\nขอบเขตงานหลัก ได้แก่ ออกแบบหน้าเว็บใหม่ทั้งหมด 8 หน้า ทำระบบตะกร้าสินค้าที่รับชำระเงินผ่านพร้อมเพย์และบัตรเครดิต และทำหน้าหลังบ้านให้พนักงานอัปเดตราคาและสต็อกสินค้าได้เอง\n\nใช้เวลาดำเนินงานประมาณ 10 สัปดาห์ ค่าใช้จ่ายรวม 185,000 บาท (ยังไม่รวมภาษีมูลค่าเพิ่ม) รวมดูแลเว็บไซต์และแก้ไขปัญหาฟรี 3 เดือนหลังเปิดใช้งาน",
+  "answer": "**Project Proposal: Website Upgrade for Baan Suan Organic Co., Ltd.**\n\nWe propose upgrading the existing website to ensure full mobile responsiveness and integrating an online ordering system. This will enable customers to order fresh vegetables and fruits directly, eliminating the need for phone orders via staff assistance.\n\n**Scope of Work:**\n- Complete redesign of 8 core web pages.\n- Implementation of a shopping cart with payment integration supporting PromptPay and credit cards.\n- Development of an admin dashboard allowing staff to independently update product prices and inventory levels.\n\n**Project Timeline & Cost:**\n- Estimated duration: 10 weeks.\n- Total cost: THB 185,000 (excluding VAT).\n- Includes complimentary website maintenance and technical support for 3 months post-launch.",
+  "stats": {
+    "tokens_per_second": 9.501206151564775,
+    "time_to_first_token": 3.275398,
+    "generation_time": 20.220615000000002,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen35",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "translation-04",
+  "model": "typhoon2.5-qwen3-4b",
+  "context_length": 8192,
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "max_tokens": 2048,
+    "seed": 42
+  },
+  "prompt": "ช่วยแปลสรุปข้อเสนอนี้เป็นภาษาอังกฤษหน่อยครับ จะส่งให้ผู้จัดการฝั่งลูกค้าที่เป็นชาวต่างชาติ\n\nสรุปข้อเสนอโครงการปรับปรุงเว็บไซต์ บริษัท บ้านสวนออร์แกนิค จำกัด\n\nทางเราเสนอให้ปรับปรุงเว็บไซต์เดิมให้รองรับการแสดงผลบนมือถือ และเพิ่มระบบสั่งซื้อสินค้าออนไลน์ เพื่อให้ลูกค้าสั่งผักและผลไม้ได้เองโดยไม่ต้องโทรสั่งผ่านพนักงาน\n\nขอบเขตงานหลัก ได้แก่ ออกแบบหน้าเว็บใหม่ทั้งหมด 8 หน้า ทำระบบตะกร้าสินค้าที่รับชำระเงินผ่านพร้อมเพย์และบัตรเครดิต และทำหน้าหลังบ้านให้พนักงานอัปเดตราคาและสต็อกสินค้าได้เอง\n\nใช้เวลาดำเนินงานประมาณ 10 สัปดาห์ ค่าใช้จ่ายรวม 185,000 บาท (ยังไม่รวมภาษีมูลค่าเพิ่ม) รวมดูแลเว็บไซต์และแก้ไขปัญหาฟรี 3 เดือนหลังเปิดใช้งาน",
+  "answer": "Website Improvement Proposal Summary – Organic Garden Co. Ltd.\n\nWe propose upgrading the existing website to be fully responsive on mobile devices and adding an online ordering system, enabling customers to place orders directly for vegetables and fruits without needing to call customer service.\n\nKey deliverables include:\n- Full redesign of 8 new web pages  \n- Implementation of a shopping cart system supporting payment via Thaipayment and credit card  \n- Backend management panel allowing staff to update product pricing and inventory independently  \n\nThe project will take approximately 10 weeks, with total cost amounting to THB 185,000 (excluding VAT). We also include free website maintenance and technical support for the first three months after launch.",
+  "stats": {
+    "tokens_per_second": 27.324833385866285,
+    "time_to_first_token": 2.99985,
+    "generation_time": 8.196588,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "qwen3",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 8192
+  },
+  "runtime": {
+    "name": "llama.cpp-linux-x86_64-nvidia-cuda-avx2",
+    "version": "2.54.0",
+    "supported_formats": [
+      "gguf"
+    ]
+  }
+}
