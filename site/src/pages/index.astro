@@ -1,0 +1,152 @@
+---
+import { ArrowRightIcon, CloudSlashIcon, TranslateIcon, QuestionIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
+import Layout from '../layouts/Layout.astro';
+import SpellingExample from '../components/SpellingExample.astro';
+import { TASKS } from '../data/models';
+
+const problems = [
+  {
+    icon: CloudSlashIcon,
+    title: 'เอกสารลับ ส่งขึ้น Cloud ไม่ได้',
+    body: 'AI ออฟไลน์ประมวลผลบนเครื่องคุณ ลองตัดเน็ตแล้วใช้ดูได้เลย',
+  },
+  {
+    icon: TranslateIcon,
+    title: 'ศัพท์อย่าง 7B, Q4, VRAM อ่านแล้วงง',
+    body: 'ตอบคำถามเป็นปุ่ม มีภาพสอนดูสเปกใน Windows ทุกขั้น',
+  },
+  {
+    icon: QuestionIcon,
+    title: 'ไม่รู้ว่าตัวไหนเก่งภาษาไทย',
+    body: 'เราทดสอบกับงานเอกสารออฟฟิศภาษาไทยเอง และให้ดูคำตอบจริงทุกข้อ',
+  },
+];
+
+const steps = [
+  { title: 'เช็กเครื่อง', body: 'ดู RAM และการ์ดจอใน Task Manager' },
+  { title: 'รับคำแนะนำ', body: 'โมเดลเดียวที่เหมาะกับเครื่องและงานของคุณ' },
+  { title: 'ติดตั้ง LM Studio', body: 'แอปฟรีสำหรับเปิดโมเดลบน Windows' },
+  { title: 'โหลดโมเดล', body: 'คัดลอกลิงก์ไปวาง ไม่ต้องค้นเอง' },
+  { title: 'ลองกับเอกสารของคุณ', body: 'วางข้อความจากไฟล์ Word แล้วถาม' },
+  { title: 'ตัดเน็ตแล้วถามอีกครั้ง', body: 'พิสูจน์เองว่าทำงานออฟไลน์จริง' },
+];
+---
+
+<Layout
+  title="AITidBaan (AIติดบ้าน) | AI ออฟไลน์ภาษาไทยสำหรับงานเอกสาร"
+  description="แนะนำ AI ออฟไลน์ (Local LLM) ที่ทำงานเอกสารภาษาไทยได้จริงบนเครื่องของคุณ พร้อมผลทดสอบและคู่มือติดตั้งทีละขั้น"
+  headerCta
+>
+  <main>
+    <section class="mx-auto grid min-h-[100dvh] max-w-5xl items-center gap-12 px-4 pt-24 pb-16 md:grid-cols-[1.05fr_1fr] md:gap-10">
+      <div>
+        <h1 class="text-4xl leading-[1.25] font-bold tracking-tight md:text-5xl md:leading-[1.2]">
+          AI ช่วยงานเอกสาร<br />ที่ทำงานบนคอมคุณเอง
+        </h1>
+        <p class="mt-5 max-w-[34ch] text-lg text-muted">
+          ตอบคำถามเรื่องเครื่องไม่กี่ข้อ แล้วรับคำแนะนำ AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตัวเดียวที่เหมาะกับคุณ
+        </p>
+        <a
+          id="hero-cta"
+          href="/wizard#step-1"
+          class="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-lg font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+        >
+          เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+        </a>
+      </div>
+      <SpellingExample />
+    </section>
+
+    <section class="mx-auto max-w-5xl px-4 py-20">
+      <h2 class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
+        ใช้ AI กับงานเอกสารได้ โดยไม่ต้องส่งข้อมูลออกไปไหน
+      </h2>
+      <dl class="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-3">
+        {
+          problems.map(({ icon: Icon, title, body }) => (
+            <div class="border-t border-line pt-6">
+              <dt class="flex items-start gap-3 font-semibold">
+                <Icon size={24} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+                {title}
+              </dt>
+              <dd class="mt-2 pl-9 text-muted">{body}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="bg-sunk">
+      <div class="mx-auto grid max-w-5xl gap-10 px-4 py-20 md:grid-cols-[1fr_1.2fr] md:items-center">
+        <div>
+          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">ทดสอบเองกับงานที่คนออฟฟิศทำจริง</h2>
+          <p class="mt-4 max-w-[46ch] text-muted">
+            โมเดลทุกตัวได้คำสั่งเดียวกันทุกตัวอักษร ผู้ให้คะแนน 2 คนอ่านคำตอบโดยไม่เห็นชื่อโมเดล
+            และมีข้อหลอกไว้จับว่าโมเดลแต่งตัวเลขขึ้นเองหรือเปล่า
+          </p>
+          <ul class="mt-6 flex flex-wrap gap-2">
+            {TASKS.map((t) => <li class="rounded-full border border-line bg-surface px-3 py-1 text-sm">{t.label}</li>)}
+          </ul>
+        </div>
+        <dl class="grid grid-cols-3 gap-4">
+          <div class="rounded-2xl bg-surface p-5">
+            <dt class="text-sm text-muted">โมเดล</dt>
+            <dd class="mt-1 text-4xl font-bold tabular-nums">5</dd>
+          </div>
+          <div class="rounded-2xl bg-surface p-5">
+            <dt class="text-sm text-muted">งานทดสอบ</dt>
+            <dd class="mt-1 text-4xl font-bold tabular-nums">6</dd>
+          </div>
+          <div class="rounded-2xl bg-accent p-5 text-accent-ink">
+            <dt class="text-sm opacity-80">คำตอบที่ให้คะแนน</dt>
+            <dd class="mt-1 text-4xl font-bold tabular-nums">155</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-5xl px-4 py-20">
+      <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
+      <p class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
+      <ol class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          steps.map((s, i) => (
+            <li class="flex gap-4">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
+                {i + 1}
+              </span>
+              <div>
+                <p class="font-semibold">{s.title}</p>
+                <p class="text-muted">{s.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mx-auto max-w-5xl px-4 pb-24">
+      <div class="flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-surface p-8 md:flex-row md:items-center">
+        <div>
+          <p class="text-2xl font-bold">เริ่มจากเช็กเครื่องก่อน</p>
+          <p class="mt-1 flex items-center gap-2 text-muted">
+            <CheckIcon size={18} weight="bold" className="text-good" aria-hidden="true" /> ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที
+          </p>
+        </div>
+        <a
+          href="/wizard#step-1"
+          class="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+        >
+          เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line">
+    <div class="mx-auto flex max-w-5xl flex-col gap-2 px-4 py-8 text-sm text-muted sm:flex-row sm:justify-between">
+      <p>AITidBaan (AIติดบ้าน) เว็บฟรี ทำโดยคนคนเดียว</p>
+      <p>AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ</p>
+    </div>
+  </footer>
+</Layout>

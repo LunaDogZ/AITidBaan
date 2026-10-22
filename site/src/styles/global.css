@@ -1,0 +1,89 @@
+@import '@fontsource/anuphan/400.css';
+@import '@fontsource/anuphan/500.css';
+@import '@fontsource/anuphan/600.css';
+@import '@fontsource/anuphan/700.css';
+@import 'tailwindcss';
+
+/* โหมดมืดตามระบบ ใช้ CSS variables ชุดเดียวทั้งเว็บ
+   ความโค้ง: ปุ่ม = pill, การ์ด = rounded-2xl, ตัวเลือก = rounded-xl */
+:root {
+  --bg: oklch(0.985 0.003 250);
+  --surface: oklch(1 0 0 / 0.9);
+  --surface-sunk: oklch(0.955 0.006 250);
+  --ink: oklch(0.22 0.02 255);
+  --muted: oklch(0.47 0.02 255);
+  --line: oklch(0.9 0.008 250);
+  --accent: oklch(0.5 0.17 262);
+  --accent-ink: oklch(0.99 0 0);
+  --accent-soft: oklch(0.94 0.035 262);
+  --good: oklch(0.52 0.13 155);
+  --good-soft: oklch(0.95 0.04 155);
+  --minor: oklch(0.58 0.12 75);
+  --minor-soft: oklch(0.96 0.05 85);
+  --bad: oklch(0.55 0.17 25);
+  --bad-soft: oklch(0.95 0.03 25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: oklch(0.18 0.012 255);
+    --surface: oklch(0.225 0.014 255 / 0.92);
+    --surface-sunk: oklch(0.2 0.012 255);
+    --ink: oklch(0.95 0.005 250);
+    --muted: oklch(0.72 0.015 250);
+    --line: oklch(0.32 0.015 255);
+    --accent: oklch(0.72 0.13 262);
+    --accent-ink: oklch(0.18 0.03 262);
+    --accent-soft: oklch(0.3 0.06 262);
+    --good: oklch(0.78 0.13 155);
+    --good-soft: oklch(0.3 0.05 155);
+    --minor: oklch(0.82 0.12 85);
+    --minor-soft: oklch(0.32 0.05 85);
+    --bad: oklch(0.75 0.14 25);
+    --bad-soft: oklch(0.32 0.05 25);
+  }
+}
+
+@theme inline {
+  --font-sans: 'Anuphan', ui-sans-serif, system-ui, sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-sunk: var(--surface-sunk);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-minor: var(--minor);
+  --color-minor-soft: var(--minor-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+}
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  /* ภาษาไทยมีสระบน-ล่าง ต้องการบรรทัดโปร่งกว่าภาษาอังกฤษ */
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    animation: fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+}
