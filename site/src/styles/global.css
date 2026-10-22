@@ -4,48 +4,30 @@
 @import '@fontsource/anuphan/700.css';
 @import 'tailwindcss';
 
-/* โหมดมืดตามระบบ ใช้ CSS variables ชุดเดียวทั้งเว็บ
+/* ธีมสว่างอย่างเดียว (เจ้าของโปรเจกต์ขอ 2026-10-22)
    ความโค้ง: ปุ่ม = pill, การ์ด = rounded-2xl, ตัวเลือก = rounded-xl */
 :root {
-  --bg: oklch(0.985 0.003 250);
-  --surface: oklch(1 0 0 / 0.9);
-  --surface-sunk: oklch(0.955 0.006 250);
-  --ink: oklch(0.22 0.02 255);
-  --muted: oklch(0.47 0.02 255);
+  color-scheme: light;
+  --bg: oklch(0.995 0.002 250);
+  --surface: oklch(1 0 0);
+  --surface-sunk: oklch(0.965 0.006 250);
+  --ink: oklch(0.2 0.02 255);
+  --muted: oklch(0.42 0.02 255);
   --line: oklch(0.9 0.008 250);
   --accent: oklch(0.5 0.17 262);
   --accent-ink: oklch(0.99 0 0);
-  --accent-soft: oklch(0.94 0.035 262);
-  --good: oklch(0.52 0.13 155);
+  --accent-soft: oklch(0.95 0.03 262);
+  --good: oklch(0.5 0.13 155);
   --good-soft: oklch(0.95 0.04 155);
-  --minor: oklch(0.58 0.12 75);
+  --minor: oklch(0.55 0.12 70);
   --minor-soft: oklch(0.96 0.05 85);
-  --bad: oklch(0.55 0.17 25);
+  --bad: oklch(0.53 0.17 25);
   --bad-soft: oklch(0.95 0.03 25);
-  /* ฉากปัญหาของทิศทาง B: เข้มทั้งสองโหมด เป็นการสลับธีมครั้งเดียวที่ตั้งใจ */
-  --scene: oklch(0.24 0.03 262);
-  --scene-ink: oklch(0.96 0.005 250);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: oklch(0.18 0.012 255);
-    --surface: oklch(0.225 0.014 255 / 0.92);
-    --surface-sunk: oklch(0.2 0.012 255);
-    --ink: oklch(0.95 0.005 250);
-    --muted: oklch(0.72 0.015 250);
-    --line: oklch(0.32 0.015 255);
-    --accent: oklch(0.72 0.13 262);
-    --accent-ink: oklch(0.18 0.03 262);
-    --accent-soft: oklch(0.3 0.06 262);
-    --good: oklch(0.78 0.13 155);
-    --good-soft: oklch(0.3 0.05 155);
-    --minor: oklch(0.82 0.12 85);
-    --minor-soft: oklch(0.32 0.05 85);
-    --bad: oklch(0.75 0.14 25);
-    --bad-soft: oklch(0.32 0.05 25);
-    --scene: oklch(0.13 0.015 262);
-  }
+  /* ฉากปัญหาของทิศทาง B */
+  --scene: oklch(0.94 0.03 262);
+  --scene-ink: var(--ink);
+  /* easing หลักแบบ fastwork: ออกตัวเร็วแล้วค่อยๆ หยุด */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
@@ -70,6 +52,9 @@
 }
 
 html {
+  /* 18px: ตัวอักษรไทยที่ 16px อ่านยากสำหรับคนทั่วไป ทุกขนาดใน Tailwind ขยายตามนี้ */
+  font-size: 112.5%;
+  scroll-behavior: smooth;
   background: var(--bg);
   color: var(--ink);
   /* ภาษาไทยมีสระบน-ล่าง ต้องการบรรทัดโปร่งกว่าภาษาอังกฤษ */
@@ -77,19 +62,97 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
+/* คำตอบของโมเดลที่แปลงจาก markdown */
+.md > * + * {
+  margin-top: 0.75em;
+}
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  font-weight: 700;
+  font-size: 1.05em;
+}
+.md ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+.md ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+.md hr {
+  border-color: var(--line);
+}
+.md table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+.md th,
+.md td {
+  border: 1px solid var(--line);
+  padding: 0.4em 0.6em;
+  text-align: left;
+  vertical-align: top;
+}
+.md th {
+  background: var(--surface-sunk);
+  font-weight: 600;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .fade-in {
-    animation: fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: fade-in 0.5s var(--ease-out);
+  }
+  /* เปลี่ยนคำถามในวิซาร์ด: ไปข้างหน้าเลื่อนมาจากขวา ย้อนกลับเลื่อนมาจากซ้าย */
+  .slide-next {
+    animation: slide-next 0.55s var(--ease-out);
+  }
+  .slide-prev {
+    animation: slide-prev 0.55s var(--ease-out);
+  }
+  @keyframes slide-next {
+    from {
+      opacity: 0;
+      transform: translateX(48px);
+    }
+  }
+  @keyframes slide-prev {
+    from {
+      opacity: 0;
+      transform: translateX(-48px);
+    }
+  }
+
+  /* ขยับเข้าจอทีละชิ้นเมื่อเลื่อนมาถึง (scripts/reveal.ts ใส่ .is-in) ใส่ --i เพื่อเหลื่อมเวลา */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.62s var(--ease-out),
+      transform 0.62s var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
   }
   @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(6px);
+      transform: translateY(12px);
     }
   }
 }

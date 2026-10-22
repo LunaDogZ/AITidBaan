@@ -1,0 +1,181 @@
+---
+// เลื่อนแล้วสลับงานแบบ profile showcase ของ fastwork: เมนูซ้ายค้างไว้ การ์ดขวาเปลี่ยนตามการเลื่อน
+// URL hash เปลี่ยนตามงาน (#example-spelling) ส่งลิงก์ตรงไปงานนั้นได้
+// จอเล็กกว่า lg หรือตั้ง reduced motion: การ์ดเรียงลงมาธรรมดา
+import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
+import examples from '../data/examples.json';
+import { MODELS, SAMPLE_DATA, TASKS, TEST_DATE } from '../data/models';
+import type { Task } from '../lib/recommend';
+import { renderMd } from '../lib/markdown';
+
+const model = MODELS.find((m) => m.id === 'gemma-4-e4b')!;
+const answers = (examples.answers as Record<string, Record<Task, string>>)[model.rawId];
+const prompts = examples.prompts as Record<Task, string>;
+
+// ตัดที่ขึ้นบรรทัดใหม่ใกล้ความยาวที่ต้องการ จะได้ไม่ขาดกลางคำหรือกลางแถวตาราง
+const excerpt = (s: string, max: number) => {
+  const t = s.trim();
+  if (t.length <= max) return t;
+  const cut = t.lastIndexOf('\n', max);
+  return t.slice(0, cut > max / 2 ? cut : max).trim();
+};
+
+const items = TASKS.map((t) => ({
+  ...t,
+  instruction: prompts[t.id].split('\n')[0],
+  answer: renderMd(excerpt(answers[t.id], 900)),
+  good: model.ratings[t.id]?.good ?? 0,
+  total: Object.values(model.ratings[t.id] ?? {}).reduce((a, b) => a + b, 0),
+}));
+---
+
+<section id="examples" class="showcase-track relative">
+  <div class="showcase-stage mx-auto max-w-5xl px-4 py-20">
+    <div data-reveal>
+      <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">ดูคำตอบจริงทีละงาน</h2>
+      <p class="mt-3 text-lg text-muted">
+        คำตอบจาก {model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ {TEST_DATE}
+      </p>
+    </div>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[15rem_1fr] lg:gap-14">
+      <nav aria-label="งานทดสอบ" class="showcase-nav hidden lg:block">
+        <ol class="space-y-1">
+          {
+            items.map((it, i) => (
+              <li>
+                <a
+                  href={`#example-${it.id}`}
+                  data-index={i}
+                  class="showcase-tab block py-1.5 text-xl leading-snug text-muted/70 transition-[color,font-size] duration-500 hover:text-ink"
+                >
+                  {it.label}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="showcase-cards grid gap-6">
+        {
+          items.map((it, i) => (
+            <article
+              id={`example-${it.id}`}
+              data-index={i}
+              class="showcase-card scroll-mt-28 rounded-2xl border border-line bg-surface p-6 shadow-[0_24px_60px_-34px_oklch(0.3_0.04_255/0.4)] sm:p-8"
+            >
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 class="text-2xl font-bold">{it.label}</h3>
+                <span class="text-muted">{it.hint}</span>
+              </div>
+              <div class="mt-5 rounded-xl bg-sunk p-4">
+                <p class="text-sm font-medium text-muted">คำสั่งที่ใช้ทดสอบ</p>
+                <p class="mt-1">{it.instruction}</p>
+              </div>
+              <div class="mt-4">
+                <p class="text-sm font-medium text-muted">คำตอบจริงจาก {model.name} (ตัดมาบางส่วน)</p>
+                <div class="answer md mt-2" set:html={it.answer} />
+              </div>
+              <p class="mt-5 flex flex-wrap items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-good-soft px-3 py-1 font-semibold text-good">
+                  <CheckCircleIcon weight="fill" size={18} aria-hidden="true" /> ใช้ได้เลย {it.good} จาก {it.total} ข้อ
+                </span>
+                {SAMPLE_DATA && <span class="text-sm text-muted">ผลประเมินเป็นข้อมูลตัวอย่าง</span>}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { scroll } from 'motion';
+
+  const track = document.querySelector<HTMLElement>('.showcase-track');
+  const tabs = [...document.querySelectorAll<HTMLAnchorElement>('.showcase-tab')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.showcase-card')];
+  // เงื่อนไขต้องตรงกับ @media ใน <style>
+  const mode = matchMedia('(min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)');
+  let active = -1;
+
+  const setActive = (i: number) => {
+    if (i === active) return;
+    active = i;
+    tabs.forEach((t, n) => t.toggleAttribute('data-active', n === i));
+    cards.forEach((c, n) => c.toggleAttribute('data-active', n === i));
+    if (location.hash.startsWith('#example-') || i > 0) history.replaceState(null, '', `#${cards[i].id}`);
+  };
+
+  // ตำแหน่งเลื่อนที่ทำให้งานที่ i แสดง: แบ่งระยะที่ stage ค้างเป็น 6 ช่วงเท่ากัน แล้วไปกลางช่วง
+  const scrollFor = (i: number) => {
+    const top = track!.getBoundingClientRect().top + scrollY;
+    const distance = track!.offsetHeight - innerHeight;
+    return top + ((i + 0.5) / cards.length) * distance;
+  };
+
+  if (track && mode.matches) {
+    setActive(0);
+    scroll(
+      (progress: number) => setActive(Math.min(cards.length - 1, Math.floor(progress * cards.length))),
+      { target: track, offset: ['start start', 'end end'] },
+    );
+    tabs.forEach((t, i) =>
+      t.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollTo({ top: scrollFor(i), behavior: 'smooth' });
+      }),
+    );
+    // เปิดลิงก์ #example-xxx ตรงๆ ให้เลื่อนไปงานนั้น
+    const fromHash = cards.findIndex((c) => `#${c.id}` === location.hash);
+    if (fromHash > 0) scrollTo({ top: scrollFor(fromHash) });
+  }
+</script>
+
+<style>
+  .showcase-tab[data-active] {
+    color: var(--ink);
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  @media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+    /* ระยะเลื่อนต่องานประมาณ 60vh */
+    .showcase-track {
+      height: calc(100dvh + 6 * 60vh);
+    }
+    .showcase-stage {
+      position: sticky;
+      top: 0;
+      min-height: 100dvh;
+      padding-top: 6.5rem;
+      padding-bottom: 2rem;
+    }
+    .showcase-cards {
+      display: grid;
+    }
+    /* การ์ดซ้อนกันในช่องเดียว สลับด้วย opacity + เลื่อนขึ้นนิดหน่อย */
+    .showcase-card {
+      grid-area: 1 / 1;
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+      pointer-events: none;
+      transition:
+        opacity 0.5s var(--ease-out),
+        transform 0.6s var(--ease-out);
+    }
+    .showcase-card[data-active] {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    /* การ์ดต้องพอดีจอ ตัดคำตอบยาวด้วยการไล่จาง */
+    .showcase-card .answer {
+      max-height: 15rem;
+      overflow: hidden;
+      mask-image: linear-gradient(to bottom, black 65%, transparent);
+    }
+  }
+</style>

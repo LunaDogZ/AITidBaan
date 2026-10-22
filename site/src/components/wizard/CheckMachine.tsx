@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon, InfoIcon } from '@phosphor-icons/react';
 import type { Gpu, Ram, Task, Vram } from '../../lib/recommend';
 import { TASKS } from '../../data/models';
@@ -37,6 +38,10 @@ interface Props {
 }
 
 export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ, onDone }: Props) {
+  // จำคำถามก่อนหน้าไว้ เพื่อเลือกทิศทางที่คำถามใหม่เลื่อนเข้ามา
+  const prevQ = useRef(q);
+  const direction = q >= prevQ.current ? 'slide-next' : 'slide-prev';
+  prevQ.current = q;
   const set = (patch: Partial<Answers>) => onChange({ ...answers, ...patch });
   const toggleTask = (t: Task) =>
     set({ tasks: answers.tasks.includes(t) ? answers.tasks.filter((x) => x !== t) : [...answers.tasks, t] });
@@ -54,13 +59,13 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
       <div className="flex min-h-[680px] flex-col rounded-2xl border border-line bg-surface p-6 sm:p-8">
         <p className="text-sm text-muted">คำถาม {q + 1} จาก 3</p>
 
-        <div key={q} className="fade-in flex-1">
+        <div key={q} className={`${direction} flex-1`}>
           {q === 0 && (
             <>
-              <h1 id="q-title" className="mt-1 text-2xl font-bold">
+              <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
                 เครื่องของคุณมี RAM เท่าไร
               </h1>
-              <p className="mt-2 text-muted">
+              <p className="mt-2 text-lg text-muted">
                 กด Ctrl + Shift + Esc เพื่อเปิด Task Manager แล้วไปที่แท็บ Performance เลือก Memory
                 ดูตัวเลขมุมขวาบน
               </p>
@@ -92,10 +97,10 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
 
           {q === 1 && (
             <>
-              <h1 id="q-title" className="mt-1 text-2xl font-bold">
+              <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
                 ในแท็บ Performance มีคำว่า NVIDIA ไหม
               </h1>
-              <p className="mt-2 text-muted">ดูที่รายการด้านซ้าย ส่วนที่ขึ้นต้นด้วย GPU</p>
+              <p className="mt-2 text-lg text-muted">ดูที่รายการด้านซ้าย ส่วนที่ขึ้นต้นด้วย GPU</p>
               <div className="mt-4">
                 <ScreenshotSlot caption="Task Manager > Performance > GPU (Windows 11)" />
               </div>
@@ -145,10 +150,10 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
 
           {q === 2 && (
             <>
-              <h1 id="q-title" className="mt-1 text-2xl font-bold">
+              <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
                 อยากให้ AI ช่วยงานแบบไหน
               </h1>
-              <p className="mt-2 text-muted">เลือกได้หลายข้อ เราจะดูผลทดสอบของงานที่คุณเลือก</p>
+              <p className="mt-2 text-lg text-muted">เลือกได้หลายข้อ เราจะดูผลทดสอบของงานที่คุณเลือก</p>
               <fieldset className="mt-5">
                 <legend className="sr-only">งานที่ใช้</legend>
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -169,7 +174,8 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
           )}
         </div>
 
-        <div className="mt-8 flex items-center justify-between gap-4">
+        {/* ปุ่มติดขอบล่างของจอเสมอ แม้การ์ดจะสูงกว่าจอ (จอเล็ก หรือตอนมีคำถาม VRAM เพิ่ม) */}
+        <div className="sticky bottom-0 -mx-6 -mb-6 mt-6 flex items-center justify-between gap-4 rounded-b-2xl border-t border-line bg-surface/95 px-6 py-4 backdrop-blur sm:-mx-8 sm:-mb-8 sm:px-8">
           {q > 0 ? (
             <button
               type="button"

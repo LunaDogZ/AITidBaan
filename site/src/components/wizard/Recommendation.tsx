@@ -3,6 +3,7 @@ import { ArrowRightIcon, CheckCircleIcon, PencilSimpleIcon, WarningCircleIcon, X
 import { goodCount, machineTier, recommend, type MachineAnswers, type Task } from '../../lib/recommend';
 import { MODELS, SAMPLE_DATA, TASKS, TEST_DATE, TIER_LABEL } from '../../data/models';
 import examples from '../../data/examples.json';
+import { renderMd } from '../../lib/markdown';
 import { Trouble } from './ui';
 
 interface Props {
@@ -14,8 +15,6 @@ interface Props {
 
 const taskLabel = (t: Task) => TASKS.find((x) => x.id === t)!.label;
 
-// คำตอบดิบเป็น markdown ตัดเครื่องหมายที่อ่านแล้วรกออก แสดงเป็นข้อความธรรมดา
-const plain = (s: string) => s.replace(/\*\*/g, '').replace(/^#{1,6}[ \t]+/gm, '');
 
 export function Recommendation({ machine, tasks, onEdit, onNext }: Props) {
   const tier = machineTier(machine);
@@ -130,7 +129,7 @@ function Stat({ label, value, note, help }: { label: string; value: string; note
         {label}
       </dt>
       <dd className="mt-1 font-semibold">{value}</dd>
-      {note && <dd className="text-xs text-muted">{note}</dd>}
+      {note && <dd className="text-sm text-muted">{note}</dd>}
     </div>
   );
 }
@@ -145,12 +144,11 @@ function Example({ task, prompt, answer }: { task: Task; prompt: string; answer:
         <p className="mt-3 whitespace-pre-wrap text-muted">{prompt}</p>
       </details>
       <div className="relative mt-3">
-        <p
+        <div
           id="example-answer"
-          className={`whitespace-pre-wrap rounded-xl border border-line p-4 text-[15px] ${open ? '' : 'max-h-56 overflow-hidden'}`}
-        >
-          {plain(answer)}
-        </p>
+          className={`md rounded-xl border border-line p-5 ${open ? '' : 'max-h-72 overflow-hidden'}`}
+          dangerouslySetInnerHTML={{ __html: renderMd(answer) }}
+        />
         {!open && (
           <div className="pointer-events-none absolute inset-x-px bottom-px h-20 rounded-b-xl bg-gradient-to-t from-surface to-transparent" />
         )}

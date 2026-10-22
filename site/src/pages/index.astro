@@ -2,6 +2,7 @@
 import { ArrowRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Layout from '../layouts/Layout.astro';
 import SpellingExample from '../components/SpellingExample.astro';
+import TaskShowcase from '../components/TaskShowcase.astro';
 import { TASKS } from '../data/models';
 import { PROBLEMS, STEPS } from '../data/home';
 ---
@@ -14,31 +15,33 @@ import { PROBLEMS, STEPS } from '../data/home';
   <main>
     <section class="mx-auto grid min-h-[100dvh] max-w-5xl items-center gap-12 px-4 pt-24 pb-16 md:grid-cols-[1.05fr_1fr] md:gap-10">
       <div>
-        <h1 class="text-4xl leading-[1.25] font-bold tracking-tight md:text-5xl md:leading-[1.2]">
+        <h1 data-reveal class="text-4xl leading-[1.25] font-bold tracking-tight md:text-5xl md:leading-[1.2]">
           AI ช่วยงานเอกสาร<br />ที่ทำงานบนคอมคุณเอง
         </h1>
-        <p class="mt-5 max-w-[34ch] text-lg text-muted">
+        <p data-reveal style="--i: 1" class="mt-5 max-w-[34ch] text-xl text-muted">
           ตอบคำถามเรื่องเครื่องไม่กี่ข้อ แล้วรับคำแนะนำ AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตัวเดียวที่เหมาะกับคุณ
         </p>
         <a
           id="hero-cta"
           href="/wizard#step-1"
+          data-reveal
+          style="--i: 2"
           class="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-lg font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
         >
           เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
         </a>
       </div>
-      <SpellingExample />
+      <div data-reveal style="--i: 3"><SpellingExample /></div>
     </section>
 
     <section class="mx-auto max-w-5xl px-4 py-20">
-      <h2 class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
+      <h2 data-reveal class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
         ใช้ AI กับงานเอกสารได้ โดยไม่ต้องส่งข้อมูลออกไปไหน
       </h2>
       <dl class="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-3">
         {
-          PROBLEMS.map(({ icon: Icon, title, body }) => (
-            <div class="border-t border-line pt-6">
+          PROBLEMS.map(({ icon: Icon, title, body }, i) => (
+            <div data-reveal style={`--i: ${i}`} class="border-t border-line pt-6">
               <dt class="flex items-start gap-3 font-semibold">
                 <Icon size={24} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
                 {title}
@@ -50,9 +53,11 @@ import { PROBLEMS, STEPS } from '../data/home';
       </dl>
     </section>
 
+    <TaskShowcase />
+
     <section class="bg-sunk">
       <div class="mx-auto grid max-w-5xl gap-10 px-4 py-20 md:grid-cols-[1fr_1.2fr] md:items-center">
-        <div>
+        <div data-reveal>
           <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">ทดสอบเองกับงานที่คนออฟฟิศทำจริง</h2>
           <p class="mt-4 max-w-[46ch] text-muted">
             โมเดลทุกตัวได้คำสั่งเดียวกันทุกตัวอักษร ผู้ให้คะแนน 2 คนอ่านคำตอบโดยไม่เห็นชื่อโมเดล
@@ -63,15 +68,15 @@ import { PROBLEMS, STEPS } from '../data/home';
           </ul>
         </div>
         <dl class="grid grid-cols-3 gap-4">
-          <div class="rounded-2xl bg-surface p-5">
+          <div data-reveal style="--i: 1" class="rounded-2xl bg-surface p-5">
             <dt class="text-sm text-muted">โมเดล</dt>
             <dd class="mt-1 text-4xl font-bold tabular-nums">5</dd>
           </div>
-          <div class="rounded-2xl bg-surface p-5">
+          <div data-reveal style="--i: 2" class="rounded-2xl bg-surface p-5">
             <dt class="text-sm text-muted">งานทดสอบ</dt>
             <dd class="mt-1 text-4xl font-bold tabular-nums">6</dd>
           </div>
-          <div class="rounded-2xl bg-accent p-5 text-accent-ink">
+          <div data-reveal style="--i: 3" class="rounded-2xl bg-accent p-5 text-accent-ink">
             <dt class="text-sm opacity-80">คำตอบที่ให้คะแนน</dt>
             <dd class="mt-1 text-4xl font-bold tabular-nums">155</dd>
           </div>
@@ -80,12 +85,12 @@ import { PROBLEMS, STEPS } from '../data/home';
     </section>
 
     <section class="mx-auto max-w-5xl px-4 py-20">
-      <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
+      <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
       <p class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
       <ol class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {
           STEPS.map((s, i) => (
-            <li class="flex gap-4">
+            <li data-reveal style={`--i: ${i}`} class="flex gap-4">
               <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
                 {i + 1}
               </span>
@@ -100,7 +105,7 @@ import { PROBLEMS, STEPS } from '../data/home';
     </section>
 
     <section class="mx-auto max-w-5xl px-4 pb-24">
-      <div class="flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-surface p-8 md:flex-row md:items-center">
+      <div data-reveal class="flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-surface p-8 md:flex-row md:items-center">
         <div>
           <p class="text-2xl font-bold">เริ่มจากเช็กเครื่องก่อน</p>
           <p class="mt-1 flex items-center gap-2 text-muted">

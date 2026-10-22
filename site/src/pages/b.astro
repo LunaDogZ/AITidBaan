@@ -2,11 +2,13 @@
 // ทิศทาง B: ได้แรงบันดาลใจจาก interaction ของ fastwork.com/selling
 // 1) hero กลายร่าง: เลื่อนแล้วข้อความจางหาย การ์ดตัวอย่างเลื่อนมากลางจอกลายเป็นเนื้อหา
 // 2) ฉากปัญหาค้างไว้ แล้วการ์ดทางออกเลื่อนขึ้นมาทับ
-// 3) CTA ลอยด้านล่าง โผล่เฉพาะตอนที่มองไม่เห็นปุ่มอื่น
-// แอนิเมชันใช้ CSS scroll-driven ถ้าเบราว์เซอร์ไม่รองรับหรือตั้ง reduced motion ไว้ จะเป็นหน้านิ่งแบบทิศทาง A
+// 3) เลื่อนแล้วสลับงาน (TaskShowcase) และ CTA ลอยด้านล่าง
+// แบบเดียวกับ fastwork: JS อ่านระยะเลื่อนแล้วตั้งตัวแปร CSS (--p) จึงทำงานทุกเบราว์เซอร์
+// จอเล็ก/เตี้ย หรือตั้ง reduced motion: hero เป็นหน้านิ่ง
 import { ArrowRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Layout from '../layouts/Layout.astro';
 import SpellingExample from '../components/SpellingExample.astro';
+import TaskShowcase from '../components/TaskShowcase.astro';
 import { TASKS } from '../data/models';
 import { PROBLEMS, STEPS } from '../data/home';
 
@@ -25,43 +27,46 @@ const notes = [
 >
   <main>
     <section class="hero-track relative">
-      <!-- จุดอ้างอิงของ CTA ลอย: เลื่อนพ้นจุดนี้แล้วข้อความ hero หายไปแล้ว (ตำแหน่งตั้งใน <style>) -->
-      <div id="hero-sentinel" class="hero-sentinel pointer-events-none absolute top-0 h-px w-px" aria-hidden="true"></div>
       <div class="hero-stage mx-auto grid min-h-[100dvh] max-w-5xl items-center gap-12 px-4 pt-24 pb-16 lg:grid-cols-[1fr_30rem] lg:gap-8">
         <div class="hero-copy">
-          <h1 class="text-4xl leading-[1.25] font-bold tracking-tight md:text-5xl md:leading-[1.2]">
+          <h1 data-reveal class="text-4xl leading-[1.25] font-bold tracking-tight md:text-5xl md:leading-[1.2]">
             AI ช่วยงานเอกสาร<br />ที่ทำงานบนคอมคุณเอง
           </h1>
-          <p class="mt-5 max-w-[34ch] text-lg text-muted">
+          <p data-reveal style="--i: 1" class="mt-5 max-w-[34ch] text-xl text-muted">
             ตอบคำถามเรื่องเครื่องไม่กี่ข้อ แล้วรับคำแนะนำ AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตัวเดียวที่เหมาะกับคุณ
           </p>
           <a
             id="hero-cta"
             href="/wizard#step-1"
+            data-reveal
+            style="--i: 2"
             class="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-lg font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
           >
             เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
           </a>
         </div>
+        <!-- data-reveal อยู่ข้างใน เพราะ .hero-card ใช้ transform ของการกลายร่าง -->
         <div class="hero-card relative">
-          <p class="hero-caption text-center text-lg font-semibold">นี่คือคำตอบจริงจากโมเดลบนเครื่อง ไม่ใช่ภาพประกอบ</p>
-          <SpellingExample />
+          <p class="hero-caption text-center text-xl font-semibold">นี่คือคำตอบจริงจากโมเดลบนเครื่อง ไม่ใช่ภาพประกอบ</p>
+          <div data-reveal style="--i: 3"><SpellingExample /></div>
         </div>
       </div>
     </section>
 
     <section class="relative">
-      <div class="pain-stage flex md:sticky md:top-0 min-h-[100dvh] flex-col justify-center overflow-hidden bg-scene px-4 py-24 text-scene-ink">
+      <div class="pain-stage flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-scene px-4 py-24 text-scene-ink md:sticky md:top-0">
         <div class="mx-auto w-full max-w-5xl">
-          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
+          <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
           <ul class="mt-12 flex flex-wrap gap-3 sm:gap-5">
             {
-              notes.map((n) => (
-                <li
-                  class="w-[calc(50%-0.375rem)] rounded-2xl bg-scene-ink/95 p-4 text-base sm:w-56 sm:p-5 sm:text-lg leading-snug font-medium text-scene shadow-[0_20px_40px_-20px_oklch(0_0_0/0.6)]"
-                  style={`rotate: ${n.tilt}deg`}
-                >
-                  {n.text}
+              notes.map((n, i) => (
+                <li data-reveal style={`--i: ${i + 1}`}>
+                  <p
+                    class="w-[calc(50vw-1.4rem)] rounded-2xl bg-surface p-4 text-lg leading-snug font-medium shadow-[0_20px_40px_-24px_oklch(0.3_0.06_262/0.5)] sm:w-60 sm:p-5 sm:text-xl"
+                    style={`rotate: ${n.tilt}deg`}
+                  >
+                    {n.text}
+                  </p>
                 </li>
               ))
             }
@@ -71,17 +76,17 @@ const notes = [
       <!-- ให้ฉากปัญหาค้างไว้ครู่หนึ่งก่อนการ์ดทางออกเลื่อนขึ้นมาทับ -->
       <div class="hidden h-[45vh] md:block" aria-hidden="true"></div>
 
-      <div class="relative z-10 -mt-24 rounded-t-[2rem] bg-bg shadow-[0_-24px_60px_-30px_oklch(0_0_0/0.5)]">
+      <div class="relative z-10 -mt-24 rounded-t-[2rem] bg-bg shadow-[0_-24px_60px_-30px_oklch(0.3_0.06_262/0.35)]">
         <div class="mx-auto max-w-5xl px-4 py-20">
-          <h2 class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
+          <h2 data-reveal class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
             AITidBaan แก้ให้ทีละเรื่อง
           </h2>
           <dl class="mt-10 space-y-8">
             {
-              PROBLEMS.map(({ icon: Icon, title, body }) => (
-                <div class="grid gap-2 md:grid-cols-[21rem_1fr] md:gap-10">
+              PROBLEMS.map(({ icon: Icon, title, body }, i) => (
+                <div data-reveal style={`--i: ${i}`} class="grid gap-2 md:grid-cols-[22rem_1fr] md:gap-10">
                   <dt class="flex items-start gap-3 font-semibold">
-                    <Icon size={24} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+                    <Icon size={26} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
                     {title}
                   </dt>
                   <dd class="pl-9 text-muted md:pl-0">{body}</dd>
@@ -90,7 +95,7 @@ const notes = [
             }
           </dl>
 
-          <div class="mt-16 grid gap-6 rounded-2xl bg-sunk p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+          <div data-reveal class="mt-16 grid gap-6 rounded-2xl bg-sunk p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
             <div>
               <p class="text-xl font-bold">ทดสอบเองกับงานที่คนออฟฟิศทำจริง</p>
               <p class="mt-2 max-w-[52ch] text-muted">
@@ -106,14 +111,16 @@ const notes = [
       </div>
     </section>
 
+    <TaskShowcase />
+
     <section class="mx-auto max-w-5xl px-4 py-20">
-      <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
-      <p class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
+      <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
+      <p data-reveal class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
       <ol class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {
           STEPS.map((s, i) => (
-            <li class="flex gap-4">
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
+            <li data-reveal style={`--i: ${i}`} class="flex gap-4">
+              <span class="flex size-10 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
                 {i + 1}
               </span>
               <div>
@@ -127,14 +134,14 @@ const notes = [
     </section>
 
     <section id="final-cta" class="mx-auto max-w-5xl px-4 pb-24">
-      <div class="flex flex-col items-start justify-between gap-6 rounded-2xl bg-accent p-8 text-accent-ink md:flex-row md:items-center">
+      <div data-reveal class="flex flex-col items-start justify-between gap-6 rounded-2xl bg-accent p-8 text-accent-ink md:flex-row md:items-center">
         <div>
           <p class="text-2xl font-bold">เริ่มจากเช็กเครื่องก่อน</p>
-          <p class="mt-1 opacity-85">ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที</p>
+          <p class="mt-1 opacity-90">ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที</p>
         </div>
         <a
           href="/wizard#step-1"
-          class="inline-flex items-center gap-2 rounded-full bg-bg px-7 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-[0.98]"
+          class="inline-flex items-center gap-2 rounded-full bg-surface px-7 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-[0.98]"
         >
           เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
         </a>
@@ -152,16 +159,16 @@ const notes = [
   <div
     id="float-cta"
     aria-hidden="true"
-    class="pointer-events-none fixed inset-x-0 bottom-5 z-20 flex translate-y-4 justify-center px-4 opacity-0 transition duration-300 data-[show]:pointer-events-auto data-[show]:translate-y-0 data-[show]:opacity-100"
+    class="pointer-events-none fixed inset-x-0 bottom-5 z-20 flex translate-y-4 justify-center px-4 opacity-0 transition duration-500 ease-[var(--ease-out)] data-[show]:pointer-events-auto data-[show]:translate-y-0 data-[show]:opacity-100"
   >
-    <div class="flex items-center gap-4 rounded-full border border-line bg-surface py-2 pr-2 pl-5 shadow-[0_16px_40px_-16px_oklch(0.3_0.04_255/0.45)] backdrop-blur-md">
-      <span class="hidden items-center gap-1.5 text-sm text-muted sm:flex">
-        <CheckIcon size={16} weight="bold" className="text-good" aria-hidden="true" /> ฟรี ไม่ต้องสมัคร ประมาณ 2 นาที
+    <div class="flex items-center gap-4 rounded-full border border-line bg-surface py-2 pr-2 pl-5 shadow-[0_16px_40px_-16px_oklch(0.3_0.04_255/0.45)]">
+      <span class="hidden items-center gap-1.5 text-muted sm:flex">
+        <CheckIcon size={18} weight="bold" className="text-good" aria-hidden="true" /> ฟรี ไม่ต้องสมัคร ประมาณ 2 นาที
       </span>
       <a
         href="/wizard#step-1"
         tabindex="-1"
-        class="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+        class="rounded-full bg-accent px-5 py-2.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
       >
         เช็กเครื่องของฉัน
       </a>
@@ -170,35 +177,67 @@ const notes = [
 </Layout>
 
 <script>
-  // CTA ลอยโผล่เฉพาะตอนที่ไม่เห็นปุ่มใน hero และยังไม่ถึงกล่องปุ่มท้ายหน้า
-  // ถ้า hero กลายร่างได้ ปุ่มจะจางหายทั้งที่ยังอยู่ในจอ จึงดูจุดอ้างอิงแทนปุ่ม
-  // เงื่อนไขต้องตรงกับ @media ใน <style> และเปลี่ยนได้เมื่อย่อขยายหน้าต่าง
+  import { scroll } from 'motion';
+
+  // ข้อความ hero หายหมดที่ p = COPY_END (สัดส่วนของระยะที่ stage ค้าง) ต้องตรงกับ 0.21 ใน .hero-copy ของ <style>
+  const COPY_END = 0.21;
+  // เงื่อนไขต้องตรงกับ html.morph ใน <style> และเปลี่ยนได้เมื่อย่อขยายหน้าต่าง
   const morphQuery = matchMedia(
     '(prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 760px)',
   );
-  const float = document.getElementById('float-cta');
-  const link = float?.querySelector('a');
-  if (float && link) {
-    const visible = new Set<Element>();
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
-      const show = visible.size === 0;
-      float.toggleAttribute('data-show', show);
-      float.setAttribute('aria-hidden', String(!show));
-      link.tabIndex = show ? 0 : -1;
-    });
-    const watch = () => {
-      io.disconnect();
-      visible.clear();
-      const morphs = CSS.supports('animation-timeline: view()') && morphQuery.matches;
-      for (const id of [morphs ? 'hero-sentinel' : 'hero-cta', 'final-cta']) {
-        const el = document.getElementById(id);
-        if (el) io.observe(el);
+  const root = document.documentElement;
+  const track = document.querySelector<HTMLElement>('.hero-track')!;
+  const copy = document.querySelector<HTMLElement>('.hero-copy')!;
+  const heroCta = document.getElementById('hero-cta')!;
+  const finalCta = document.getElementById('final-cta')!;
+  const float = document.getElementById('float-cta')!;
+  const floatLink = float.querySelector('a')!;
+
+  let copyGone = false;
+  let heroCtaSeen = true;
+  let finalSeen = false;
+
+  const updateFloat = () => {
+    const morphs = root.classList.contains('morph');
+    const show = (morphs ? copyGone : !heroCtaSeen) && !finalSeen;
+    float.toggleAttribute('data-show', show);
+    float.setAttribute('aria-hidden', String(!show));
+    floatLink.tabIndex = show ? 0 : -1;
+  };
+
+  new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.target === heroCta) heroCtaSeen = e.isIntersecting;
+      if (e.target === finalCta) finalSeen = e.isIntersecting;
+    }
+    updateFloat();
+  }).observe(heroCta);
+  new IntersectionObserver(([e]) => {
+    finalSeen = e.isIntersecting;
+    updateFloat();
+  }).observe(finalCta);
+
+  // แบบ fastwork: อ่านความคืบหน้าการเลื่อนแล้วตั้ง --p ให้ CSS คำนวณท่าทางเอง
+  scroll(
+    (p: number) => {
+      track.style.setProperty('--p', String(p));
+      const gone = p >= COPY_END;
+      if (gone !== copyGone) {
+        copyGone = gone;
+        copy.inert = gone; // จางหมดแล้วกดหรือ tab ไปที่ปุ่มที่มองไม่เห็นไม่ได้
+        updateFloat();
       }
-    };
-    watch();
-    morphQuery.addEventListener('change', watch);
-  }
+    },
+    { target: track, offset: ['start start', 'end end'] },
+  );
+
+  const applyMode = () => {
+    root.classList.toggle('morph', morphQuery.matches);
+    if (!morphQuery.matches) copy.inert = false;
+    updateFloat();
+  };
+  applyMode();
+  morphQuery.addEventListener('change', applyMode);
 </script>
 
 <style>
@@ -206,72 +245,36 @@ const notes = [
     display: none;
   }
 
-  /* hero กลายร่าง เฉพาะจอกว้างที่รองรับ scroll-driven animation */
-  @supports (animation-timeline: view()) {
-    /* จอเตี้ยกว่า 760px การ์ดที่ขยายแล้วกับคำบรรยายจะชน header */
-    @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 760px) {
-      .hero-track {
-        --track: 220vh;
-        height: var(--track);
-        view-timeline: --hero block;
-      }
-      /* ข้อความหายตอน 70% ของช่วง contain 0-30% = 21% ของระยะที่ stage ค้าง (track - 100vh) */
-      .hero-sentinel {
-        top: calc((var(--track) - 100vh) * 0.21);
-      }
-      .hero-stage {
-        position: sticky;
-        top: 0;
-        height: 100dvh;
-      }
-      .hero-copy,
-      .hero-card,
-      .hero-caption {
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: --hero;
-      }
-      .hero-copy {
-        animation-name: copy-out;
-        animation-range: contain 0% contain 30%;
-      }
-      /* การ์ดอยู่คอลัมน์ขวากว้าง 30rem ในกรอบ 62rem: เลื่อนซ้าย 16rem = กึ่งกลางพอดี */
-      .hero-card {
-        animation-name: card-center;
-        animation-range: contain 5% contain 55%;
-      }
-      .hero-caption {
-        display: block;
-        position: absolute;
-        inset-inline: -4rem;
-        bottom: calc(100% + 2rem);
-        animation-name: caption-in;
-        animation-range: contain 50% contain 70%;
-      }
-    }
+  :global(html.morph) .hero-track {
+    --p: 0;
+    height: 220vh;
   }
-
-  /* จางหมดที่ 70% แล้วซ่อนเลย ปุ่มที่แทบมองไม่เห็นจะได้กดไม่ได้ */
-  @keyframes copy-out {
-    70%,
-    to {
-      opacity: 0;
-      visibility: hidden;
-    }
-    to {
-      filter: blur(8px);
-      transform: translateY(-2rem);
-    }
+  :global(html.morph) .hero-stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
   }
-  @keyframes card-center {
-    to {
-      transform: translateX(-16rem) scale(1.1);
-    }
+  /* ช่วงของแต่ละท่า (สัดส่วนของ --p): ข้อความ 0-0.21, การ์ดเลื่อนกลาง 0.05-0.55, คำบรรยาย 0.5-0.7 */
+  :global(html.morph) .hero-copy {
+    --t: clamp(0, var(--p) / 0.21, 1);
+    opacity: calc(1 - var(--t));
+    filter: blur(calc(var(--t) * 8px));
+    transform: translateY(calc(var(--t) * -2rem));
   }
-  @keyframes caption-in {
-    from {
-      opacity: 0;
-      transform: translateY(1rem);
-    }
+  /* การ์ดอยู่คอลัมน์ขวากว้าง 30rem ในกรอบ 62rem: เลื่อนซ้าย 16rem = กึ่งกลางพอดี */
+  :global(html.morph) .hero-card {
+    --t: clamp(0, (var(--p) - 0.05) / 0.5, 1);
+    /* ease-out แบบง่าย: 1 - (1 - t)^2 */
+    --e: calc(1 - (1 - var(--t)) * (1 - var(--t)));
+    transform: translateX(calc(var(--e) * -16rem)) scale(calc(1 + var(--e) * 0.1));
+  }
+  :global(html.morph) .hero-caption {
+    --t: clamp(0, (var(--p) - 0.5) / 0.2, 1);
+    display: block;
+    position: absolute;
+    inset-inline: -4rem;
+    bottom: calc(100% + 2rem);
+    opacity: var(--t);
+    transform: translateY(calc((1 - var(--t)) * 1rem));
   }
 </style>

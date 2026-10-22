@@ -15,9 +15,13 @@ export function Progress({ current }: { current: number }) {
           const now = n === current;
           return (
             <li key={label} aria-current={now ? 'step' : undefined}>
-              <div className={`h-1.5 rounded-full ${done || now ? 'bg-accent' : 'bg-line'}`} />
+              <div className="h-2 overflow-hidden rounded-full bg-line">
+                <div
+                  className={`h-full rounded-full bg-accent transition-transform duration-700 ease-[var(--ease-out)] origin-left ${done || now ? 'scale-x-100' : 'scale-x-0'}`}
+                />
+              </div>
               <span
-                className={`mt-2 hidden items-center gap-1 text-xs md:flex ${now ? 'font-semibold text-ink' : 'text-muted'}`}
+                className={`mt-2 hidden items-center gap-1 md:flex ${now ? 'font-semibold text-ink' : 'text-muted'}`}
               >
                 {done && <CheckIcon size={12} weight="bold" aria-hidden="true" />}
                 {label}

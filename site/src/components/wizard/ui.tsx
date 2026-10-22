@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { CaretDownIcon, ImageIcon } from '@phosphor-icons/react';
+import { CaretDownIcon, CheckCircleIcon, ImageIcon } from '@phosphor-icons/react';
 
 interface ChoiceProps {
   type: 'radio' | 'checkbox';
@@ -12,9 +12,15 @@ interface ChoiceProps {
 
 export function Choice({ type, name, checked, onChange, label, hint }: ChoiceProps) {
   return (
-    <label className="flex cursor-pointer flex-col justify-center rounded-xl border border-line bg-surface px-4 py-3 transition has-checked:border-accent has-checked:bg-accent-soft has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-accent hover:border-accent active:scale-[0.99]">
+    <label className="group relative flex cursor-pointer flex-col justify-center rounded-xl border-2 border-line bg-surface px-4 py-3.5 transition duration-300 ease-[var(--ease-out)] has-checked:border-accent has-checked:bg-accent-soft hover:-translate-y-0.5 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-accent hover:border-accent active:scale-[0.99]">
       <input type={type} name={name} checked={checked} onChange={onChange} className="sr-only" />
-      <span className="font-semibold">{label}</span>
+      <CheckCircleIcon
+        weight="fill"
+        size={22}
+        aria-hidden="true"
+        className="absolute top-3 right-3 scale-50 text-accent opacity-0 transition duration-300 ease-[var(--ease-out)] group-has-checked:scale-100 group-has-checked:opacity-100"
+      />
+      <span className="pr-6 text-lg font-semibold">{label}</span>
       {hint && <span className="text-sm text-muted">{hint}</span>}
     </label>
   );
@@ -23,7 +29,7 @@ export function Choice({ type, name, checked, onChange, label, hint }: ChoicePro
 export function ScreenshotSlot({ caption }: { caption: string }) {
   // TODO: ใส่ภาพแคปจริงจาก Windows 10 และ 11 (PRD ข้อ 9)
   return (
-    <div className="flex aspect-[16/5] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-line bg-sunk px-4 text-center text-sm text-muted">
+    <div className="flex aspect-[16/4] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-line bg-sunk px-4 text-center text-sm text-muted">
       <ImageIcon size={28} aria-hidden="true" />
       <span>ภาพแคปหน้าจอ: {caption}</span>
     </div>

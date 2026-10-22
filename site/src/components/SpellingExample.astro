@@ -11,8 +11,8 @@ import { SAMPLE_DATA, TEST_DATE } from '../data/models';
     <span class="text-muted">ทดสอบเมื่อ {TEST_DATE}</span>
   </figcaption>
 
-  <div class="mt-4 rounded-xl bg-sunk p-4 text-[15px]">
-    <p class="text-xs font-medium text-muted">ต้นฉบับ</p>
+  <div class="mt-4 rounded-xl bg-sunk p-4 text-base">
+    <p class="text-sm font-medium text-muted">ต้นฉบับ</p>
     <p class="mt-1">
       ผู้ที่จะเข้าพื้นที่ไลน์ผลิตต้องสวมหมวกนิรภัยปิด<mark
         class="rounded bg-bad-soft px-0.5 text-bad underline decoration-wavy underline-offset-4">ศรีษะ</mark
@@ -22,8 +22,8 @@ import { SAMPLE_DATA, TEST_DATE } from '../data/models';
     </p>
   </div>
 
-  <div class="mt-3 rounded-xl border border-line p-4 text-[15px]">
-    <p class="text-xs font-medium text-muted">คำตอบจริงจาก Gemma 4 E4B (ตัดมาบางส่วน)</p>
+  <div class="mt-3 rounded-xl border border-line p-4 text-base">
+    <p class="text-sm font-medium text-muted">คำตอบจริงจาก Gemma 4 E4B (ตัดมาบางส่วน)</p>
     <p class="mt-1">
       ผู้ที่จะเข้าพื้นที่ไลน์ผลิตต้องสวมหมวกนิรภัยคลุม<mark class="rounded bg-good-soft px-0.5 text-good">ศีรษะ</mark
       >และรองเท้านิรภัยทุกครั้ง หากผู้ใดไม่ปฏิบัติตาม เจ้าหน้าที่ความปลอดภัยจะไม่<mark class="rounded bg-good-soft px-0.5 text-good">อนุญาต</mark>ให้เข้าพื้นที่
@@ -34,6 +34,6 @@ import { SAMPLE_DATA, TEST_DATE } from '../data/models';
     <span class="inline-flex items-center gap-1.5 rounded-full bg-good-soft px-3 py-1 text-sm font-semibold text-good">
       <CheckCircleIcon weight="fill" size={18} aria-hidden="true" /> ใช้ได้เลย
     </span>
-    {SAMPLE_DATA && <span class="text-xs text-muted">ผลประเมินเป็นข้อมูลตัวอย่าง</span>}
+    {SAMPLE_DATA && <span class="text-sm text-muted">ผลประเมินเป็นข้อมูลตัวอย่าง</span>}
   </div>
 </figure>

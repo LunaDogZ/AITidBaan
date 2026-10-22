@@ -39,9 +39,9 @@ export default function Wizard() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-24 pb-20">
+    <div className="mx-auto max-w-3xl px-4 pt-[5.25rem] pb-20">
       <Progress current={shown} />
-      <div key={shown} className="fade-in mt-8">
+      <div key={shown} className="fade-in mt-6">
         {shown === 1 && (
           <CheckMachine
             answers={answers}
