@@ -1,0 +1,277 @@
+---
+// ทิศทาง B: ได้แรงบันดาลใจจาก interaction ของ fastwork.com/selling
+// 1) hero กลายร่าง: เลื่อนแล้วข้อความจางหาย การ์ดตัวอย่างเลื่อนมากลางจอกลายเป็นเนื้อหา
+// 2) ฉากปัญหาค้างไว้ แล้วการ์ดทางออกเลื่อนขึ้นมาทับ
+// 3) CTA ลอยด้านล่าง โผล่เฉพาะตอนที่มองไม่เห็นปุ่มอื่น
+// แอนิเมชันใช้ CSS scroll-driven ถ้าเบราว์เซอร์ไม่รองรับหรือตั้ง reduced motion ไว้ จะเป็นหน้านิ่งแบบทิศทาง A
+import { ArrowRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
+import Layout from '../layouts/Layout.astro';
+import SpellingExample from '../components/SpellingExample.astro';
+import { TASKS } from '../data/models';
+import { PROBLEMS, STEPS } from '../data/home';
+
+const notes = [
+  { text: 'เอกสารลูกค้าเป็นความลับ ห้ามเอาขึ้น ChatGPT', tilt: -3 },
+  { text: '7B, Q4, GGUF คืออะไรกันแน่', tilt: 2 },
+  { text: 'โน้ตบุ๊กออฟฟิศฉันจะรันไหวไหม', tilt: -1.5 },
+  { text: 'ตัวไหนเขียนภาษาไทยได้ดีจริง', tilt: 3 },
+  { text: 'ลองโหลดมาแล้ว ตอบเป็นภาษาจีน', tilt: -2 },
+];
+---
+
+<Layout
+  title="AITidBaan (AIติดบ้าน) | AI ออฟไลน์ภาษาไทยสำหรับงานเอกสาร"
+  description="แนะนำ AI ออฟไลน์ (Local LLM) ที่ทำงานเอกสารภาษาไทยได้จริงบนเครื่องของคุณ พร้อมผลทดสอบและคู่มือติดตั้งทีละขั้น"
+>
+  <main>
+    <section class="hero-track relative">
+      <!-- จุดอ้างอิงของ CTA ลอย: เลื่อนพ้นจุดนี้แล้วข้อความ hero หายไปแล้ว (ตำแหน่งตั้งใน <style>) -->
+      <div id="hero-sentinel" class="hero-sentinel pointer-events-none absolute top-0 h-px w-px" aria-hidden="true"></div>
+      <div class="hero-stage mx-auto grid min-h-[100dvh] max-w-5xl items-center gap-12 px-4 pt-24 pb-16 lg:grid-cols-[1fr_30rem] lg:gap-8">
+        <div class="hero-copy">
+          <h1 class="text-4xl leading-[1.25] font-bold tracking-tight md:text-5xl md:leading-[1.2]">
+            AI ช่วยงานเอกสาร<br />ที่ทำงานบนคอมคุณเอง
+          </h1>
+          <p class="mt-5 max-w-[34ch] text-lg text-muted">
+            ตอบคำถามเรื่องเครื่องไม่กี่ข้อ แล้วรับคำแนะนำ AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตัวเดียวที่เหมาะกับคุณ
+          </p>
+          <a
+            id="hero-cta"
+            href="/wizard#step-1"
+            class="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-lg font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+          >
+            เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+          </a>
+        </div>
+        <div class="hero-card relative">
+          <p class="hero-caption text-center text-lg font-semibold">นี่คือคำตอบจริงจากโมเดลบนเครื่อง ไม่ใช่ภาพประกอบ</p>
+          <SpellingExample />
+        </div>
+      </div>
+    </section>
+
+    <section class="relative">
+      <div class="pain-stage flex md:sticky md:top-0 min-h-[100dvh] flex-col justify-center overflow-hidden bg-scene px-4 py-24 text-scene-ink">
+        <div class="mx-auto w-full max-w-5xl">
+          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
+          <ul class="mt-12 flex flex-wrap gap-3 sm:gap-5">
+            {
+              notes.map((n) => (
+                <li
+                  class="w-[calc(50%-0.375rem)] rounded-2xl bg-scene-ink/95 p-4 text-base sm:w-56 sm:p-5 sm:text-lg leading-snug font-medium text-scene shadow-[0_20px_40px_-20px_oklch(0_0_0/0.6)]"
+                  style={`rotate: ${n.tilt}deg`}
+                >
+                  {n.text}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <!-- ให้ฉากปัญหาค้างไว้ครู่หนึ่งก่อนการ์ดทางออกเลื่อนขึ้นมาทับ -->
+      <div class="hidden h-[45vh] md:block" aria-hidden="true"></div>
+
+      <div class="relative z-10 -mt-24 rounded-t-[2rem] bg-bg shadow-[0_-24px_60px_-30px_oklch(0_0_0/0.5)]">
+        <div class="mx-auto max-w-5xl px-4 py-20">
+          <h2 class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
+            AITidBaan แก้ให้ทีละเรื่อง
+          </h2>
+          <dl class="mt-10 space-y-8">
+            {
+              PROBLEMS.map(({ icon: Icon, title, body }) => (
+                <div class="grid gap-2 md:grid-cols-[21rem_1fr] md:gap-10">
+                  <dt class="flex items-start gap-3 font-semibold">
+                    <Icon size={24} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+                    {title}
+                  </dt>
+                  <dd class="pl-9 text-muted md:pl-0">{body}</dd>
+                </div>
+              ))
+            }
+          </dl>
+
+          <div class="mt-16 grid gap-6 rounded-2xl bg-sunk p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+            <div>
+              <p class="text-xl font-bold">ทดสอบเองกับงานที่คนออฟฟิศทำจริง</p>
+              <p class="mt-2 max-w-[52ch] text-muted">
+                5 โมเดล 6 งาน รวม 155 คำตอบ ผู้ให้คะแนน 2 คนอ่านโดยไม่เห็นชื่อโมเดล
+                และมีข้อหลอกไว้จับว่าโมเดลแต่งตัวเลขขึ้นเองหรือเปล่า
+              </p>
+            </div>
+            <ul class="flex max-w-md flex-wrap gap-2 md:justify-end">
+              {TASKS.map((t) => <li class="rounded-full border border-line bg-surface px-3 py-1 text-sm">{t.label}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-5xl px-4 py-20">
+      <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
+      <p class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
+      <ol class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          STEPS.map((s, i) => (
+            <li class="flex gap-4">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
+                {i + 1}
+              </span>
+              <div>
+                <p class="font-semibold">{s.title}</p>
+                <p class="text-muted">{s.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section id="final-cta" class="mx-auto max-w-5xl px-4 pb-24">
+      <div class="flex flex-col items-start justify-between gap-6 rounded-2xl bg-accent p-8 text-accent-ink md:flex-row md:items-center">
+        <div>
+          <p class="text-2xl font-bold">เริ่มจากเช็กเครื่องก่อน</p>
+          <p class="mt-1 opacity-85">ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที</p>
+        </div>
+        <a
+          href="/wizard#step-1"
+          class="inline-flex items-center gap-2 rounded-full bg-bg px-7 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-[0.98]"
+        >
+          เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line">
+    <div class="mx-auto flex max-w-5xl flex-col gap-2 px-4 py-8 text-sm text-muted sm:flex-row sm:justify-between">
+      <p>AITidBaan (AIติดบ้าน) เว็บฟรี ทำโดยคนคนเดียว</p>
+      <p>AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ</p>
+    </div>
+  </footer>
+
+  <div
+    id="float-cta"
+    aria-hidden="true"
+    class="pointer-events-none fixed inset-x-0 bottom-5 z-20 flex translate-y-4 justify-center px-4 opacity-0 transition duration-300 data-[show]:pointer-events-auto data-[show]:translate-y-0 data-[show]:opacity-100"
+  >
+    <div class="flex items-center gap-4 rounded-full border border-line bg-surface py-2 pr-2 pl-5 shadow-[0_16px_40px_-16px_oklch(0.3_0.04_255/0.45)] backdrop-blur-md">
+      <span class="hidden items-center gap-1.5 text-sm text-muted sm:flex">
+        <CheckIcon size={16} weight="bold" className="text-good" aria-hidden="true" /> ฟรี ไม่ต้องสมัคร ประมาณ 2 นาที
+      </span>
+      <a
+        href="/wizard#step-1"
+        tabindex="-1"
+        class="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+      >
+        เช็กเครื่องของฉัน
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // CTA ลอยโผล่เฉพาะตอนที่ไม่เห็นปุ่มใน hero และยังไม่ถึงกล่องปุ่มท้ายหน้า
+  // ถ้า hero กลายร่างได้ ปุ่มจะจางหายทั้งที่ยังอยู่ในจอ จึงดูจุดอ้างอิงแทนปุ่ม
+  // เงื่อนไขต้องตรงกับ @media ใน <style> และเปลี่ยนได้เมื่อย่อขยายหน้าต่าง
+  const morphQuery = matchMedia(
+    '(prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 760px)',
+  );
+  const float = document.getElementById('float-cta');
+  const link = float?.querySelector('a');
+  if (float && link) {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+      const show = visible.size === 0;
+      float.toggleAttribute('data-show', show);
+      float.setAttribute('aria-hidden', String(!show));
+      link.tabIndex = show ? 0 : -1;
+    });
+    const watch = () => {
+      io.disconnect();
+      visible.clear();
+      const morphs = CSS.supports('animation-timeline: view()') && morphQuery.matches;
+      for (const id of [morphs ? 'hero-sentinel' : 'hero-cta', 'final-cta']) {
+        const el = document.getElementById(id);
+        if (el) io.observe(el);
+      }
+    };
+    watch();
+    morphQuery.addEventListener('change', watch);
+  }
+</script>
+
+<style>
+  .hero-caption {
+    display: none;
+  }
+
+  /* hero กลายร่าง เฉพาะจอกว้างที่รองรับ scroll-driven animation */
+  @supports (animation-timeline: view()) {
+    /* จอเตี้ยกว่า 760px การ์ดที่ขยายแล้วกับคำบรรยายจะชน header */
+    @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 760px) {
+      .hero-track {
+        --track: 220vh;
+        height: var(--track);
+        view-timeline: --hero block;
+      }
+      /* ข้อความหายตอน 70% ของช่วง contain 0-30% = 21% ของระยะที่ stage ค้าง (track - 100vh) */
+      .hero-sentinel {
+        top: calc((var(--track) - 100vh) * 0.21);
+      }
+      .hero-stage {
+        position: sticky;
+        top: 0;
+        height: 100dvh;
+      }
+      .hero-copy,
+      .hero-card,
+      .hero-caption {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --hero;
+      }
+      .hero-copy {
+        animation-name: copy-out;
+        animation-range: contain 0% contain 30%;
+      }
+      /* การ์ดอยู่คอลัมน์ขวากว้าง 30rem ในกรอบ 62rem: เลื่อนซ้าย 16rem = กึ่งกลางพอดี */
+      .hero-card {
+        animation-name: card-center;
+        animation-range: contain 5% contain 55%;
+      }
+      .hero-caption {
+        display: block;
+        position: absolute;
+        inset-inline: -4rem;
+        bottom: calc(100% + 2rem);
+        animation-name: caption-in;
+        animation-range: contain 50% contain 70%;
+      }
+    }
+  }
+
+  /* จางหมดที่ 70% แล้วซ่อนเลย ปุ่มที่แทบมองไม่เห็นจะได้กดไม่ได้ */
+  @keyframes copy-out {
+    70%,
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+    to {
+      filter: blur(8px);
+      transform: translateY(-2rem);
+    }
+  }
+  @keyframes card-center {
+    to {
+      transform: translateX(-16rem) scale(1.1);
+    }
+  }
+  @keyframes caption-in {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+</style>

@@ -22,6 +22,9 @@
   --minor-soft: oklch(0.96 0.05 85);
   --bad: oklch(0.55 0.17 25);
   --bad-soft: oklch(0.95 0.03 25);
+  /* ฉากปัญหาของทิศทาง B: เข้มทั้งสองโหมด เป็นการสลับธีมครั้งเดียวที่ตั้งใจ */
+  --scene: oklch(0.24 0.03 262);
+  --scene-ink: oklch(0.96 0.005 250);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,6 +44,7 @@
     --minor-soft: oklch(0.32 0.05 85);
     --bad: oklch(0.75 0.14 25);
     --bad-soft: oklch(0.32 0.05 25);
+    --scene: oklch(0.13 0.015 262);
   }
 }
 
@@ -61,6 +65,8 @@
   --color-minor-soft: var(--minor-soft);
   --color-bad: var(--bad);
   --color-bad-soft: var(--bad-soft);
+  --color-scene: var(--scene);
+  --color-scene-ink: var(--scene-ink);
 }
 
 html {
