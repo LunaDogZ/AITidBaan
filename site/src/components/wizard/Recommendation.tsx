@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ArrowRightIcon, CheckCircleIcon, PencilSimpleIcon, WarningCircleIcon, XCircleIcon } from '@phosphor-icons/react';
-import { goodCount, machineTier, recommend, type MachineAnswers, type Task } from '../../lib/recommend';
+import { ArrowRightIcon, CheckCircleIcon, LightbulbIcon, PencilSimpleIcon, WarningCircleIcon, XCircleIcon } from '@phosphor-icons/react';
+import { goodCount, machineTier, recommend, unsureUpgrades, type MachineAnswers, type Task } from '../../lib/recommend';
 import { MODELS, SAMPLE_DATA, TASKS, TEST_DATE, TIER_LABEL } from '../../data/models';
 import examples from '../../data/examples.json';
 import { renderMd } from '../../lib/markdown';
@@ -10,17 +10,22 @@ interface Props {
   machine: MachineAnswers;
   tasks: Task[];
   onEdit: () => void;
+  // ไปที่คำถามข้อนั้นในขั้นเช็กเครื่อง (0 = RAM, 1 = การ์ดจอ)
+  onEditQuestion: (q: number) => void;
   onNext: () => void;
 }
+
+const UNSURE_LABEL = { ram: 'RAM', gpu: 'การ์ดจอ' } as const;
 
 const taskLabel = (t: Task) => TASKS.find((x) => x.id === t)!.label;
 
 
-export function Recommendation({ machine, tasks, onEdit, onNext }: Props) {
+export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext }: Props) {
   const tier = machineTier(machine);
   const model = recommend(machine, tasks, MODELS);
 
   if (tier === 'notEnough' || !model) return <NotEnough onEdit={onEdit} />;
+  const unsure = unsureUpgrades(machine);
 
   const exampleTask = tasks[0];
   const answer = (examples.answers as Record<string, Record<Task, string>>)[model.rawId][exampleTask];
@@ -44,6 +49,30 @@ export function Recommendation({ machine, tasks, onEdit, onNext }: Props) {
           <PencilSimpleIcon size={14} aria-hidden="true" /> เปลี่ยนคำตอบ
         </button>
       </div>
+
+      {unsure.length > 0 && (
+        <div className="mt-5 flex gap-3 rounded-xl bg-accent-soft p-4">
+          <LightbulbIcon size={22} weight="fill" className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+          <div>
+            <p>
+              คุณตอบ "ไม่แน่ใจ" เรื่อง {unsure.map((k) => UNSURE_LABEL[k]).join(' และ')} เราเลยแนะนำแบบปลอดภัยไว้ก่อน
+              ถ้ารู้สเปกจริง อาจได้โมเดลที่เก่งกว่านี้
+            </p>
+            <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+              {unsure.map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => onEditQuestion(k === 'ram' ? 0 : 1)}
+                  className="font-semibold text-accent underline underline-offset-4"
+                >
+                  {k === 'ram' ? 'เช็ก RAM อีกครั้ง' : 'เช็กการ์ดจออีกครั้ง'}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <article className="mt-6 rounded-2xl border border-line bg-surface p-6 sm:p-8">
         <p className="text-sm text-muted">โมเดลที่เหมาะกับคุณ</p>

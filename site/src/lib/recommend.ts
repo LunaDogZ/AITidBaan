@@ -18,6 +18,19 @@ export function machineTier(a: MachineAnswers): Tier {
   return 'small';
 }
 
+const TIER_RANK: Record<Tier, number> = { notEnough: 0, small: 1, medium: 2, strong: 3 };
+
+// ข้อที่ตอบ "ไม่แน่ใจ" แล้วถ้ารู้ค่าจริง ระดับเครื่องอาจสูงขึ้นได้ (ใช้บอกผู้ใช้ว่าควรกลับไปเช็กข้อไหน)
+export function unsureUpgrades(a: MachineAnswers): ('ram' | 'gpu')[] {
+  const now = TIER_RANK[machineTier(a)];
+  const better = (b: MachineAnswers) => TIER_RANK[machineTier(b)] > now;
+  const out: ('ram' | 'gpu')[] = [];
+  if (a.ram === 'unsure' && better({ ...a, ram: 32 })) out.push('ram');
+  if ((a.gpu === 'unsure' || (a.gpu === 'nvidia' && a.vram === 'unsure')) && better({ ...a, gpu: 'nvidia', vram: 12 }))
+    out.push('gpu');
+  return out;
+}
+
 export type Task = 'summary' | 'formal' | 'spelling' | 'extraction' | 'translation' | 'minutes';
 
 export interface RatingCount {

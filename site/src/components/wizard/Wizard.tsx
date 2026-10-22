@@ -105,7 +105,16 @@ export default function Wizard() {
           />
         )}
         {shown === 2 && machine && (
-          <Recommendation machine={machine} tasks={answers.tasks} onEdit={() => go(1)} onNext={() => go(3)} />
+          <Recommendation
+            machine={machine}
+            tasks={answers.tasks}
+            onEdit={() => go(1)}
+            onEditQuestion={(q) => {
+              setQuestion(q);
+              go(1);
+            }}
+            onNext={() => go(3)}
+          />
         )}
         {shown === 3 && model && <InstallApp model={model} onBack={() => go(2)} onNext={() => go(4)} />}
         {shown === 4 && model && <LoadModel model={model} onBack={() => go(3)} onNext={() => go(5)} />}

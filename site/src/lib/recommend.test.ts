@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { machineTier, recommend } from './recommend';
+import { machineTier, recommend, unsureUpgrades } from './recommend';
 
 describe('machineTier', () => {
   it('RAM 8GB ไม่มีการ์ดจอ NVIDIA = เครื่องเล็ก', () => {
@@ -52,5 +52,26 @@ describe('recommend', () => {
 
   it('RAM 4GB ไม่แนะนำโมเดลใดเลย', () => {
     expect(recommend({ ram: 4, gpu: 'none' }, ['summary'], models)).toBeNull();
+  });
+});
+
+describe('unsureUpgrades', () => {
+  it('ไม่แน่ใจเรื่อง RAM และเครื่องยังเล็ก: ถ้ารู้จริงอาจขึ้นเป็นเครื่องกลาง', () => {
+    expect(unsureUpgrades({ ram: 'unsure', gpu: 'none' })).toEqual(['ram']);
+  });
+
+  it('ไม่แน่ใจเรื่องการ์ดจอหรือ VRAM: ถ้ารู้จริงอาจขึ้นเป็นเครื่องแรง', () => {
+    expect(unsureUpgrades({ ram: 16, gpu: 'unsure' })).toEqual(['gpu']);
+    expect(unsureUpgrades({ ram: 16, gpu: 'nvidia', vram: 'unsure' })).toEqual(['gpu']);
+  });
+
+  it('ไม่แน่ใจทั้งสองข้อ บอกทั้งสองข้อ', () => {
+    expect(unsureUpgrades({ ram: 'unsure', gpu: 'unsure' })).toEqual(['ram', 'gpu']);
+  });
+
+  it('รู้จริงแล้วก็ไม่ได้ดีขึ้น ไม่ต้องบอก', () => {
+    // การ์ด 8GB ขึ้นไปเป็นเครื่องแรงอยู่แล้ว RAM จะเท่าไรก็ไม่เปลี่ยน
+    expect(unsureUpgrades({ ram: 'unsure', gpu: 'nvidia', vram: 12 })).toEqual([]);
+    expect(unsureUpgrades({ ram: 16, gpu: 'none' })).toEqual([]);
   });
 });
