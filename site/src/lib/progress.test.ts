@@ -27,15 +27,20 @@ describe('parseProgress', () => {
 
 describe('resumeLink', () => {
   it('ทำถึงขั้น 2 ขึ้นไป ได้ลิงก์ทำต่อพร้อมเลขขั้น', () => {
-    expect(resumeLink(saved)).toEqual({ href: '/wizard#step-4', label: 'ทำต่อจากขั้น ④' });
+    expect(resumeLink(saved, 'th')).toEqual({ href: '/wizard#step-4', label: 'ทำต่อจากขั้น ④' });
   });
 
   it('ทำเสร็จแล้ว ได้ลิงก์ไปดูการติดตั้ง', () => {
-    expect(resumeLink({ ...saved, step: 6, done: true })).toEqual({ href: '/wizard', label: 'ดูการติดตั้งของฉัน' });
+    expect(resumeLink({ ...saved, step: 6, done: true }, 'th')).toEqual({ href: '/wizard', label: 'ดูการติดตั้งของฉัน' });
+  });
+
+  it('ภาษาอังกฤษ ลิงก์อยู่ใต้ /en/', () => {
+    expect(resumeLink(saved, 'en')).toEqual({ href: '/en/wizard#step-4', label: 'Continue from step ④' });
+    expect(resumeLink({ ...saved, done: true }, 'en')?.href).toBe('/en/wizard');
   });
 
   it('ยังอยู่ขั้นแรก หรือไม่มีค่า ไม่ต้องเปลี่ยนปุ่ม', () => {
-    expect(resumeLink({ ...saved, step: 1 })).toBeNull();
-    expect(resumeLink(null)).toBeNull();
+    expect(resumeLink({ ...saved, step: 1 }, 'th')).toBeNull();
+    expect(resumeLink(null, 'th')).toBeNull();
   });
 });

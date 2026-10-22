@@ -1,4 +1,5 @@
 import type { Gpu, Ram, Task, Vram } from './recommend';
+import { href, type Lang } from '../i18n';
 
 // ความคืบหน้าของวิซาร์ดที่จำไว้ใน localStorage ของผู้ใช้ (PRD ข้อ 4) ไม่ได้ส่งออกนอกเครื่อง
 export interface Progress {
@@ -34,11 +35,17 @@ export function parseProgress(raw: string | null): Progress | null {
   return { answers, step: v.step, done: v.done === true };
 }
 
-export function resumeLink(p: Progress | null): { href: string; label: string } | null {
+const RESUME_LABEL = {
+  th: { done: 'ดูการติดตั้งของฉัน', step: (n: string) => `ทำต่อจากขั้น ${n}` },
+  en: { done: 'View my setup', step: (n: string) => `Continue from step ${n}` },
+};
+
+export function resumeLink(p: Progress | null, lang: Lang): { href: string; label: string } | null {
   if (!p) return null;
-  if (p.done) return { href: '/wizard', label: 'ดูการติดตั้งของฉัน' };
+  const t = RESUME_LABEL[lang];
+  if (p.done) return { href: href(lang, '/wizard'), label: t.done };
   if (p.step < 2) return null;
-  return { href: `/wizard#step-${p.step}`, label: `ทำต่อจากขั้น ${CIRCLED[p.step - 1]}` };
+  return { href: href(lang, `/wizard#step-${p.step}`), label: t.step(CIRCLED[p.step - 1]) };
 }
 
 // localStorage อาจใช้ไม่ได้ (โหมดไม่ระบุตัวตนบางแบบ หรือปิด cookie) ให้เว็บทำงานต่อได้เหมือนไม่มีค่าที่จำไว้
