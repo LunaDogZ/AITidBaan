@@ -1,7 +1,7 @@
 ---
 // หน้าแรก (เดิมคือทิศทาง B) ได้แรงบันดาลใจจาก interaction ของ fastwork.com/selling
 // hero คำที่หมุน + การ์ดลอย, ฉากปัญหาที่การ์ดทางออกเลื่อนทับ, เลื่อนแล้วสลับงาน (TaskShowcase), CTA ลอยด้านล่าง
-import { ArrowRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
+import { ArrowDownIcon, ArrowRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import TaskShowcase from '../components/TaskShowcase.astro';
@@ -105,17 +105,22 @@ const notes = [
     <section class="mx-auto max-w-5xl px-4 py-20">
       <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
       <p data-reveal class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
-      <!-- หน้าตาเดียวกับแถบความคืบหน้าในวิซาร์ด เข้าไปแล้วจะจำได้ แถบเติมสีทีละช่องเมื่อเลื่อนมาถึง -->
-      <ol class="mt-12 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-6">
+      <!-- กล่องละขั้น มีลูกศรชี้ไปกล่องถัดไป: จอเล็กเรียงลงล่าง จอใหญ่แถวละ 3 -->
+      <ol class="mt-12 grid gap-y-12 lg:grid-cols-3 lg:gap-x-12 lg:gap-y-8">
         {
           STEPS.map((s, i) => (
-            <li data-reveal style={`--i: ${i}`}>
-              <div class="h-2 overflow-hidden rounded-full bg-line">
-                <div class="step-bar h-full origin-left rounded-full bg-accent"></div>
+            <li data-reveal style={`--i: ${i}`} class="relative">
+              <div class="h-full rounded-2xl border border-line bg-surface p-6 shadow-[0_14px_30px_-22px_oklch(0.3_0.04_255/0.4)]">
+                <p class="text-sm font-semibold tabular-nums text-accent">ขั้น {'①②③④⑤⑥'[i]}</p>
+                <p class="mt-2 text-xl font-bold leading-snug">{s.title}</p>
+                <p class="mt-2 text-lg text-muted">{s.body}</p>
               </div>
-              <p class="mt-4 text-sm font-semibold tabular-nums text-accent">ขั้น {'①②③④⑤⑥'[i]}</p>
-              <p class="mt-1 font-semibold leading-snug">{s.title}</p>
-              <p class="mt-1 text-muted">{s.body}</p>
+              {i < STEPS.length - 1 && (
+                <ArrowDownIcon size={24} weight="bold" className="absolute -bottom-9 left-1/2 -translate-x-1/2 text-accent lg:hidden" aria-hidden="true" />
+              )}
+              {i % 3 !== 2 && (
+                <ArrowRightIcon size={24} weight="bold" className="absolute top-1/2 -right-9 hidden -translate-y-1/2 text-accent lg:block" aria-hidden="true" />
+              )}
             </li>
           ))
         }
@@ -133,7 +138,7 @@ const notes = [
           data-wizard-cta
           class="inline-flex items-center gap-2 rounded-full bg-surface px-7 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-[0.98]"
         >
-          <span data-cta-label>เช็กเครื่องของฉัน</span> <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+          <span data-cta-label>มาเริ่มติดตั้งกันเลย!</span> <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
         </a>
       </div>
     </section>
@@ -161,7 +166,7 @@ const notes = [
         tabindex="-1"
         class="rounded-full bg-accent px-5 py-2.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
       >
-        <span data-cta-label>เช็กเครื่องของฉัน</span>
+        <span data-cta-label>มาเริ่มติดตั้งกันเลย!</span>
       </a>
     </div>
   </div>
@@ -217,16 +222,3 @@ const notes = [
   watch('final-cta', 'final');
 </script>
 
-
-<style>
-  @media (prefers-reduced-motion: no-preference) {
-    :global(.js) .step-bar {
-      transform: scaleX(0);
-      transition: transform 0.8s var(--ease-out);
-      transition-delay: calc(var(--i, 0) * 140ms + 200ms);
-    }
-    :global(.js [data-reveal].is-in) .step-bar {
-      transform: none;
-    }
-  }
-</style>
