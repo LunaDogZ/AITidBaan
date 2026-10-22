@@ -117,9 +117,10 @@ const notes = [
         </div>
         <a
           href="/wizard#step-1"
+          data-wizard-cta
           class="inline-flex items-center gap-2 rounded-full bg-surface px-7 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-[0.98]"
         >
-          เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+          <span data-cta-label>เช็กเครื่องของฉัน</span> <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
         </a>
       </div>
     </section>
@@ -143,17 +144,31 @@ const notes = [
       </span>
       <a
         href="/wizard#step-1"
+        data-wizard-cta
         tabindex="-1"
         class="rounded-full bg-accent px-5 py-2.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
       >
-        เช็กเครื่องของฉัน
+        <span data-cta-label>เช็กเครื่องของฉัน</span>
       </a>
     </div>
   </div>
 </Layout>
 
 <script>
-  // CTA ลอยโผล่เมื่อมองไม่เห็นปุ่มใน hero และไม่ได้กำลังอ่านตัวอย่างหรืออยู่ที่กล่องปุ่มท้ายหน้า
+  import { loadProgress, resumeLink } from '../lib/progress';
+
+  // ผู้ใช้ที่เคยทำวิซาร์ดค้างไว้ ปุ่มทุกปุ่มพาไปทำต่อจากขั้นเดิม
+  const resume = resumeLink(loadProgress());
+  if (resume) {
+    for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-wizard-cta]')) {
+      a.href = resume.href;
+      a.querySelector('[data-cta-label]')!.textContent = resume.label;
+    }
+  }
+</script>
+
+<script>
+  // CTA ลอยเมื่อมองไม่เห็นปุ่มใน hero และไม่ได้กำลังอ่านตัวอย่างหรืออยู่ที่กล่องปุ่มท้ายหน้า
   const float = document.getElementById('float-cta')!;
   const floatLink = float.querySelector('a')!;
   const seen = { hero: true, showcase: false, final: false };

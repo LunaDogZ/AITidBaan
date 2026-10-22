@@ -7,8 +7,10 @@ import { InstallApp } from './InstallApp';
 import { LoadModel } from './LoadModel';
 import { TryIt } from './TryIt';
 import { GoOffline } from './GoOffline';
+import { Resume } from './Resume';
 import { recommend } from '../../lib/recommend';
 import { MODELS } from '../../data/models';
+import { clearProgress, loadProgress, resumeLink, saveProgress, type Progress as Saved } from '../../lib/progress';
 
 // ขั้นอยู่ใน URL hash (#step-1) เพื่อให้ปุ่ม back ของเบราว์เซอร์ใช้ได้
 function stepFromHash(): number {
@@ -20,10 +22,23 @@ export default function Wizard() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<Answers>({ tasks: [] });
   const [question, setQuestion] = useState(0);
+  const [done, setDone] = useState(false);
+  // ค่าที่จำไว้ต้องโหลดก่อนเช็กขั้นด้านล่าง ไม่งั้นลิงก์ #step-4 จากปุ่ม "ทำต่อ" หน้าแรกจะโดนดึงกลับขั้นแรก
+  const [loaded, setLoaded] = useState(false);
+  // เข้าวิซาร์ดตรงๆ (ไม่ได้ระบุขั้น) ขณะที่มีความคืบหน้าเดิม ให้ถามก่อนว่าจะทำต่อไหม
+  const [resume, setResume] = useState<Saved | null>(null);
 
   useEffect(() => {
+    const saved = loadProgress();
+    const first = stepFromHash();
+    if (saved) {
+      setAnswers(saved.answers);
+      setDone(saved.done);
+      if (first === 1 && resumeLink(saved)) setResume(saved);
+    }
+    setStep(first);
+    setLoaded(true);
     const sync = () => setStep(stepFromHash());
-    sync();
     addEventListener('hashchange', sync);
     return () => removeEventListener('hashchange', sync);
   }, []);
@@ -36,16 +51,45 @@ export default function Wizard() {
   const model = machine ? recommend(machine, answers.tasks, MODELS) : null;
   const allowed = !ready ? 1 : !model ? 2 : 6;
   useEffect(() => {
-    if (step > allowed) {
+    if (loaded && step > allowed) {
       history.replaceState(null, '', `#step-${allowed}`);
       setStep(allowed);
     }
-  }, [step, allowed]);
+  }, [loaded, step, allowed]);
   const shown = Math.min(step, allowed);
   const go = (n: number) => {
+    setResume(null);
     location.hash = `step-${n}`;
     scrollTo({ top: 0 });
   };
+  const restart = () => {
+    clearProgress();
+    setAnswers({ tasks: [] });
+    setDone(false);
+    setQuestion(0);
+    go(1);
+  };
+
+  useEffect(() => {
+    if (loaded && !resume) saveProgress({ answers, step: shown, done });
+  }, [loaded, resume, answers, shown, done]);
+
+  if (!loaded) return null;
+  if (resume) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 pt-[5.25rem] pb-20">
+        <div className="fade-in">
+          <Resume
+            step={resume.step}
+            done={resume.done}
+            modelName={model?.name}
+            onContinue={() => go(resume.done ? 5 : resume.step)}
+            onRestart={restart}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 pt-[5.25rem] pb-20">
@@ -68,7 +112,7 @@ export default function Wizard() {
         {shown === 5 && model && (
           <TryIt model={model} tasks={answers.tasks} onBack={() => go(4)} onNext={() => go(6)} />
         )}
-        {shown === 6 && model && <GoOffline onBack={() => go(5)} />}
+        {shown === 6 && model && <GoOffline done={done} onDone={() => setDone(true)} onBack={() => go(5)} />}
       </div>
     </div>
   );

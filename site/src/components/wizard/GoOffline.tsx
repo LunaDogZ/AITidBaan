@@ -1,20 +1,19 @@
-import { useState } from 'react';
 import { ConfettiIcon } from '@phosphor-icons/react';
 import { ScreenshotSlot, StepShell, Steps, Trouble } from './ui';
 
 interface Props {
+  done: boolean;
+  onDone: () => void;
   onBack: () => void;
 }
 
-export function GoOffline({ onBack }: Props) {
-  const [done, setDone] = useState(false);
-
+export function GoOffline({ done, onDone, onBack }: Props) {
   return (
     <StepShell
       title="ตัดเน็ตแล้วลองถามอีกครั้ง"
       lead="ขั้นนี้พิสูจน์ด้วยตาตัวเองว่า AI ประมวลผลบนเครื่องคุณ ไม่ได้ส่งเอกสารไปที่ไหน"
       onBack={onBack}
-      onNext={done ? undefined : () => setDone(true)}
+      onNext={done ? undefined : onDone}
       nextLabel="AI ยังตอบได้"
     >
       <Steps
