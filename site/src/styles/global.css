@@ -26,6 +26,12 @@
   /* ฉากปัญหาของทิศทาง B */
   --scene: oklch(0.94 0.03 262);
   --scene-ink: var(--ink);
+  /* กระดาษโน้ตในฉากปัญหา: พาสเทลอ่อน ตัวหนังสือสีหมึกอ่านได้ทุกสี */
+  --note-green: oklch(0.93 0.07 155);
+  --note-purple: oklch(0.91 0.06 300);
+  --note-salmon: oklch(0.9 0.07 35);
+  --note-yellow: oklch(0.95 0.08 95);
+  --note-cyan: oklch(0.93 0.05 215);
   /* easing หลักแบบ fastwork: ออกตัวเร็วแล้วค่อยๆ หยุด */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }

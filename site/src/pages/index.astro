@@ -8,12 +8,14 @@ import TaskShowcase from '../components/TaskShowcase.astro';
 import { TASKS } from '../data/models';
 import { PROBLEMS, STEPS } from '../data/home';
 
+// กระดาษโน้ตแปะบอร์ดแบบ fastwork: สีพาสเทลคนละใบ เอียงและเหลื่อมกันนิดหน่อย (lift = เลื่อนขึ้นลง)
+// \u2060 กันเบราว์เซอร์ตัดบรรทัดกลางคำที่ตัวตัดคำไทยแยกผิด
 const notes = [
-  { text: 'เอกสารลูกค้าเป็นความลับ ห้ามเอาขึ้น ChatGPT', tilt: -3 },
-  { text: '7B, Q4, GGUF คืออะไรกันแน่', tilt: 2 },
-  { text: 'โน้ตบุ๊กออฟฟิศฉันจะรันไหวไหม', tilt: -1.5 },
-  { text: 'ตัวไหนเขียนภาษาไทยได้ดีจริง', tilt: 3 },
-  { text: 'ลองโหลดมาแล้ว ตอบเป็นภาษาจีน', tilt: -2 },
+  { text: 'เอกสารลูกค้าเป็นความ\u2060ลับ ห้ามเอาขึ้น ChatGPT', tilt: -4, lift: '0.5rem', tone: 'var(--note-green)' },
+  { text: '7B, Q4, GGUF คืออะไรกันแน่', tilt: 3, lift: '-0.75rem', tone: 'var(--note-purple)' },
+  { text: 'โน้ตบุ๊กออฟฟิศฉันจะรันไหวไหม', tilt: -2, lift: '0.25rem', tone: 'var(--note-salmon)' },
+  { text: 'ตัวไหนเขียนภาษาไทยได้ดีจริง', tilt: 2.5, lift: '-0.5rem', tone: 'var(--note-yellow)' },
+  { text: 'ลองโหลดมาแล้ว ตอบเป็นภาษาจีน', tilt: -3, lift: '0.5rem', tone: 'var(--note-cyan)' },
 ];
 ---
 
@@ -25,16 +27,19 @@ const notes = [
     <Hero />
 
     <section class="relative">
-      <div class="pain-stage flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-scene px-4 py-24 text-scene-ink md:sticky md:top-0">
-        <div class="mx-auto w-full max-w-5xl">
-          <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
-          <ul class="mt-12 flex flex-wrap gap-3 sm:gap-5">
+      <!-- พื้นไล่จากขาวของ hero เข้าฟ้า ไม่ตัดเป็นแถบ -->
+      <div class="pain-stage flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-[linear-gradient(180deg,var(--bg)_0%,var(--scene)_38%)] px-4 py-24 text-scene-ink md:sticky md:top-0 [@media(max-height:820px)]:py-16 [@media(max-height:740px)]:justify-start [@media(max-height:740px)]:pt-20">
+        <div class="mx-auto w-full max-w-5xl text-center">
+          <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight text-balance md:text-5xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
+          <p data-reveal style="--i: 1" class="mt-4 text-xl text-muted">ถ้าเคยคิดแบบนี้ เว็บนี้ทำมาเพื่อคุณ</p>
+          <!-- กว้างพอวาง 3 ใบต่อแถว: 3 ใบบน 2 ใบล่าง จัดกลาง -->
+          <ul class="mx-auto mt-14 [@media(max-height:820px)]:mt-8 [@media(max-height:740px)]:mt-5 flex max-w-[46rem] flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-y-5">
             {
               notes.map((n, i) => (
-                <li data-reveal style={`--i: ${i + 1}`}>
+                <li data-reveal style={`--i: ${i + 2}`}>
                   <p
-                    class="w-[calc(50vw-1.4rem)] rounded-2xl bg-surface p-4 text-lg leading-snug font-medium shadow-[0_20px_40px_-24px_oklch(0.3_0.06_262/0.5)] sm:w-60 sm:p-5 sm:text-xl"
-                    style={`rotate: ${n.tilt}deg`}
+                    class="note flex aspect-[1.15] w-[44vw] items-center justify-center rounded-xl p-4 text-lg leading-snug font-medium text-balance shadow-[0_24px_40px_-26px_oklch(0.3_0.06_262/0.55)] transition-[rotate,scale] duration-500 ease-[var(--ease-out)] hover:scale-105 hover:rotate-0 sm:w-56 sm:p-6 sm:text-[1.3rem] sm:[@media(max-height:820px)]:w-44 sm:[@media(max-height:820px)]:text-lg"
+                    style={`rotate: ${n.tilt}deg; translate: 0 ${n.lift}; background: ${n.tone}`}
                   >
                     {n.text}
                   </p>
