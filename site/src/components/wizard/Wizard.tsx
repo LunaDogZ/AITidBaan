@@ -3,6 +3,12 @@ import { toMachine, type Answers } from './answers';
 import { Progress } from './Progress';
 import { CheckMachine } from './CheckMachine';
 import { Recommendation } from './Recommendation';
+import { InstallApp } from './InstallApp';
+import { LoadModel } from './LoadModel';
+import { TryIt } from './TryIt';
+import { GoOffline } from './GoOffline';
+import { recommend } from '../../lib/recommend';
+import { MODELS } from '../../data/models';
 
 // ขั้นอยู่ใน URL hash (#step-1) เพื่อให้ปุ่ม back ของเบราว์เซอร์ใช้ได้
 function stepFromHash(): number {
@@ -26,13 +32,16 @@ export default function Wizard() {
   const ready = machine !== null && answers.tasks.length > 0;
   // เข้า #step-2 ตรงๆ โดยยังไม่ได้ตอบ ให้กลับไปขั้นแรก ทั้งหน้าจอและ URL
   // (ถ้าแก้แค่หน้าจอ พอตอบครบจะกระโดดไปขั้น 2 เองโดยไม่ได้กดไปต่อ)
+  // ขั้น ③-⑥ ต้องมีโมเดลที่แนะนำ ถ้าไม่มี (RAM 4GB) ให้อยู่ที่หน้าผลแนะนำ
+  const model = machine ? recommend(machine, answers.tasks, MODELS) : null;
+  const allowed = !ready ? 1 : !model ? 2 : 6;
   useEffect(() => {
-    if (step > 1 && !ready) {
-      history.replaceState(null, '', '#step-1');
-      setStep(1);
+    if (step > allowed) {
+      history.replaceState(null, '', `#step-${allowed}`);
+      setStep(allowed);
     }
-  }, [step, ready]);
-  const shown = ready ? step : 1;
+  }, [step, allowed]);
+  const shown = Math.min(step, allowed);
   const go = (n: number) => {
     location.hash = `step-${n}`;
     scrollTo({ top: 0 });
@@ -54,15 +63,12 @@ export default function Wizard() {
         {shown === 2 && machine && (
           <Recommendation machine={machine} tasks={answers.tasks} onEdit={() => go(1)} onNext={() => go(3)} />
         )}
-        {shown >= 3 && (
-          <div className="rounded-2xl border border-line bg-surface p-8">
-            <p className="text-xl font-bold">ขั้นนี้ยังไม่ได้ทำใน prototype</p>
-            <p className="mt-2 text-muted">prototype รอบนี้มีแค่ขั้นเช็กเครื่องกับผลแนะนำ</p>
-            <button onClick={() => go(2)} className="mt-6 font-semibold text-accent underline underline-offset-4">
-              กลับไปดูผลแนะนำ
-            </button>
-          </div>
+        {shown === 3 && model && <InstallApp model={model} onBack={() => go(2)} onNext={() => go(4)} />}
+        {shown === 4 && model && <LoadModel model={model} onBack={() => go(3)} onNext={() => go(5)} />}
+        {shown === 5 && model && (
+          <TryIt model={model} tasks={answers.tasks} onBack={() => go(4)} onNext={() => go(6)} />
         )}
+        {shown === 6 && model && <GoOffline onBack={() => go(5)} />}
       </div>
     </div>
   );

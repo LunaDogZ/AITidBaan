@@ -12,6 +12,7 @@ export interface Model extends RatedModel {
   fileGB: number;
   tokPerSec: number;
   speedKind: 'ค่าประมาณ' | 'ผลวัด';
+  hfUrl: string; // ลิงก์ GGUF ที่ให้ผู้ใช้วางในช่องค้นหาของ LM Studio (ใช้ไฟล์ Q4_K_M)
 }
 
 export const TASKS: { id: Task; label: string; hint: string }[] = [
@@ -29,6 +30,7 @@ export const MODELS: Model[] = [
   {
     id: 'typhoon-2.5-4b',
     rawId: 'typhoon2.5-qwen3-4b',
+    hfUrl: 'https://huggingface.co/mradermacher/typhoon2.5-qwen3-4b-GGUF',
     name: 'Typhoon 2.5 4B',
     tier: 'small',
     blurb: 'โมเดลที่ฝึกภาษาไทยโดยเฉพาะ ตัวเล็ก เปิดบนโน้ตบุ๊กทั่วไปได้',
@@ -40,6 +42,7 @@ export const MODELS: Model[] = [
   {
     id: 'gemma-4-e4b',
     rawId: 'gemma-4-e4b-it',
+    hfUrl: 'https://huggingface.co/lmstudio-community/gemma-4-E4B-it-GGUF',
     name: 'Gemma 4 E4B',
     tier: 'small',
     blurb: 'โมเดลทั่วไปจาก Google ที่อ่านเขียนภาษาไทยได้ดี',
@@ -51,6 +54,7 @@ export const MODELS: Model[] = [
   {
     id: 'openthaigpt-1.5-7b',
     rawId: 'openthaigpt1.5-7b-instruct',
+    hfUrl: 'https://huggingface.co/openthaigpt/openthaigpt1.5-7b-instruct-GGUF',
     name: 'OpenThaiGPT 1.5 7B',
     tier: 'medium',
     blurb: 'โมเดลภาษาไทยขนาดกลาง เหมาะกับเครื่อง RAM 16GB',
@@ -62,6 +66,7 @@ export const MODELS: Model[] = [
   {
     id: 'typhoon-2.1-12b',
     rawId: 'typhoon2.1-gemma3-12b',
+    hfUrl: 'https://huggingface.co/typhoon-ai/typhoon2.1-gemma3-12b-gguf',
     name: 'Typhoon 2.1 Gemma3 12B',
     tier: 'strong',
     blurb: 'โมเดลภาษาไทยตัวใหญ่ ต้องใช้การ์ดจอ NVIDIA 8GB ขึ้นไป',
@@ -73,6 +78,7 @@ export const MODELS: Model[] = [
   {
     id: 'qwen-3.5-9b',
     rawId: 'qwen3.5-9b',
+    hfUrl: 'https://huggingface.co/lmstudio-community/Qwen3.5-9B-GGUF',
     name: 'Qwen3.5 9B',
     tier: 'strong',
     blurb: 'โมเดลทั่วไปที่เก่งงานดึงข้อมูล แต่บางครั้งมีคำจีนแทรก',

@@ -1,6 +1,6 @@
 import { CheckIcon } from '@phosphor-icons/react';
 
-const STEPS = ['เช็กเครื่อง', 'โมเดลของคุณ', 'ติดตั้ง LM Studio', 'โหลดโมเดล', 'ลองถาม', 'ตัดเน็ต'];
+const STEPS = ['เช็กเครื่อง', 'โมเดลของคุณ', 'ติดตั้งแอป', 'โหลดโมเดล', 'ลองถาม', 'ตัดเน็ต'];
 
 export function Progress({ current }: { current: number }) {
   return (
