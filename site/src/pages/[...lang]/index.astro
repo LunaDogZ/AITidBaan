@@ -2,36 +2,92 @@
 // หน้าแรก (เดิมคือทิศทาง B) ได้แรงบันดาลใจจาก interaction ของ fastwork.com/selling
 // hero คำที่หมุน + การ์ดลอย, ฉากปัญหาที่การ์ดทางออกเลื่อนทับ, เลื่อนแล้วสลับงาน (TaskShowcase), CTA ลอยด้านล่าง
 import { ArrowDownIcon, ArrowRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import TaskShowcase from '../components/TaskShowcase.astro';
-import { TASKS } from '../data/models';
-import { PROBLEMS, STEPS } from '../data/home';
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import TaskShowcase from '../../components/TaskShowcase.astro';
+import { TASKS } from '../../data/models';
+import { PROBLEMS, STEPS } from '../../data/home';
+import { href, langOf, langPaths } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
 
 // กระดาษโน้ตแปะบอร์ดแบบ fastwork: สีพาสเทลคนละใบ เอียงและเหลื่อมกันนิดหน่อย (lift = เลื่อนขึ้นลง)
-// \u2060 กันเบราว์เซอร์ตัดบรรทัดกลางคำที่ตัวตัดคำไทยแยกผิด
-const notes = [
-  { text: 'เอกสารลูกค้าเป็นความ\u2060ลับ ห้ามเอาขึ้น ChatGPT', tilt: -4, lift: '0.5rem', tone: 'var(--note-green)' },
-  { text: '7B, Q4, GGUF คืออะไรกันแน่', tilt: 3, lift: '-0.75rem', tone: 'var(--note-purple)' },
-  { text: 'โน้ตบุ๊กออฟฟิศฉันจะรันไหวไหม', tilt: -2, lift: '0.25rem', tone: 'var(--note-salmon)' },
-  { text: 'ตัวไหนเขียนภาษาไทยได้ดีจริง', tilt: 2.5, lift: '-0.5rem', tone: 'var(--note-yellow)' },
-  { text: 'ลองโหลดมาแล้ว ตอบเป็นภาษาจีน', tilt: -3, lift: '0.5rem', tone: 'var(--note-cyan)' },
+const NOTE_LOOK = [
+  { tilt: -4, lift: '0.5rem', tone: 'var(--note-green)' },
+  { tilt: 3, lift: '-0.75rem', tone: 'var(--note-purple)' },
+  { tilt: -2, lift: '0.25rem', tone: 'var(--note-salmon)' },
+  { tilt: 2.5, lift: '-0.5rem', tone: 'var(--note-yellow)' },
+  { tilt: -3, lift: '0.5rem', tone: 'var(--note-cyan)' },
 ];
+
+const T = {
+  th: {
+    title: 'AITidBaan (AIติดบ้าน) | AI ออฟไลน์ภาษาไทยสำหรับงานเอกสาร',
+    description: 'แนะนำ AI ออฟไลน์ (Local LLM) ที่ทำงานเอกสารภาษาไทยได้จริงบนเครื่องของคุณ พร้อมผลทดสอบและคู่มือติดตั้งทีละขั้น',
+    painTitle: 'อยากให้ AI ช่วยงาน แต่ติดตรงนี้',
+    painLead: 'ถ้าเคยคิดแบบนี้ เว็บนี้ทำมาเพื่อคุณ',
+    // \u2060 กันเบราว์เซอร์ตัดบรรทัดกลางคำที่ตัวตัดคำไทยแยกผิด
+    notes: [
+      'เอกสารลูกค้าเป็นความ\u2060ลับ ห้ามเอาขึ้น ChatGPT',
+      '7B, Q4, GGUF คืออะไรกันแน่',
+      'โน้ตบุ๊กออฟฟิศฉันจะรันไหวไหม',
+      'ตัวไหนเขียนภาษาไทยได้ดีจริง',
+      'ลองโหลดมาแล้ว ตอบเป็นภาษาจีน',
+    ],
+    fixTitle: 'AITidBaan แก้ให้ทีละเรื่อง',
+    testTitle: 'ทดสอบเองกับงานที่คนออฟฟิศทำจริง',
+    testBody:
+      'เราลองให้ AI ออฟไลน์ทำงานเอกสารภาษาไทยจริง แล้วให้คนอ่านให้คะแนนโดยไม่เห็นชื่อโมเดล และมีข้อหลอกไว้จับว่าโมเดลแต่งตัวเลขขึ้นเองหรือเปล่า',
+    stepsTitle: 'พาทำทีละขั้น จนถามเอกสารของคุณได้',
+    stepsLead: 'คู่มือนี้สำหรับ Windows',
+    step: 'ขั้น',
+    finalTitle: 'เริ่มจากเช็กเครื่องก่อน',
+    finalLead: 'ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที',
+    cta: 'มาเริ่มติดตั้งกันเลย!',
+    floatNote: 'ฟรี ไม่ต้องสมัคร ประมาณ 2 นาที',
+    footer: ['AITidBaan (AIติดบ้าน) เว็บฟรี ทำโดยคนคนเดียว', 'AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ'],
+  },
+  en: {
+    title: 'AITidBaan | Offline AI for Thai office documents',
+    description:
+      'Find an offline AI (local LLM) that handles Thai documents well on your own computer, with real test results and a step-by-step setup guide.',
+    painTitle: "You want AI to help, but you're stuck here",
+    painLead: 'If any of these sound familiar, this site is for you',
+    notes: [
+      'Client files are confidential. No ChatGPT allowed',
+      'What do 7B, Q4 and GGUF even mean?',
+      'Can my office laptop run it?',
+      'Which one actually writes good Thai?',
+      'I tried one and it answered in Chinese',
+    ],
+    fixTitle: 'How AITidBaan helps, one by one',
+    testTitle: 'Tested on real office work',
+    testBody:
+      'We gave offline AI models real Thai office documents, had people score the answers without seeing model names, and added trick questions to catch models that make up numbers.',
+    stepsTitle: 'Step by step, until you can ask about your own documents',
+    stepsLead: 'This guide is for Windows',
+    step: 'Step',
+    finalTitle: 'Start by checking your computer',
+    finalLead: 'Free, no sign-up, about 2 minutes',
+    cta: "Let's get it installed!",
+    floatNote: 'Free, no sign-up, about 2 minutes',
+    footer: ['AITidBaan (AIติดบ้าน) is a free site made by one person', 'AI runs on your computer. This site only recommends'],
+  },
+}[lang];
+const notes = T.notes.map((text, i) => ({ text, ...NOTE_LOOK[i] }));
 ---
 
-<Layout
-  title="AITidBaan (AIติดบ้าน) | AI ออฟไลน์ภาษาไทยสำหรับงานเอกสาร"
-  description="แนะนำ AI ออฟไลน์ (Local LLM) ที่ทำงานเอกสารภาษาไทยได้จริงบนเครื่องของคุณ พร้อมผลทดสอบและคู่มือติดตั้งทีละขั้น"
->
+<Layout lang={lang} title={T.title} description={T.description}>
   <main>
-    <Hero />
+    <Hero lang={lang} />
 
     <section class="relative">
       <!-- พื้นไล่จากขาวของ hero เข้าฟ้า ไม่ตัดเป็นแถบ -->
       <div class="pain-stage flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-[linear-gradient(180deg,var(--bg)_0%,var(--scene)_38%)] px-4 py-24 text-scene-ink md:sticky md:top-0 [@media(max-height:820px)]:py-16 [@media(max-height:740px)]:justify-start [@media(max-height:740px)]:pt-20">
         <div class="mx-auto w-full max-w-5xl text-center">
-          <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight text-balance md:text-5xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
-          <p data-reveal style="--i: 1" class="mt-4 text-xl text-muted">ถ้าเคยคิดแบบนี้ เว็บนี้ทำมาเพื่อคุณ</p>
+          <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight text-balance md:text-5xl">{T.painTitle}</h2>
+          <p data-reveal style="--i: 1" class="mt-4 text-xl text-muted">{T.painLead}</p>
           <!-- กว้างพอวาง 3 ใบต่อแถว: 3 ใบบน 2 ใบล่าง จัดกลาง -->
           <ul id="pain-notes" class="mx-auto mt-14 [@media(max-height:820px)]:mt-8 [@media(max-height:740px)]:mt-5 flex max-w-[46rem] flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-y-5">
             {
@@ -55,12 +111,12 @@ const notes = [
       <div id="fix-sheet" class="relative z-10 -mt-24 rounded-t-[2rem] bg-bg shadow-[0_-24px_60px_-30px_oklch(0.3_0.06_262/0.35)]">
         <div class="mx-auto max-w-5xl px-4 py-20">
           <h2 data-reveal class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
-            AITidBaan แก้ให้ทีละเรื่อง
+            {T.fixTitle}
           </h2>
           <!-- โน้ตปัญหาสีเดียวกับบนบอร์ดด้านบน จับคู่กับวิธีที่เว็บนี้แก้ -->
           <dl class="mt-10 divide-y divide-line border-y border-line">
             {
-              PROBLEMS.map(({ title, body, tone, tilt }, i) => (
+              PROBLEMS[lang].map(({ title, body, tone, tilt }, i) => (
                 <div data-reveal style={`--i: ${i}`} class="grid items-center gap-4 py-7 md:grid-cols-[17rem_1fr] md:gap-12">
                   <dt
                     class="w-fit max-w-[17rem] rounded-lg px-4 py-3 text-lg leading-snug font-medium text-scene-ink shadow-[0_14px_24px_-18px_oklch(0.3_0.06_262/0.6)]"
@@ -79,15 +135,12 @@ const notes = [
 
           <div data-reveal class="mt-16 grid gap-6 rounded-2xl bg-sunk p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
             <div>
-              <p class="text-xl font-bold">ทดสอบเองกับงานที่คนออฟฟิศทำจริง</p>
-              <p class="mt-2 max-w-[52ch] text-muted">
-                เราลองให้ AI ออฟไลน์ทำงานเอกสารภาษาไทยจริง แล้วให้คนอ่านให้คะแนนโดยไม่เห็นชื่อโมเดล
-                และมีข้อหลอกไว้จับว่าโมเดลแต่งตัวเลขขึ้นเองหรือเปล่า
-              </p>
+              <p class="text-xl font-bold">{T.testTitle}</p>
+              <p class="mt-2 max-w-[52ch] text-muted">{T.testBody}</p>
             </div>
             <ol class="grid gap-x-6 gap-y-1.5 sm:grid-cols-2 md:min-w-[22rem]">
               {
-                TASKS.map((t, i) => (
+                TASKS[lang].map((t, i) => (
                   <li class="flex items-baseline gap-2">
                     <span class="text-sm font-semibold tabular-nums text-accent">{String(i + 1).padStart(2, '0')}</span>
                     {t.label}
@@ -100,22 +153,22 @@ const notes = [
       </div>
     </section>
 
-    <TaskShowcase />
+    <TaskShowcase lang={lang} />
 
     <section class="mx-auto max-w-5xl px-4 py-20">
-      <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
-      <p data-reveal class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
+      <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">{T.stepsTitle}</h2>
+      <p data-reveal class="mt-3 text-muted">{T.stepsLead}</p>
       <!-- กล่องละขั้น มีลูกศรชี้ไปกล่องถัดไป: จอเล็กเรียงลงล่าง จอใหญ่แถวละ 3 -->
       <ol class="mt-12 grid gap-y-12 lg:grid-cols-3 lg:gap-x-12 lg:gap-y-8">
         {
-          STEPS.map((s, i) => (
+          STEPS[lang].map((s, i) => (
             <li data-reveal style={`--i: ${i}`} class="relative">
               <div class="h-full rounded-2xl border border-line bg-surface p-6 shadow-[0_14px_30px_-22px_oklch(0.3_0.04_255/0.4)]">
-                <p class="text-sm font-semibold tabular-nums text-accent">ขั้น {'①②③④⑤⑥'[i]}</p>
+                <p class="text-sm font-semibold tabular-nums text-accent">{T.step} {'①②③④⑤⑥'[i]}</p>
                 <p class="mt-2 text-xl font-bold leading-snug">{s.title}</p>
                 <p class="mt-2 text-lg text-muted">{s.body}</p>
               </div>
-              {i < STEPS.length - 1 && (
+              {i < STEPS[lang].length - 1 && (
                 <ArrowDownIcon size={24} weight="bold" className="absolute -bottom-9 left-1/2 -translate-x-1/2 text-accent lg:hidden" aria-hidden="true" />
               )}
               {i % 3 !== 2 && (
@@ -130,15 +183,15 @@ const notes = [
     <section id="final-cta" class="mx-auto max-w-5xl px-4 pb-24">
       <div data-reveal class="flex flex-col items-start justify-between gap-6 rounded-2xl bg-accent p-8 text-accent-ink md:flex-row md:items-center">
         <div>
-          <p class="text-2xl font-bold">เริ่มจากเช็กเครื่องก่อน</p>
-          <p class="mt-1 opacity-90">ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที</p>
+          <p class="text-2xl font-bold">{T.finalTitle}</p>
+          <p class="mt-1 opacity-90">{T.finalLead}</p>
         </div>
         <a
-          href="/wizard#step-1"
+          href={href(lang, '/wizard#step-1')}
           data-wizard-cta
           class="inline-flex items-center gap-2 rounded-full bg-surface px-7 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-[0.98]"
         >
-          <span data-cta-label>มาเริ่มติดตั้งกันเลย!</span> <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+          <span data-cta-label>{T.cta}</span> <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
         </a>
       </div>
     </section>
@@ -146,8 +199,8 @@ const notes = [
 
   <footer class="border-t border-line">
     <div class="mx-auto flex max-w-5xl flex-col gap-2 px-4 py-8 text-sm text-muted sm:flex-row sm:justify-between">
-      <p>AITidBaan (AIติดบ้าน) เว็บฟรี ทำโดยคนคนเดียว</p>
-      <p>AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ</p>
+      <p>{T.footer[0]}</p>
+      <p>{T.footer[1]}</p>
     </div>
   </footer>
 
@@ -158,25 +211,25 @@ const notes = [
   >
     <div class="flex items-center gap-4 rounded-full border border-line bg-surface py-2 pr-2 pl-5 shadow-[0_16px_40px_-16px_oklch(0.3_0.04_255/0.45)]">
       <span class="hidden items-center gap-1.5 text-muted sm:flex">
-        <CheckIcon size={18} weight="bold" className="text-good" aria-hidden="true" /> ฟรี ไม่ต้องสมัคร ประมาณ 2 นาที
+        <CheckIcon size={18} weight="bold" className="text-good" aria-hidden="true" /> {T.floatNote}
       </span>
       <a
-        href="/wizard#step-1"
+        href={href(lang, '/wizard#step-1')}
         data-wizard-cta
         tabindex="-1"
         class="rounded-full bg-accent px-5 py-2.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
       >
-        <span data-cta-label>มาเริ่มติดตั้งกันเลย!</span>
+        <span data-cta-label>{T.cta}</span>
       </a>
     </div>
   </div>
 </Layout>
 
 <script>
-  import { loadProgress, resumeLink } from '../lib/progress';
+  import { loadProgress, resumeLink } from '../../lib/progress';
 
   // ผู้ใช้ที่เคยทำวิซาร์ดค้างไว้ ปุ่มทุกปุ่มพาไปทำต่อจากขั้นเดิม
-  const resume = resumeLink(loadProgress());
+  const resume = resumeLink(loadProgress(), document.documentElement.lang === 'en' ? 'en' : 'th');
   if (resume) {
     for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-wizard-cta]')) {
       a.href = resume.href;

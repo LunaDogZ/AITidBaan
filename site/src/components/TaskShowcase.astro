@@ -7,18 +7,47 @@ import examples from '../data/examples.json';
 import { MODELS, SAMPLE_DATA, TASKS, TEST_DATE } from '../data/models';
 import type { Task } from '../lib/recommend';
 import { renderMd } from '../lib/markdown';
+import type { Lang } from '../i18n';
+
+const { lang } = Astro.props as { lang: Lang };
 
 const model = MODELS.find((m) => m.id === 'gemma-4-e4b')!;
 const answers = (examples.answers as Record<string, Record<Task, string>>)[model.rawId];
 const prompts = examples.prompts as Record<Task, string>;
 
-const items = TASKS.map((t) => ({
+const items = TASKS[lang].map((t) => ({
   ...t,
   instruction: prompts[t.id].split('\n')[0],
   answer: renderMd(answers[t.id]),
   good: model.ratings[t.id]?.good ?? 0,
   total: Object.values(model.ratings[t.id] ?? {}).reduce((a, b) => a + b, 0),
 }));
+
+// คำสั่งและคำตอบเป็นภาษาไทยทั้งสองภาษา เพราะเว็บทดสอบงานเอกสารไทย ฉบับอังกฤษจึงบอกไว้ตรงหัวข้อ
+const T = {
+  th: {
+    title: 'ดูคำตอบจริงทีละงาน',
+    lead: `คำตอบจาก ${model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ ${TEST_DATE.th}`,
+    nav: 'งานทดสอบ',
+    prompt: 'คำสั่งที่ใช้ทดสอบ',
+    answer: `คำตอบจริงจาก ${model.name}`,
+    fullAnswer: (label: string) => `คำตอบเต็มของงาน${label}`,
+    scrollHint: 'เลื่อนในกรอบเพื่ออ่านคำตอบต่อ',
+    good: (good: number, total: number) => `ใช้ได้เลย ${good} จาก ${total} ข้อ`,
+    sample: 'ผลประเมินเป็นข้อมูลตัวอย่าง',
+  },
+  en: {
+    title: 'Real answers, task by task',
+    lead: `Answers from ${model.name}, a model for ordinary laptops, tested ${TEST_DATE.en}. The documents and answers are in Thai, because that is what we test.`,
+    nav: 'Test tasks',
+    prompt: 'Test prompt',
+    answer: `Real answer from ${model.name}`,
+    fullAnswer: (label: string) => `Full answer for ${label}`,
+    scrollHint: 'Scroll inside the box to keep reading',
+    good: (good: number, total: number) => `Usable as-is: ${good} of ${total}`,
+    sample: 'Scores are sample data',
+  },
+}[lang];
 ---
 
 <section id="examples" class="showcase-track relative">
@@ -27,10 +56,10 @@ const items = TASKS.map((t) => ({
       <!-- หัวข้ออยู่คอลัมน์ซ้ายเหนือเมนู การ์ดทางขวาจะได้สูงเกือบเต็มจอ -->
       <div class="min-w-0">
         <div data-reveal>
-          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl lg:text-3xl">ดูคำตอบจริงทีละงาน</h2>
-          <p class="mt-3 text-muted">คำตอบจาก {model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ {TEST_DATE}</p>
+          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl lg:text-3xl">{T.title}</h2>
+          <p class="mt-3 text-muted">{T.lead}</p>
         </div>
-        <nav aria-label="งานทดสอบ" class="showcase-nav mt-8 hidden lg:block">
+        <nav aria-label={T.nav} class="showcase-nav mt-8 hidden lg:block">
         <ol class="space-y-1">
           {
             items.map((it, i) => (
@@ -62,25 +91,26 @@ const items = TASKS.map((t) => ({
                 <span class="text-muted">{it.hint}</span>
               </div>
               <div class="mt-5 rounded-xl bg-sunk p-4">
-                <p class="text-sm font-medium text-muted">คำสั่งที่ใช้ทดสอบ</p>
-                <p class="mt-1 line-clamp-2" title={it.instruction}>{it.instruction}</p>
+                <p class="text-sm font-medium text-muted">{T.prompt}</p>
+                <p class="mt-1 line-clamp-2" lang="th" title={it.instruction}>{it.instruction}</p>
               </div>
               <div class="answer-wrap mt-4 flex min-h-0 flex-col">
-                <p class="text-sm font-medium text-muted">คำตอบจริงจาก {model.name}</p>
+                <p class="text-sm font-medium text-muted">{T.answer}</p>
                 {/* คำตอบยาว: เลื่อนอ่านในกรอบได้ อ่านจนสุดแล้วล้อเมาส์จะเลื่อนหน้าต่อเอง */}
                 <div
                   class="answer md mt-2 max-h-[26rem] min-h-0 overflow-y-auto overscroll-auto rounded-xl border border-line p-4"
                   tabindex="0"
-                  aria-label={`คำตอบเต็มของงาน${it.label}`}
+                  aria-label={T.fullAnswer(it.label)}
+                  lang="th"
                   set:html={it.answer}
                 />
-                <p class="scroll-hint mt-2 text-sm text-muted">เลื่อนในกรอบเพื่ออ่านคำตอบต่อ</p>
+                <p class="scroll-hint mt-2 text-sm text-muted">{T.scrollHint}</p>
               </div>
               <p class="mt-5 flex flex-wrap items-center gap-3">
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-good-soft px-3 py-1 font-semibold text-good">
-                  <CheckCircleIcon weight="fill" size={18} aria-hidden="true" /> ใช้ได้เลย {it.good} จาก {it.total} ข้อ
+                  <CheckCircleIcon weight="fill" size={18} aria-hidden="true" /> {T.good(it.good, it.total)}
                 </span>
-                {SAMPLE_DATA && <span class="text-sm text-muted">ผลประเมินเป็นข้อมูลตัวอย่าง</span>}
+                {SAMPLE_DATA && <span class="text-sm text-muted">{T.sample}</span>}
               </p>
             </article>
           ))

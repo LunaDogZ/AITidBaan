@@ -1,14 +1,31 @@
 ---
 // hero แบบ fastwork.com/selling: หัวข้อกลางจอมีคำที่หมุนเปลี่ยน, การ์ดของจริงลอยรอบสองข้าง,
 // กล่องตัวเลข, ปุ่มเด่น และลิงก์ชวนเลื่อนต่อ เลื่อนลงแล้วการ์ดกระจายออก เนื้อหาจางหายช้ากว่าการเลื่อน
-// การ์ดเป็นคำสั่ง + คำตอบจริงของ Gemma 4 E4B จาก results/raw (ข้อ -01 ของแต่ละงาน)
+// การ์ดเป็นคำสั่ง + คำตอบจริงของ Gemma 4 E4B จาก results/raw (ข้อ -01 ของแต่ละงาน) เป็นภาษาไทยทั้งสองภาษา
 import { ArrowRightIcon, CaretDownIcon, CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
 import examples from '../data/examples.json';
 import { MODELS, TASKS } from '../data/models';
 import type { Task } from '../lib/recommend';
+import { href, type Lang } from '../i18n';
+
+const { lang } = Astro.props as { lang: Lang };
+const T = {
+  th: {
+    tail: 'ด้วย AI บนคอมคุณเอง',
+    lead: 'สอนเรื่อง AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตั้งแต่เช็กเครื่อง เลือกตัวที่เหมาะ จนติดตั้งใช้ได้จริงทีละขั้น',
+    cta: 'มาเริ่มติดตั้งกันเลย!',
+    examples: 'ดูตัวอย่างคำตอบจริง',
+  },
+  en: {
+    tail: 'with AI on your own PC',
+    lead: 'Learn offline AI (what techies call a local LLM), from checking your computer and picking the right model to getting it running, one step at a time.',
+    cta: "Let's get it installed!",
+    examples: 'See real answers',
+  },
+}[lang];
 
 // คำที่หมุนในหัวข้อ ใช้ชื่องานทดสอบเดียวกับการ์ดและส่วนตัวอย่าง
-const WORDS = TASKS.map((t) => t.label);
+const WORDS = TASKS[lang].map((t) => t.label);
 
 const model = MODELS.find((m) => m.id === 'gemma-4-e4b')!;
 const answers = (examples.answers as Record<string, Record<Task, string>>)[model.rawId];
@@ -36,7 +53,7 @@ const SLOTS = [
 ] as const;
 
 // การ์ดมีเท่าที่มีช่องวาง ถ้าเพิ่มงานทดสอบต้องเพิ่ม SLOTS ด้วย
-const cards = TASKS.slice(0, SLOTS.length).map((t, i) => ({
+const cards = TASKS[lang].slice(0, SLOTS.length).map((t, i) => ({
   ...SLOTS[i],
   label: t.label,
   prompt: snippet(prompts[t.id].split('\n')[0], 46),
@@ -76,13 +93,14 @@ const cards = TASKS.slice(0, SLOTS.length).map((t, i) => ({
     }
   </div>
 
-  <div class="hero-content relative mx-auto flex max-w-[40rem] flex-col items-center text-center">
+  <div class="hero-content relative mx-auto flex max-w-[48rem] flex-col items-center text-center">
     <h1 class="text-[2.1rem] leading-[1.22] min-[400px]:text-[2.5rem] font-semibold tracking-[-0.02em] text-balance sm:text-6xl lg:text-[4.25rem]">
-      <span class="sr-only">{WORDS.join(' ')} ด้วย AI บนคอมคุณเอง</span>
+      <span class="sr-only">{WORDS.join(', ')} {T.tail}</span>
       <span aria-hidden="true" class="block">
         {/* ช่องสูง 1.7em เพราะสระบนล่างและวรรณยุกต์ไทยล้นบรรทัดปกติ ถ้าแคบกว่านี้ส่วนล่างของคำก่อนหน้าจะโผล่เข้ามา
             ใช้ margin ติดลบชดเชยไม่ให้ระยะบรรทัดห่างขึ้น และไล่จางขอบบนล่าง */}
-        <span class="rotator relative -my-[0.24em] inline-grid h-[1.7em] overflow-hidden align-bottom text-accent [mask-image:linear-gradient(transparent,black_14%,black_86%,transparent)]">
+        {/* ชื่องานภาษาอังกฤษยาวกว่าไทยมาก ("Translate Thai-English") ย่อตามความกว้างจอไม่ให้ล้นบนมือถือ */}
+        <span class:list={['rotator relative -my-[0.24em] inline-grid h-[1.7em] overflow-hidden align-bottom text-accent [mask-image:linear-gradient(transparent,black_14%,black_86%,transparent)]', lang === 'en' && 'text-[min(1em,7.4vw)]']}>
           <span class="rotator-track flex flex-col">
             {
               [...WORDS, WORDS[0]].map((w) => (
@@ -92,22 +110,22 @@ const cards = TASKS.slice(0, SLOTS.length).map((t, i) => ({
           </span>
         </span>
       </span>
-      <span aria-hidden="true" class="block">ด้วย AI บนคอมคุณเอง</span>
+      <span aria-hidden="true" class="block">{T.tail}</span>
     </h1>
 
     <p data-reveal style="--i: 1" class="mt-6 max-w-[36ch] text-xl leading-relaxed text-muted text-balance">
-      สอนเรื่อง AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตั้งแต่เช็กเครื่อง เลือกตัวที่เหมาะ จนติดตั้งใช้ได้จริงทีละขั้น
+      {T.lead}
     </p>
 
     <a
       id="hero-cta"
-      href="/wizard#step-1"
+      href={href(lang, '/wizard#step-1')}
       data-wizard-cta
       data-reveal
       style="--i: 2"
       class="group mt-9 inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-4 text-xl font-semibold text-accent-ink shadow-[0_14px_30px_-12px_var(--accent)] transition duration-300 ease-[var(--ease-out)] hover:-translate-y-0.5 hover:shadow-[0_20px_36px_-12px_var(--accent)] active:scale-[0.98]"
     >
-      <span data-cta-label>มาเริ่มติดตั้งกันเลย!</span>
+      <span data-cta-label>{T.cta}</span>
       <ArrowRightIcon size={22} weight="bold" className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
     </a>
     <a
@@ -116,7 +134,7 @@ const cards = TASKS.slice(0, SLOTS.length).map((t, i) => ({
       style="--i: 3"
       class="group mt-6 inline-flex flex-col items-center text-muted transition hover:text-ink"
     >
-      ดูตัวอย่างคำตอบจริง
+      {T.examples}
       <CaretDownIcon size={20} weight="bold" className="hint-bounce mt-1" aria-hidden="true" />
     </a>
   </div>

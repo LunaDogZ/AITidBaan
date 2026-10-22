@@ -1,24 +1,51 @@
 ---
 import { CopyIcon } from '@phosphor-icons/react/dist/ssr';
-import Layout from '../layouts/Layout.astro';
-import Wizard from '../components/wizard/Wizard';
+import Layout from '../../layouts/Layout.astro';
+import Wizard from '../../components/wizard/Wizard';
+import { langOf, langPaths } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
+
+const T = {
+  th: {
+    title: 'เช็กเครื่องของฉัน | AITidBaan',
+    description: 'ตอบคำถามสเปกเครื่องไม่กี่ข้อ แล้วรับคำแนะนำ AI ออฟไลน์ตัวเดียวที่เหมาะกับคุณ',
+    mobileTitle: 'ขั้นตอนนี้ต้องทำบนคอมที่จะติดตั้ง',
+    mobileLead: 'คัดลอกลิงก์นี้ไปเปิดบนคอม Windows ของคุณ แล้วเริ่มเช็กเครื่องได้เลย',
+    copy: 'คัดลอกลิงก์',
+    copied: 'คัดลอกแล้ว',
+    copyFailed: 'คัดลอกไม่ได้ ลองกดค้างที่ช่อง URL',
+  },
+  en: {
+    title: 'Check my computer | AITidBaan',
+    description: 'Answer a few questions about your computer and get the one offline AI model that fits you.',
+    mobileTitle: 'Do this step on the computer you will install on',
+    mobileLead: 'Copy this link, open it on your Windows computer, and start checking from there.',
+    copy: 'Copy link',
+    copied: 'Copied',
+    copyFailed: "Couldn't copy. Try long-pressing the address bar",
+  },
+}[lang];
 ---
 
-<Layout title="เช็กเครื่องของฉัน | AITidBaan" description="ตอบคำถามสเปกเครื่องไม่กี่ข้อ แล้วรับคำแนะนำ AI ออฟไลน์ตัวเดียวที่เหมาะกับคุณ">
+<Layout lang={lang} title={T.title} description={T.description}>
   <main>
     <!-- วิซาร์ดต้องทำบนคอมที่จะติดตั้ง (PRD ข้อ 4 หลักการ UX/UI) -->
     <div class="max-md:pointer-coarse:hidden">
-      <Wizard client:media="(min-width: 768px), (pointer: fine)" />
+      <Wizard lang={lang} client:media="(min-width: 768px), (pointer: fine)" />
     </div>
     <section class="hidden px-4 pt-28 pb-16 max-md:pointer-coarse:block">
-      <h1 class="text-2xl font-bold">ขั้นตอนนี้ต้องทำบนคอมที่จะติดตั้ง</h1>
-      <p class="mt-3 text-muted">คัดลอกลิงก์นี้ไปเปิดบนคอม Windows ของคุณ แล้วเริ่มเช็กเครื่องได้เลย</p>
+      <h1 class="text-2xl font-bold">{T.mobileTitle}</h1>
+      <p class="mt-3 text-muted">{T.mobileLead}</p>
       <button
         id="copy-link"
         type="button"
+        data-copied={T.copied}
+        data-failed={T.copyFailed}
         class="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-semibold text-accent-ink active:scale-[0.98]"
       >
-        <CopyIcon size={18} weight="bold" aria-hidden="true" /> <span>คัดลอกลิงก์</span>
+        <CopyIcon size={18} weight="bold" aria-hidden="true" /> <span>{T.copy}</span>
       </button>
     </section>
   </main>
@@ -30,9 +57,9 @@ import Wizard from '../components/wizard/Wizard';
     const label = btn.querySelector('span')!;
     try {
       await navigator.clipboard.writeText(location.href.split('#')[0]);
-      label.textContent = 'คัดลอกแล้ว';
+      label.textContent = btn.dataset.copied!;
     } catch {
-      label.textContent = 'คัดลอกไม่ได้ ลองกดค้างที่ช่อง URL';
+      label.textContent = btn.dataset.failed!;
     }
   });
 </script>

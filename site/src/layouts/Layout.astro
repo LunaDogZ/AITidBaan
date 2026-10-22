@@ -1,16 +1,24 @@
 ---
 import '../styles/global.css';
+import { href, LANGS, switchPath, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
   title: string;
   description: string;
 }
 
-const { title, description } = Astro.props;
+const { lang, title, description } = Astro.props;
+
+const LANG_NAME: Record<Lang, string> = { th: 'ไทย', en: 'English' };
+const T = {
+  th: { switchLabel: 'เปลี่ยนภาษา' },
+  en: { switchLabel: 'Change language' },
+}[lang];
 ---
 
 <!doctype html>
-<html lang="th">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,37 +26,94 @@ const { title, description } = Astro.props;
     <script is:inline>document.documentElement.classList.add("js");</script>
     <title>{title}</title>
     <meta name="description" content={description} />
+    {LANGS.map((l) => <link rel="alternate" hreflang={l} href={switchPath(Astro.url.pathname, l)} />)}
   </head>
   <body class="min-h-[100dvh] font-sans antialiased">
     <!-- header เป็น pill เล็กลอยมุมซ้ายแบบ fastwork hero จะได้ดูโปร่ง -->
     <header class="pointer-events-none fixed inset-x-0 top-4 z-20 px-4">
       <div class="mx-auto flex max-w-6xl items-center justify-between">
         <a
-          href="/"
-          class="pointer-events-auto inline-flex h-12 items-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-5 text-lg font-bold tracking-tight shadow-[0_8px_30px_-14px_oklch(0.3_0.03_255/0.3)] backdrop-blur-md transition hover:bg-surface"
+          href={href(lang, '/')}
+          class="pointer-events-auto inline-flex h-12 items-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-5 text-lg font-bold tracking-tight whitespace-nowrap shadow-[0_8px_30px_-14px_oklch(0.3_0.03_255/0.3)] backdrop-blur-md transition hover:bg-surface"
         >
-          AITidBaan <span class="font-medium text-muted">AIติดบ้าน</span>
+          <!-- จอแคบมากวางคู่กับปุ่มภาษาไม่พอ เหลือแค่ชื่อหลัก -->
+          AITidBaan <span class="hidden font-medium text-muted min-[400px]:inline">AIติดบ้าน</span>
         </a>
-        <!-- ปุ่มเปลี่ยนภาษา: ยังไม่ทำงาน ใส่ไว้ก่อนให้หน้าตาครบ -->
-        <button
-          type="button"
-          aria-label="เปลี่ยนภาษา"
-          class="pointer-events-auto inline-flex h-12 items-center gap-2 rounded-full border border-line/70 bg-surface/80 px-4 text-base font-bold shadow-[0_8px_30px_-14px_oklch(0.3_0.03_255/0.3)] backdrop-blur-md transition hover:bg-surface"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" />
-          </svg>
-          TH
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </button>
+        <!-- ปุ่มเปลี่ยนภาษา: เปิดเมนู เลือกแล้วไปหน้าเดียวกันในอีกภาษา -->
+        <div id="lang-menu" class="pointer-events-auto relative">
+          <button
+            type="button"
+            aria-label={T.switchLabel}
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="lang-list"
+            class="inline-flex h-12 items-center gap-2 rounded-full border border-line/70 bg-surface/80 px-4 text-base font-bold shadow-[0_8px_30px_-14px_oklch(0.3_0.03_255/0.3)] backdrop-blur-md transition hover:bg-surface"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" />
+            </svg>
+            {lang.toUpperCase()}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <ul
+            id="lang-list"
+            hidden
+            class="absolute top-full right-0 mt-2 min-w-40 rounded-2xl border border-line/70 bg-surface p-1.5 shadow-[0_16px_40px_-16px_oklch(0.3_0.04_255/0.45)]"
+          >
+            {
+              LANGS.map((l) => (
+                <li>
+                  <a
+                    href={switchPath(Astro.url.pathname, l)}
+                    hreflang={l}
+                    lang={l}
+                    aria-current={l === lang ? 'true' : undefined}
+                    class="flex items-center justify-between gap-4 rounded-xl px-3 py-2.5 font-semibold transition hover:bg-sunk aria-[current]:text-accent"
+                  >
+                    {LANG_NAME[l]}
+                    {l === lang && (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m5 12 5 5 9-10" />
+                      </svg>
+                    )}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
     </header>
     <slot />
     <script>
       import '../scripts/reveal';
+
+      const menu = document.getElementById('lang-menu')!;
+      const button = menu.querySelector('button')!;
+      const list = menu.querySelector('ul')!;
+      const setOpen = (open: boolean) => {
+        list.hidden = !open;
+        button.setAttribute('aria-expanded', String(open));
+      };
+      button.addEventListener('click', () => setOpen(list.hidden === true));
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target as Node)) setOpen(false);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !list.hidden) {
+          setOpen(false);
+          button.focus();
+        }
+      });
+      // พาขั้นวิซาร์ดหรืองานตัวอย่างที่ดูอยู่ (#step-3, #example-xxx) ไปด้วย
+      for (const a of list.querySelectorAll('a')) {
+        a.addEventListener('click', () => {
+          a.hash = location.hash;
+        });
+      }
     </script>
   </body>
 </html>
