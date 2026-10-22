@@ -68,7 +68,7 @@ export function InstallApp({ model, onBack, onNext }: Props) {
               href={DOWNLOAD_URL}
               target="_blank"
               rel="noopener"
-              className="inline-flex items-center gap-2 rounded-full border-2 border-accent px-5 py-2 font-semibold text-accent transition hover:bg-accent-soft"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-accent px-4 py-2 font-semibold whitespace-nowrap text-accent transition hover:bg-accent-soft max-sm:text-base sm:px-5"
             >
               เปิดหน้าดาวน์โหลด LM Studio <ArrowSquareOutIcon size={18} aria-hidden="true" />
             </a>

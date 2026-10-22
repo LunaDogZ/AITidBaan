@@ -1,8 +1,9 @@
 ---
 // เลื่อนแล้วสลับงานแบบ profile showcase ของ fastwork: เมนูซ้ายค้างไว้ การ์ดขวาเปลี่ยนตามการเลื่อน
+// การ์ดเป็นแชทแบบเดียวกับการ์ดลอยใน hero: คำสั่งเป็นบับเบิลน้ำเงินชิดขวา คำตอบเป็นบับเบิลเทาชิดซ้าย
 // URL hash เปลี่ยนตามงาน (#example-spelling) ส่งลิงก์ตรงไปงานนั้นได้
-// จอเล็กกว่า lg หรือตั้ง reduced motion: การ์ดเรียงลงมาธรรมดา
-import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
+// จอเล็กกว่า lg, จอเตี้ย หรือตั้ง reduced motion: เลือกงานจากชิปด้านบน แสดงทีละใบ
+import { CheckCircleIcon, SparkleIcon } from '@phosphor-icons/react/dist/ssr';
 import examples from '../data/examples.json';
 import { MODELS, SAMPLE_DATA, TASKS, TEST_DATE } from '../data/models';
 import type { Task } from '../lib/recommend';
@@ -19,34 +20,66 @@ const items = TASKS.map((t) => ({
   good: model.ratings[t.id]?.good ?? 0,
   total: Object.values(model.ratings[t.id] ?? {}).reduce((a, b) => a + b, 0),
 }));
+const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <section id="examples" class="showcase-track relative">
   <div class="showcase-stage mx-auto max-w-5xl px-4 py-20">
-    <div class="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-12">
-      <!-- หัวข้ออยู่คอลัมน์ซ้ายเหนือเมนู การ์ดทางขวาจะได้สูงเกือบเต็มจอ -->
+    <div class="grid gap-8 lg:grid-cols-[17rem_1fr] lg:gap-14">
       <div class="min-w-0">
         <div data-reveal>
-          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl lg:text-3xl">ดูคำตอบจริงทีละงาน</h2>
-          <p class="mt-3 text-muted">คำตอบจาก {model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ {TEST_DATE}</p>
+          <h2 class="text-3xl leading-snug font-bold tracking-tight text-balance md:text-4xl lg:text-3xl">ดูคำตอบจริงทีละงาน</h2>
+          <p class="mt-3 max-w-[40ch] text-muted">
+            คำตอบจาก {model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ {TEST_DATE}
+          </p>
         </div>
-        <nav aria-label="งานทดสอบ" class="showcase-nav mt-8 hidden lg:block">
-        <ol class="space-y-1">
+
+        <!-- จอใหญ่: รายการมีเลข และเส้นแนวตั้งที่เติมสีตามระยะเลื่อน (--p จากสคริปต์) -->
+        <nav aria-label="งานทดสอบ" class="showcase-rail relative mt-10 hidden pl-6">
+          <span class="absolute top-1 bottom-1 left-0 w-0.5 rounded-full bg-line" aria-hidden="true"></span>
+          <span
+            class="rail-fill absolute top-1 bottom-1 left-0 w-0.5 origin-top rounded-full bg-accent"
+            aria-hidden="true"
+          ></span>
+          <ol class="space-y-1">
+            {
+              items.map((it, i) => (
+                <li>
+                  <a
+                    href={`#example-${it.id}`}
+                    data-index={i}
+                    class="showcase-tab group flex items-baseline gap-3 py-2 text-lg leading-snug text-muted transition-colors duration-500 ease-[var(--ease-out)] hover:text-ink"
+                  >
+                    <span class="tab-num text-sm font-semibold tabular-nums text-muted/60 transition-colors duration-500">
+                      {num(i)}
+                    </span>
+                    <span class="tab-label">{it.label}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+
+        <!-- จอเล็ก: ชิปเลื่อนแนวนอน -->
+        <div
+          role="tablist"
+          aria-label="งานทดสอบ"
+          class="showcase-chips -mx-4 mt-6 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]"
+        >
           {
             items.map((it, i) => (
-              <li>
-                <a
-                  href={`#example-${it.id}`}
-                  data-index={i}
-                  class="showcase-tab block py-1.5 text-xl leading-snug text-muted/70 transition-[color,font-size] duration-500 hover:text-ink"
-                >
-                  {it.label}
-                </a>
-              </li>
+              <button
+                type="button"
+                role="tab"
+                data-index={i}
+                class="showcase-chip shrink-0 snap-start rounded-full bg-sunk px-4 py-2 font-semibold whitespace-nowrap text-muted transition duration-300 ease-[var(--ease-out)] active:scale-[0.97]"
+              >
+                {it.label}
+              </button>
             ))
           }
-        </ol>
-        </nav>
+        </div>
       </div>
 
       <div class="showcase-cards grid min-w-0 gap-6">
@@ -55,33 +88,52 @@ const items = TASKS.map((t) => ({
             <article
               id={`example-${it.id}`}
               data-index={i}
-              class="showcase-card flex min-w-0 scroll-mt-28 flex-col rounded-2xl border border-line bg-surface p-6 shadow-[0_24px_60px_-34px_oklch(0.3_0.04_255/0.4)] sm:p-8"
+              class="showcase-card flex min-w-0 scroll-mt-28 flex-col rounded-[1.75rem] border border-line/70 bg-surface p-5 shadow-[0_30px_70px_-40px_oklch(0.3_0.06_262/0.45)] sm:p-7"
             >
-              <div class="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 class="text-2xl font-bold">{it.label}</h3>
-                <span class="text-muted">{it.hint}</span>
-              </div>
-              <div class="mt-5 rounded-xl bg-sunk p-4">
-                <p class="text-sm font-medium text-muted">คำสั่งที่ใช้ทดสอบ</p>
-                <p class="mt-1 line-clamp-2" title={it.instruction}>{it.instruction}</p>
-              </div>
+              <header class="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+                <div>
+                  <p class="text-sm font-semibold tabular-nums text-accent">งานที่ {num(i)}</p>
+                  <h3 class="text-2xl font-bold tracking-tight">{it.label}</h3>
+                </div>
+                <p class="sm:text-right">
+                  <span class="inline-flex items-center gap-1.5 font-semibold text-good">
+                    <CheckCircleIcon weight="fill" size={20} aria-hidden="true" /> ใช้ได้เลย {it.good} จาก {it.total} ข้อ
+                  </span>
+                  {SAMPLE_DATA && <span class="block text-sm text-muted">ข้อมูลตัวอย่าง</span>}
+                </p>
+              </header>
+
+              <p class="sr-only">คำสั่งที่ใช้ทดสอบ</p>
+              {/* line-clamp อยู่ที่ span ด้านใน ถ้าอยู่ที่กล่องที่มี padding บรรทัดถัดไปจะโผล่ในช่อง padding */}
+              <p
+                class="mt-5 ml-auto w-fit max-w-[88%] rounded-3xl rounded-br-lg bg-accent px-5 py-3 leading-relaxed text-accent-ink"
+                title={it.instruction}
+              >
+                <span class="line-clamp-3">{it.instruction}</span>
+              </p>
+
               <div class="answer-wrap mt-4 flex min-h-0 flex-col">
-                <p class="text-sm font-medium text-muted">คำตอบจริงจาก {model.name}</p>
-                {/* คำตอบยาว: เลื่อนอ่านในกรอบได้ อ่านจนสุดแล้วล้อเมาส์จะเลื่อนหน้าต่อเอง */}
+                <p class="flex items-center gap-2 text-sm font-semibold text-muted">
+                  <span class="flex size-7 items-center justify-center rounded-full bg-accent-soft text-accent">
+                    <SparkleIcon weight="fill" size={15} aria-hidden="true" />
+                  </span>
+                  {model.name} ตอบ
+                </p>
                 <div
-                  class="answer md mt-2 max-h-[26rem] min-h-0 overflow-y-auto overscroll-auto rounded-xl border border-line p-4"
+                  class="answer md mt-2 min-h-0 max-w-[96%] overflow-hidden rounded-3xl rounded-tl-lg bg-sunk px-5 py-4"
                   tabindex="0"
                   aria-label={`คำตอบเต็มของงาน${it.label}`}
                   set:html={it.answer}
                 />
-                <p class="scroll-hint mt-2 text-sm text-muted">เลื่อนในกรอบเพื่ออ่านคำตอบต่อ</p>
+                <button
+                  type="button"
+                  class="answer-more mt-3 self-start font-semibold text-accent underline underline-offset-4"
+                  aria-expanded="false"
+                >
+                  อ่านคำตอบเต็ม
+                </button>
+                <p class="scroll-hint mt-2 text-sm text-muted" aria-hidden="true">เลื่อนในกรอบเพื่ออ่านต่อ</p>
               </div>
-              <p class="mt-5 flex flex-wrap items-center gap-3">
-                <span class="inline-flex items-center gap-1.5 rounded-full bg-good-soft px-3 py-1 font-semibold text-good">
-                  <CheckCircleIcon weight="fill" size={18} aria-hidden="true" /> ใช้ได้เลย {it.good} จาก {it.total} ข้อ
-                </span>
-                {SAMPLE_DATA && <span class="text-sm text-muted">ผลประเมินเป็นข้อมูลตัวอย่าง</span>}
-              </p>
             </article>
           ))
         }
@@ -93,40 +145,64 @@ const items = TASKS.map((t) => ({
 <script>
   import { scroll } from 'motion';
 
-  const track = document.querySelector<HTMLElement>('.showcase-track');
+  const track = document.querySelector<HTMLElement>('.showcase-track')!;
+  const rail = document.querySelector<HTMLElement>('.showcase-rail')!;
   const tabs = [...document.querySelectorAll<HTMLAnchorElement>('.showcase-tab')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('.showcase-chip')];
   const cards = [...document.querySelectorAll<HTMLElement>('.showcase-card')];
   // เงื่อนไขต้องตรงกับ @media ใน <style>
-  const mode = matchMedia('(min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)');
+  const stage = matchMedia('(min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)');
   let active = -1;
 
-  const setActive = (i: number) => {
+  const setActive = (i: number, fromUser = false) => {
     if (i === active) return;
     active = i;
     tabs.forEach((t, n) => t.toggleAttribute('data-active', n === i));
+    chips.forEach((c, n) => {
+      c.toggleAttribute('data-active', n === i);
+      c.setAttribute('aria-selected', String(n === i));
+    });
     cards.forEach((c, n) => c.toggleAttribute('data-active', n === i));
-    if (location.hash.startsWith('#example-') || i > 0) history.replaceState(null, '', `#${cards[i].id}`);
+    if (fromUser || location.hash.startsWith('#example-') || i > 0) history.replaceState(null, '', `#${cards[i].id}`);
+    if (fromUser) chips[i].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
   };
 
   // ตำแหน่งเลื่อนที่ทำให้งานที่ i แสดง: แบ่งระยะที่ stage ค้างเป็น 6 ช่วงเท่ากัน แล้วไปกลางช่วง
   const scrollFor = (i: number) => {
-    const top = track!.getBoundingClientRect().top + scrollY;
-    const distance = track!.offsetHeight - innerHeight;
+    const top = track.getBoundingClientRect().top + scrollY;
+    const distance = track.offsetHeight - innerHeight;
     return top + ((i + 0.5) / cards.length) * distance;
   };
 
-  // คำบอก "เลื่อนในกรอบ" กับเงาไล่จางด้านล่าง แสดงเฉพาะตอนที่ยังอ่านไม่จบ
+  // จอใหญ่: คำบอก "เลื่อนในกรอบ" กับขอบไล่จาง แสดงเฉพาะตอนที่ยังอ่านไม่จบ
   for (const box of document.querySelectorAll<HTMLElement>('.showcase-card .answer')) {
-    const update = () =>
-      box.toggleAttribute('data-more', box.scrollTop + box.clientHeight < box.scrollHeight - 4);
+    const update = () => box.toggleAttribute('data-more', box.scrollTop + box.clientHeight < box.scrollHeight - 4);
     box.addEventListener('scroll', update, { passive: true });
     new ResizeObserver(update).observe(box);
   }
 
-  if (track && mode.matches) {
-    setActive(0);
+  // จอเล็ก: กางคำตอบเต็มแทนการเลื่อนในกรอบ (นิ้วจะได้ไม่ติดอยู่ในกรอบ)
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('.answer-more')) {
+    btn.addEventListener('click', () => {
+      const card = btn.closest<HTMLElement>('.showcase-card')!;
+      const open = !card.hasAttribute('data-open');
+      card.toggleAttribute('data-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? 'ย่อคำตอบ' : 'อ่านคำตอบเต็ม';
+      if (!open) card.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  }
+
+  chips.forEach((c, i) => c.addEventListener('click', () => setActive(i, true)));
+  const fromHash = Math.max(0, cards.findIndex((c) => `#${c.id}` === location.hash));
+  setActive(fromHash);
+
+  if (stage.matches) {
     scroll(
-      (progress: number) => setActive(Math.min(cards.length - 1, Math.floor(progress * cards.length))),
+      (progress: number) => {
+        rail.style.setProperty('--p', String(progress));
+        setActive(Math.min(cards.length - 1, Math.floor(progress * cards.length)));
+      },
       { target: track, offset: ['start start', 'end end'] },
     );
     tabs.forEach((t, i) =>
@@ -136,29 +212,63 @@ const items = TASKS.map((t) => ({
       }),
     );
     // เปิดลิงก์ #example-xxx ตรงๆ ให้เลื่อนไปงานนั้น
-    const fromHash = cards.findIndex((c) => `#${c.id}` === location.hash);
     if (fromHash > 0) scrollTo({ top: scrollFor(fromHash) });
   }
 </script>
 
 <style>
-  .scroll-hint {
-    visibility: hidden;
-  }
-  .answer[data-more] {
-    mask-image: linear-gradient(to bottom, black 80%, transparent);
-  }
-  .answer[data-more] + .scroll-hint {
-    visibility: visible;
-  }
-
   .showcase-tab[data-active] {
     color: var(--ink);
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-weight: 600;
+  }
+  .showcase-tab[data-active] .tab-num {
+    color: var(--accent);
+  }
+  .rail-fill {
+    transform: scaleY(var(--p, 0));
+  }
+  .showcase-chip[data-active] {
+    background: var(--ink);
+    color: var(--surface);
+  }
+
+  /* จอเล็ก: มี JS แล้วแสดงทีละใบ คำตอบย่อไว้จนกดอ่านเต็ม */
+  :global(.js) .showcase-card:not([data-active]) {
+    display: none;
+  }
+  :global(.js) .showcase-card[data-active] {
+    animation: card-in 0.62s var(--ease-out);
+  }
+  .answer {
+    max-height: 22rem;
+    mask-image: linear-gradient(to bottom, black 70%, transparent);
+  }
+  .showcase-card[data-open] .answer {
+    max-height: none;
+    mask-image: none;
+  }
+  .scroll-hint {
+    display: none;
+  }
+  :global(html:not(.js)) .answer-more,
+  :global(html:not(.js)) .showcase-chips {
+    display: none;
+  }
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
   }
 
   @media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+    .showcase-chips,
+    .answer-more {
+      display: none;
+    }
+    .showcase-rail {
+      display: block;
+    }
     /* ระยะเลื่อนต่องานประมาณ 60vh */
     .showcase-track {
       height: calc(100dvh + 6 * 60vh);
@@ -170,39 +280,45 @@ const items = TASKS.map((t) => ({
       padding-top: 6rem;
       padding-bottom: 1.5rem;
     }
+    /* การ์ดซ้อนกันในช่องเดียว สูงพอดีจอ สลับด้วย opacity + เลื่อนขึ้นนิดหน่อย */
     .showcase-cards {
-      display: grid;
+      height: calc(100dvh - 7.5rem);
+      grid-template-rows: minmax(0, 1fr);
     }
-    /* การ์ดซ้อนกันในช่องเดียว สลับด้วย opacity + เลื่อนขึ้นนิดหน่อย */
-    .showcase-card {
+    :global(.js) .showcase-card,
+    :global(.js) .showcase-card:not([data-active]) {
+      display: flex;
       grid-area: 1 / 1;
+      min-height: 0;
       opacity: 0;
       transform: translateY(24px) scale(0.98);
       pointer-events: none;
+      animation: none;
       transition:
         opacity 0.5s var(--ease-out),
-        transform 0.6s var(--ease-out);
+        transform 0.62s var(--ease-out);
     }
-    .showcase-card[data-active] {
+    :global(.js) .showcase-card[data-active] {
       opacity: 1;
       transform: none;
       pointer-events: auto;
     }
-    /* การ์ดสูงพอดีจอ ส่วนคำตอบยืดเต็มที่ที่เหลือแล้วเลื่อนอ่านในกรอบ */
-    .showcase-cards {
-      height: calc(100dvh - 7.5rem);
-      /* แถวเดียวสูงเท่ากรอบ ไม่ให้ขยายตามความยาวคำตอบ */
-      grid-template-rows: minmax(0, 1fr);
-    }
-    .showcase-card {
-      min-height: 0;
-    }
+    /* คำตอบยืดเต็มที่ที่เหลือแล้วเลื่อนอ่านในกรอบ */
     .showcase-card .answer-wrap {
       flex: 1;
     }
-    .showcase-card .answer {
+    .answer {
       flex: 1;
       max-height: none;
+      overflow-y: auto;
+      overscroll-behavior: auto;
+      mask-image: none;
+    }
+    .answer[data-more] {
+      mask-image: linear-gradient(to bottom, black 82%, transparent);
+    }
+    .answer[data-more] ~ .scroll-hint {
+      display: block;
     }
   }
 </style>

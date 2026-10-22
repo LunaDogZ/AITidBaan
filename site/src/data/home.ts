@@ -1,19 +1,21 @@
-import { CloudSlashIcon, QuestionIcon, TranslateIcon } from '@phosphor-icons/react/dist/ssr';
-
 // เนื้อหาหน้าแรก
+// tone/tilt ใช้สีกระดาษโน้ตเดียวกับบอร์ดปัญหาด้านบน
 export const PROBLEMS = [
   {
-    icon: CloudSlashIcon,
+    tone: 'var(--note-green)',
+    tilt: -1.5,
     title: 'เอกสารลับ ส่งขึ้น Cloud ไม่ได้',
     body: 'AI ออฟไลน์ประมวลผลบนเครื่องคุณ ลองตัดเน็ตแล้วใช้ดูได้เลย',
   },
   {
-    icon: TranslateIcon,
+    tone: 'var(--note-purple)',
+    tilt: 1,
     title: 'ศัพท์อย่าง 7B, Q4, VRAM อ่านแล้วงง',
     body: 'ตอบคำถามเป็นปุ่ม มีภาพสอนดูสเปกใน Windows ทุกขั้น',
   },
   {
-    icon: QuestionIcon,
+    tone: 'var(--note-yellow)',
+    tilt: -1,
     title: 'ไม่รู้ว่าตัวไหนเก่งภาษาไทย',
     body: 'เราทดสอบกับงานเอกสารออฟฟิศภาษาไทยเอง และให้ดูคำตอบจริงทุกข้อ',
   },

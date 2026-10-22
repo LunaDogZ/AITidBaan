@@ -7,6 +7,7 @@ import {
   CheckIcon,
   CopyIcon,
   ImageIcon,
+  LifebuoyIcon,
   WarningIcon,
 } from '@phosphor-icons/react';
 
@@ -19,14 +20,15 @@ interface StepShellProps {
   nextLabel?: string;
 }
 
-// กรอบของขั้น ③-⑥ ใช้แถบปุ่มติดขอบล่างแบบเดียวกับขั้นเช็กเครื่อง
+// ขั้น ③-⑥ เป็นหน้าคู่มือที่อ่านยาว วางบนพื้นหน้าโดยไม่มีกรอบการ์ด (ไม่ให้เป็นกล่องซ้อนกล่อง)
+// แถบปุ่มติดขอบล่างของจอเหมือนขั้นเช็กเครื่อง
 export function StepShell({ title, lead, children, onBack, onNext, nextLabel = 'ทำเสร็จแล้ว ไปต่อ' }: StepShellProps) {
   return (
-    <div className="flex flex-col rounded-2xl border border-line bg-surface p-6 sm:p-8">
-      <h1 className="text-3xl leading-snug font-bold">{title}</h1>
-      <div className="mt-2 text-lg text-muted">{lead}</div>
+    <div className="flex flex-col">
+      <h1 className="text-[2.1rem] leading-tight font-bold tracking-tight text-balance sm:text-4xl">{title}</h1>
+      <div className="mt-3 max-w-[56ch] text-lg text-muted">{lead}</div>
       <div className="flex-1">{children}</div>
-      <div className="sticky bottom-0 -mx-6 -mb-6 mt-8 flex items-center justify-between gap-4 rounded-b-2xl border-t border-line bg-surface/95 px-6 py-4 backdrop-blur sm:-mx-8 sm:-mb-8 sm:px-8">
+      <div className="sticky bottom-0 -mx-4 mt-10 flex items-center justify-between gap-4 border-t border-line bg-bg/90 px-4 py-4 backdrop-blur">
         <button
           type="button"
           onClick={onBack}
@@ -51,14 +53,16 @@ export function StepShell({ title, lead, children, onBack, onNext, nextLabel = '
 // ขั้นตอนย่อยที่มีเลขกำกับ ของในรายการขยับเข้าจอทีละชิ้น
 export function Steps({ items }: { items: ReactNode[] }) {
   return (
-    <ol className="mt-6 space-y-4">
+    <ol className="mt-8">
       {items.map((it, i) => (
         <li
           key={i}
-          className="fade-in flex gap-4"
+          className="fade-in group relative flex gap-5 pb-8 last:pb-0"
           style={{ animationDelay: `${i * 80}ms`, animationFillMode: 'backwards' }}
         >
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent-soft font-bold text-accent">
+          {/* เส้นต่อวงกลมเลข ให้อ่านเป็นลำดับเดียวกัน */}
+          <span className="absolute top-11 bottom-2 left-[1.0625rem] w-0.5 rounded-full bg-line group-last:hidden" aria-hidden="true" />
+          <span className="relative flex size-9 shrink-0 items-center justify-center rounded-full bg-accent font-bold text-accent-ink tabular-nums">
             {i + 1}
           </span>
           <div className="min-w-0 flex-1 pt-1">{it}</div>
@@ -71,7 +75,7 @@ export function Steps({ items }: { items: ReactNode[] }) {
 // คำเตือนสำคัญที่ต้องอยู่ในเนื้อหาหลัก ไม่พับไว้ใน "ติดปัญหา?"
 export function Warn({ children }: { children: ReactNode }) {
   return (
-    <div className="mt-6 flex gap-3 rounded-xl border border-minor/40 bg-minor-soft p-4">
+    <div className="mt-8 flex gap-3 rounded-xl border-l-4 border-minor bg-minor-soft py-4 pr-5 pl-4">
       <WarningIcon size={22} weight="fill" className="mt-0.5 shrink-0 text-minor" aria-hidden="true" />
       <div>{children}</div>
     </div>
@@ -138,16 +142,22 @@ export function ScreenshotSlot({ caption }: { caption: string }) {
 
 export function Trouble({ items }: { items: { symptom: string; fix: ReactNode }[] }) {
   return (
-    <details className="group mt-6 rounded-xl border border-line">
-      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 font-semibold">
-        ติดปัญหา?
-        <CaretDownIcon size={18} className="transition group-open:rotate-180" aria-hidden="true" />
+    <details className="group mt-8 rounded-2xl bg-sunk">
+      <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-5 py-4 transition-colors hover:bg-line/50">
+        <LifebuoyIcon size={24} className="shrink-0 text-accent" aria-hidden="true" />
+        <span className="font-semibold">ติดปัญหา?</span>
+        <span className="text-muted">{items.length} เรื่องที่เจอบ่อย</span>
+        <CaretDownIcon
+          size={18}
+          className="ml-auto transition-transform duration-500 ease-[var(--ease-out)] group-open:rotate-180"
+          aria-hidden="true"
+        />
       </summary>
-      <dl className="space-y-4 border-t border-line px-4 py-4">
+      <dl className="fade-in divide-y divide-line px-5 pb-2">
         {items.map((it) => (
-          <div key={it.symptom}>
-            <dt className="font-medium">{it.symptom}</dt>
-            <dd className="text-muted">{it.fix}</dd>
+          <div key={it.symptom} className="py-4">
+            <dt className="font-semibold">{it.symptom}</dt>
+            <dd className="mt-1 max-w-[60ch] text-muted">{it.fix}</dd>
           </div>
         ))}
       </dl>

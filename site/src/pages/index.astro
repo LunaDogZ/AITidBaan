@@ -33,7 +33,7 @@ const notes = [
           <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight text-balance md:text-5xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
           <p data-reveal style="--i: 1" class="mt-4 text-xl text-muted">ถ้าเคยคิดแบบนี้ เว็บนี้ทำมาเพื่อคุณ</p>
           <!-- กว้างพอวาง 3 ใบต่อแถว: 3 ใบบน 2 ใบล่าง จัดกลาง -->
-          <ul class="mx-auto mt-14 [@media(max-height:820px)]:mt-8 [@media(max-height:740px)]:mt-5 flex max-w-[46rem] flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-y-5">
+          <ul id="pain-notes" class="mx-auto mt-14 [@media(max-height:820px)]:mt-8 [@media(max-height:740px)]:mt-5 flex max-w-[46rem] flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-y-5">
             {
               notes.map((n, i) => (
                 <li data-reveal style={`--i: ${i + 2}`}>
@@ -52,20 +52,26 @@ const notes = [
       <!-- ให้ฉากปัญหาค้างไว้ครู่หนึ่งก่อนการ์ดทางออกเลื่อนขึ้นมาทับ -->
       <div class="hidden h-[45vh] md:block" aria-hidden="true"></div>
 
-      <div class="relative z-10 -mt-24 rounded-t-[2rem] bg-bg shadow-[0_-24px_60px_-30px_oklch(0.3_0.06_262/0.35)]">
+      <div id="fix-sheet" class="relative z-10 -mt-24 rounded-t-[2rem] bg-bg shadow-[0_-24px_60px_-30px_oklch(0.3_0.06_262/0.35)]">
         <div class="mx-auto max-w-5xl px-4 py-20">
           <h2 data-reveal class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
             AITidBaan แก้ให้ทีละเรื่อง
           </h2>
-          <dl class="mt-10 space-y-8">
+          <!-- โน้ตปัญหาสีเดียวกับบนบอร์ดด้านบน จับคู่กับวิธีที่เว็บนี้แก้ -->
+          <dl class="mt-10 divide-y divide-line border-y border-line">
             {
-              PROBLEMS.map(({ icon: Icon, title, body }, i) => (
-                <div data-reveal style={`--i: ${i}`} class="grid gap-2 md:grid-cols-[22rem_1fr] md:gap-10">
-                  <dt class="flex items-start gap-3 font-semibold">
-                    <Icon size={26} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+              PROBLEMS.map(({ title, body, tone, tilt }, i) => (
+                <div data-reveal style={`--i: ${i}`} class="grid items-center gap-4 py-7 md:grid-cols-[17rem_1fr] md:gap-12">
+                  <dt
+                    class="w-fit max-w-[17rem] rounded-lg px-4 py-3 text-lg leading-snug font-medium text-scene-ink shadow-[0_14px_24px_-18px_oklch(0.3_0.06_262/0.6)]"
+                    style={`background: ${tone}; rotate: ${tilt}deg`}
+                  >
                     {title}
                   </dt>
-                  <dd class="pl-9 text-muted md:pl-0">{body}</dd>
+                  <dd class="flex gap-3 text-xl leading-relaxed">
+                    <ArrowRightIcon size={24} weight="bold" className="mt-1 hidden shrink-0 text-accent md:block" aria-hidden="true" />
+                    {body}
+                  </dd>
                 </div>
               ))
             }
@@ -79,9 +85,16 @@ const notes = [
                 และมีข้อหลอกไว้จับว่าโมเดลแต่งตัวเลขขึ้นเองหรือเปล่า
               </p>
             </div>
-            <ul class="flex max-w-md flex-wrap gap-2 md:justify-end">
-              {TASKS.map((t) => <li class="rounded-full border border-line bg-surface px-3 py-1 text-sm">{t.label}</li>)}
-            </ul>
+            <ol class="grid gap-x-6 gap-y-1.5 sm:grid-cols-2 md:min-w-[22rem]">
+              {
+                TASKS.map((t, i) => (
+                  <li class="flex items-baseline gap-2">
+                    <span class="text-sm font-semibold tabular-nums text-accent">{String(i + 1).padStart(2, '0')}</span>
+                    {t.label}
+                  </li>
+                ))
+              }
+            </ol>
           </div>
         </div>
       </div>
@@ -92,17 +105,17 @@ const notes = [
     <section class="mx-auto max-w-5xl px-4 py-20">
       <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
       <p data-reveal class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
-      <ol class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- หน้าตาเดียวกับแถบความคืบหน้าในวิซาร์ด เข้าไปแล้วจะจำได้ แถบเติมสีทีละช่องเมื่อเลื่อนมาถึง -->
+      <ol class="mt-12 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-6">
         {
           STEPS.map((s, i) => (
-            <li data-reveal style={`--i: ${i}`} class="flex gap-4">
-              <span class="flex size-10 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
-                {i + 1}
-              </span>
-              <div>
-                <p class="font-semibold">{s.title}</p>
-                <p class="text-muted">{s.body}</p>
+            <li data-reveal style={`--i: ${i}`}>
+              <div class="h-2 overflow-hidden rounded-full bg-line">
+                <div class="step-bar h-full origin-left rounded-full bg-accent"></div>
               </div>
+              <p class="mt-4 text-sm font-semibold tabular-nums text-accent">ขั้น {'①②③④⑤⑥'[i]}</p>
+              <p class="mt-1 font-semibold leading-snug">{s.title}</p>
+              <p class="mt-1 text-muted">{s.body}</p>
             </li>
           ))
         }
@@ -171,7 +184,7 @@ const notes = [
   // CTA ลอยเมื่อมองไม่เห็นปุ่มใน hero และไม่ได้กำลังอ่านตัวอย่างหรืออยู่ที่กล่องปุ่มท้ายหน้า
   const float = document.getElementById('float-cta')!;
   const floatLink = float.querySelector('a')!;
-  const seen = { hero: true, showcase: false, final: false };
+  const seen = { hero: true, pain: false, fix: false, showcase: false, final: false };
   // hero จางหายระหว่างที่ปุ่มยังอยู่ในจอ (Hero.astro ส่ง hero:gone มา) ถือว่ามองไม่เห็นปุ่มแล้ว
   let heroGone = false;
   document.addEventListener('hero:gone', (e) => {
@@ -180,7 +193,9 @@ const notes = [
   });
 
   const update = () => {
-    const show = (!seen.hero || heroGone) && !seen.showcase && !seen.final;
+    // บอร์ดโน้ตค้างอยู่กลางจอจนแผ่นทางออกเลื่อนขึ้นมาทับเกินครึ่งจอ ช่วงนั้นปุ่มลอยจะบังโน้ต
+    const onBoard = seen.pain && !seen.fix;
+    const show = (!seen.hero || heroGone) && !onBoard && !seen.showcase && !seen.final;
     float.toggleAttribute('data-show', show);
     float.setAttribute('aria-hidden', String(!show));
     floatLink.tabIndex = show ? 0 : -1;
@@ -195,8 +210,23 @@ const notes = [
     ).observe(document.getElementById(id)!);
 
   watch('hero-cta', 'hero');
+  watch('pain-notes', 'pain');
+  watch('fix-sheet', 'fix', '0px 0px -50% 0px');
   // นับว่ากำลังอ่านตัวอย่าง เมื่อส่วนนั้นคลุมเส้นกลางจอ
   watch('examples', 'showcase', '-50% 0px -50% 0px');
   watch('final-cta', 'final');
 </script>
 
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .step-bar {
+      transform: scaleX(0);
+      transition: transform 0.8s var(--ease-out);
+      transition-delay: calc(var(--i, 0) * 140ms + 200ms);
+    }
+    :global(.js [data-reveal].is-in) .step-bar {
+      transform: none;
+    }
+  }
+</style>
