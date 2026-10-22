@@ -80,11 +80,13 @@ const cards = TASKS.slice(0, SLOTS.length).map((t, i) => ({
     <h1 class="text-[2.1rem] leading-[1.22] min-[400px]:text-[2.5rem] font-semibold tracking-[-0.02em] text-balance sm:text-6xl lg:text-[4.25rem]">
       <span class="sr-only">{WORDS.join(' ')} ด้วย AI บนคอมคุณเอง</span>
       <span aria-hidden="true" class="block">
-        <span class="rotator relative inline-grid h-[1.3em] overflow-hidden align-bottom text-accent">
+        {/* ช่องสูง 1.7em เพราะสระบนล่างและวรรณยุกต์ไทยล้นบรรทัดปกติ ถ้าแคบกว่านี้ส่วนล่างของคำก่อนหน้าจะโผล่เข้ามา
+            ใช้ margin ติดลบชดเชยไม่ให้ระยะบรรทัดห่างขึ้น และไล่จางขอบบนล่าง */}
+        <span class="rotator relative -my-[0.24em] inline-grid h-[1.7em] overflow-hidden align-bottom text-accent [mask-image:linear-gradient(transparent,black_14%,black_86%,transparent)]">
           <span class="rotator-track flex flex-col">
             {
               [...WORDS, WORDS[0]].map((w) => (
-                <span class="flex h-[1.3em] items-center justify-center whitespace-nowrap">{w}</span>
+                <span class="flex h-[1.7em] items-center justify-center whitespace-nowrap">{w}</span>
               ))
             }
           </span>
@@ -94,29 +96,14 @@ const cards = TASKS.slice(0, SLOTS.length).map((t, i) => ({
     </h1>
 
     <p data-reveal style="--i: 1" class="mt-6 max-w-[36ch] text-xl leading-relaxed text-muted text-balance">
-      เราแนะนำ AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตัวเดียวที่เครื่องคุณไหว แล้วพาติดตั้งทีละขั้น
+      สอนเรื่อง AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตั้งแต่เช็กเครื่อง เลือกตัวที่เหมาะ จนติดตั้งใช้ได้จริงทีละขั้น
     </p>
-
-    <dl data-reveal style="--i: 2" class="mt-8 grid w-full max-w-md grid-cols-3 gap-2 sm:gap-3">
-      <div class="flex flex-col-reverse rounded-2xl bg-surface/80 px-2 py-3 ring-1 ring-line sm:px-5">
-        <dt class="text-muted">โมเดล</dt>
-        <dd class="text-3xl font-semibold tabular-nums sm:text-4xl">5</dd>
-      </div>
-      <div class="flex flex-col-reverse rounded-2xl bg-surface/80 px-2 py-3 ring-1 ring-line sm:px-5">
-        <dt class="text-muted">งานเอกสาร</dt>
-        <dd class="text-3xl font-semibold tabular-nums sm:text-4xl">6</dd>
-      </div>
-      <div class="flex flex-col-reverse rounded-2xl bg-surface/80 px-2 py-3 ring-1 ring-line sm:px-5">
-        <dt class="text-muted">คำตอบจริง</dt>
-        <dd class="text-3xl font-semibold tabular-nums sm:text-4xl">155</dd>
-      </div>
-    </dl>
 
     <a
       id="hero-cta"
       href="/wizard#step-1"
       data-reveal
-      style="--i: 3"
+      style="--i: 2"
       class="group mt-9 inline-flex items-center gap-2.5 rounded-full bg-accent px-8 py-4 text-xl font-semibold text-accent-ink shadow-[0_14px_30px_-12px_var(--accent)] transition duration-300 ease-[var(--ease-out)] hover:-translate-y-0.5 hover:shadow-[0_20px_36px_-12px_var(--accent)] active:scale-[0.98]"
     >
       เช็กเครื่องของฉัน
@@ -125,7 +112,7 @@ const cards = TASKS.slice(0, SLOTS.length).map((t, i) => ({
     <a
       href="#examples"
       data-reveal
-      style="--i: 4"
+      style="--i: 3"
       class="group mt-6 inline-flex flex-col items-center text-muted transition hover:text-ink"
     >
       ดูตัวอย่างคำตอบจริง
