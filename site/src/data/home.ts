@@ -1,6 +1,6 @@
 import { CloudSlashIcon, QuestionIcon, TranslateIcon } from '@phosphor-icons/react/dist/ssr';
 
-// เนื้อหาหน้าแรกที่ใช้ร่วมกันทั้งทิศทาง A (/) และ B (/b)
+// เนื้อหาหน้าแรก
 export const PROBLEMS = [
   {
     icon: CloudSlashIcon,

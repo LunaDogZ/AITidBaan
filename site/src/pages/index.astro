@@ -1,97 +1,97 @@
 ---
+// หน้าแรก (เดิมคือทิศทาง B) ได้แรงบันดาลใจจาก interaction ของ fastwork.com/selling
+// hero คำที่หมุน + การ์ดลอย, ฉากปัญหาที่การ์ดทางออกเลื่อนทับ, เลื่อนแล้วสลับงาน (TaskShowcase), CTA ลอยด้านล่าง
 import { ArrowRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Layout from '../layouts/Layout.astro';
-import SpellingExample from '../components/SpellingExample.astro';
+import Hero from '../components/Hero.astro';
 import TaskShowcase from '../components/TaskShowcase.astro';
 import { TASKS } from '../data/models';
 import { PROBLEMS, STEPS } from '../data/home';
+
+const notes = [
+  { text: 'เอกสารลูกค้าเป็นความลับ ห้ามเอาขึ้น ChatGPT', tilt: -3 },
+  { text: '7B, Q4, GGUF คืออะไรกันแน่', tilt: 2 },
+  { text: 'โน้ตบุ๊กออฟฟิศฉันจะรันไหวไหม', tilt: -1.5 },
+  { text: 'ตัวไหนเขียนภาษาไทยได้ดีจริง', tilt: 3 },
+  { text: 'ลองโหลดมาแล้ว ตอบเป็นภาษาจีน', tilt: -2 },
+];
 ---
 
 <Layout
   title="AITidBaan (AIติดบ้าน) | AI ออฟไลน์ภาษาไทยสำหรับงานเอกสาร"
   description="แนะนำ AI ออฟไลน์ (Local LLM) ที่ทำงานเอกสารภาษาไทยได้จริงบนเครื่องของคุณ พร้อมผลทดสอบและคู่มือติดตั้งทีละขั้น"
-  headerCta
 >
   <main>
-    <section class="mx-auto grid min-h-[100dvh] max-w-5xl items-center gap-12 px-4 pt-24 pb-16 md:grid-cols-[1.05fr_1fr] md:gap-10">
-      <div>
-        <h1 data-reveal class="text-4xl leading-[1.25] font-bold tracking-tight md:text-5xl md:leading-[1.2]">
-          AI ช่วยงานเอกสาร<br />ที่ทำงานบนคอมคุณเอง
-        </h1>
-        <p data-reveal style="--i: 1" class="mt-5 max-w-[34ch] text-xl text-muted">
-          ตอบคำถามเรื่องเครื่องไม่กี่ข้อ แล้วรับคำแนะนำ AI ออฟไลน์ (หรือที่สายเทคเรียกว่า Local LLM) ตัวเดียวที่เหมาะกับคุณ
-        </p>
-        <a
-          id="hero-cta"
-          href="/wizard#step-1"
-          data-reveal
-          style="--i: 2"
-          class="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-lg font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
-        >
-          เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
-        </a>
-      </div>
-      <div data-reveal style="--i: 3"><SpellingExample /></div>
-    </section>
+    <Hero />
 
-    <section class="mx-auto max-w-5xl px-4 py-20">
-      <h2 data-reveal class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
-        ใช้ AI กับงานเอกสารได้ โดยไม่ต้องส่งข้อมูลออกไปไหน
-      </h2>
-      <dl class="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-3">
-        {
-          PROBLEMS.map(({ icon: Icon, title, body }, i) => (
-            <div data-reveal style={`--i: ${i}`} class="border-t border-line pt-6">
-              <dt class="flex items-start gap-3 font-semibold">
-                <Icon size={24} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
-                {title}
-              </dt>
-              <dd class="mt-2 pl-9 text-muted">{body}</dd>
+    <section class="relative">
+      <div class="pain-stage flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-scene px-4 py-24 text-scene-ink md:sticky md:top-0">
+        <div class="mx-auto w-full max-w-5xl">
+          <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">อยากให้ AI ช่วยงาน แต่ติดตรงนี้</h2>
+          <ul class="mt-12 flex flex-wrap gap-3 sm:gap-5">
+            {
+              notes.map((n, i) => (
+                <li data-reveal style={`--i: ${i + 1}`}>
+                  <p
+                    class="w-[calc(50vw-1.4rem)] rounded-2xl bg-surface p-4 text-lg leading-snug font-medium shadow-[0_20px_40px_-24px_oklch(0.3_0.06_262/0.5)] sm:w-60 sm:p-5 sm:text-xl"
+                    style={`rotate: ${n.tilt}deg`}
+                  >
+                    {n.text}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <!-- ให้ฉากปัญหาค้างไว้ครู่หนึ่งก่อนการ์ดทางออกเลื่อนขึ้นมาทับ -->
+      <div class="hidden h-[45vh] md:block" aria-hidden="true"></div>
+
+      <div class="relative z-10 -mt-24 rounded-t-[2rem] bg-bg shadow-[0_-24px_60px_-30px_oklch(0.3_0.06_262/0.35)]">
+        <div class="mx-auto max-w-5xl px-4 py-20">
+          <h2 data-reveal class="max-w-[22ch] text-3xl leading-snug font-bold tracking-tight md:text-4xl">
+            AITidBaan แก้ให้ทีละเรื่อง
+          </h2>
+          <dl class="mt-10 space-y-8">
+            {
+              PROBLEMS.map(({ icon: Icon, title, body }, i) => (
+                <div data-reveal style={`--i: ${i}`} class="grid gap-2 md:grid-cols-[22rem_1fr] md:gap-10">
+                  <dt class="flex items-start gap-3 font-semibold">
+                    <Icon size={26} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+                    {title}
+                  </dt>
+                  <dd class="pl-9 text-muted md:pl-0">{body}</dd>
+                </div>
+              ))
+            }
+          </dl>
+
+          <div data-reveal class="mt-16 grid gap-6 rounded-2xl bg-sunk p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+            <div>
+              <p class="text-xl font-bold">ทดสอบเองกับงานที่คนออฟฟิศทำจริง</p>
+              <p class="mt-2 max-w-[52ch] text-muted">
+                5 โมเดล 6 งาน รวม 155 คำตอบ ผู้ให้คะแนน 2 คนอ่านโดยไม่เห็นชื่อโมเดล
+                และมีข้อหลอกไว้จับว่าโมเดลแต่งตัวเลขขึ้นเองหรือเปล่า
+              </p>
             </div>
-          ))
-        }
-      </dl>
+            <ul class="flex max-w-md flex-wrap gap-2 md:justify-end">
+              {TASKS.map((t) => <li class="rounded-full border border-line bg-surface px-3 py-1 text-sm">{t.label}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <TaskShowcase />
 
-    <section class="bg-sunk">
-      <div class="mx-auto grid max-w-5xl gap-10 px-4 py-20 md:grid-cols-[1fr_1.2fr] md:items-center">
-        <div data-reveal>
-          <h2 class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">ทดสอบเองกับงานที่คนออฟฟิศทำจริง</h2>
-          <p class="mt-4 max-w-[46ch] text-muted">
-            โมเดลทุกตัวได้คำสั่งเดียวกันทุกตัวอักษร ผู้ให้คะแนน 2 คนอ่านคำตอบโดยไม่เห็นชื่อโมเดล
-            และมีข้อหลอกไว้จับว่าโมเดลแต่งตัวเลขขึ้นเองหรือเปล่า
-          </p>
-          <ul class="mt-6 flex flex-wrap gap-2">
-            {TASKS.map((t) => <li class="rounded-full border border-line bg-surface px-3 py-1 text-sm">{t.label}</li>)}
-          </ul>
-        </div>
-        <dl class="grid grid-cols-3 gap-4">
-          <div data-reveal style="--i: 1" class="rounded-2xl bg-surface p-5">
-            <dt class="text-sm text-muted">โมเดล</dt>
-            <dd class="mt-1 text-4xl font-bold tabular-nums">5</dd>
-          </div>
-          <div data-reveal style="--i: 2" class="rounded-2xl bg-surface p-5">
-            <dt class="text-sm text-muted">งานทดสอบ</dt>
-            <dd class="mt-1 text-4xl font-bold tabular-nums">6</dd>
-          </div>
-          <div data-reveal style="--i: 3" class="rounded-2xl bg-accent p-5 text-accent-ink">
-            <dt class="text-sm opacity-80">คำตอบที่ให้คะแนน</dt>
-            <dd class="mt-1 text-4xl font-bold tabular-nums">155</dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-
     <section class="mx-auto max-w-5xl px-4 py-20">
       <h2 data-reveal class="text-3xl leading-snug font-bold tracking-tight md:text-4xl">พาทำทีละขั้น จนถามเอกสารของคุณได้</h2>
-      <p class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
+      <p data-reveal class="mt-3 text-muted">คู่มือนี้สำหรับ Windows</p>
       <ol class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {
           STEPS.map((s, i) => (
             <li data-reveal style={`--i: ${i}`} class="flex gap-4">
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
+              <span class="flex size-10 shrink-0 items-center justify-center rounded-full border border-line font-semibold tabular-nums">
                 {i + 1}
               </span>
               <div>
@@ -104,17 +104,15 @@ import { PROBLEMS, STEPS } from '../data/home';
       </ol>
     </section>
 
-    <section class="mx-auto max-w-5xl px-4 pb-24">
-      <div data-reveal class="flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-surface p-8 md:flex-row md:items-center">
+    <section id="final-cta" class="mx-auto max-w-5xl px-4 pb-24">
+      <div data-reveal class="flex flex-col items-start justify-between gap-6 rounded-2xl bg-accent p-8 text-accent-ink md:flex-row md:items-center">
         <div>
           <p class="text-2xl font-bold">เริ่มจากเช็กเครื่องก่อน</p>
-          <p class="mt-1 flex items-center gap-2 text-muted">
-            <CheckIcon size={18} weight="bold" className="text-good" aria-hidden="true" /> ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที
-          </p>
+          <p class="mt-1 opacity-90">ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที</p>
         </div>
         <a
           href="/wizard#step-1"
-          class="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+          class="inline-flex items-center gap-2 rounded-full bg-surface px-7 py-3.5 font-semibold text-ink transition hover:brightness-95 active:scale-[0.98]"
         >
           เช็กเครื่องของฉัน <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
         </a>
@@ -128,4 +126,57 @@ import { PROBLEMS, STEPS } from '../data/home';
       <p>AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ</p>
     </div>
   </footer>
+
+  <div
+    id="float-cta"
+    aria-hidden="true"
+    class="pointer-events-none fixed inset-x-0 bottom-5 z-20 flex translate-y-4 justify-center px-4 opacity-0 transition duration-500 ease-[var(--ease-out)] data-[show]:pointer-events-auto data-[show]:translate-y-0 data-[show]:opacity-100"
+  >
+    <div class="flex items-center gap-4 rounded-full border border-line bg-surface py-2 pr-2 pl-5 shadow-[0_16px_40px_-16px_oklch(0.3_0.04_255/0.45)]">
+      <span class="hidden items-center gap-1.5 text-muted sm:flex">
+        <CheckIcon size={18} weight="bold" className="text-good" aria-hidden="true" /> ฟรี ไม่ต้องสมัคร ประมาณ 2 นาที
+      </span>
+      <a
+        href="/wizard#step-1"
+        tabindex="-1"
+        class="rounded-full bg-accent px-5 py-2.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+      >
+        เช็กเครื่องของฉัน
+      </a>
+    </div>
+  </div>
 </Layout>
+
+<script>
+  // CTA ลอยโผล่เมื่อมองไม่เห็นปุ่มใน hero และไม่ได้กำลังอ่านตัวอย่างหรืออยู่ที่กล่องปุ่มท้ายหน้า
+  const float = document.getElementById('float-cta')!;
+  const floatLink = float.querySelector('a')!;
+  const seen = { hero: true, showcase: false, final: false };
+  // hero จางหายระหว่างที่ปุ่มยังอยู่ในจอ (Hero.astro ส่ง hero:gone มา) ถือว่ามองไม่เห็นปุ่มแล้ว
+  let heroGone = false;
+  document.addEventListener('hero:gone', (e) => {
+    heroGone = (e as CustomEvent<boolean>).detail;
+    update();
+  });
+
+  const update = () => {
+    const show = (!seen.hero || heroGone) && !seen.showcase && !seen.final;
+    float.toggleAttribute('data-show', show);
+    float.setAttribute('aria-hidden', String(!show));
+    floatLink.tabIndex = show ? 0 : -1;
+  };
+  const watch = (id: string, key: keyof typeof seen, rootMargin = '0px') =>
+    new IntersectionObserver(
+      ([e]) => {
+        seen[key] = e.isIntersecting;
+        update();
+      },
+      { rootMargin },
+    ).observe(document.getElementById(id)!);
+
+  watch('hero-cta', 'hero');
+  // นับว่ากำลังอ่านตัวอย่าง เมื่อส่วนนั้นคลุมเส้นกลางจอ
+  watch('examples', 'showcase', '-50% 0px -50% 0px');
+  watch('final-cta', 'final');
+</script>
+

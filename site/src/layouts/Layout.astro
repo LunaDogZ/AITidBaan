@@ -4,11 +4,9 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
-  /** แสดงปุ่ม "เช็กเครื่องของฉัน" ใน header หลังจากปุ่มใน hero (#hero-cta) เลื่อนพ้นจอแล้ว */
-  headerCta?: boolean;
 }
 
-const { title, description, headerCta = false } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,47 +20,20 @@ const { title, description, headerCta = false } = Astro.props;
     <meta name="description" content={description} />
   </head>
   <body class="min-h-[100dvh] font-sans antialiased">
-    <header class="fixed inset-x-0 top-3 z-20 px-4">
-      <div
-        class="mx-auto flex h-14 max-w-5xl items-center justify-between rounded-full border border-line bg-surface px-5 shadow-[0_8px_30px_-12px_oklch(0.3_0.03_255/0.25)] backdrop-blur-md"
-      >
-        <a href="/" class="text-lg font-bold tracking-tight">
+    <!-- header เป็น pill เล็กลอยมุมซ้ายแบบ fastwork hero จะได้ดูโปร่ง -->
+    <header class="pointer-events-none fixed inset-x-0 top-4 z-20 px-4">
+      <div class="mx-auto max-w-6xl">
+        <a
+          href="/"
+          class="pointer-events-auto inline-flex h-12 items-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-5 text-lg font-bold tracking-tight shadow-[0_8px_30px_-14px_oklch(0.3_0.03_255/0.3)] backdrop-blur-md transition hover:bg-surface"
+        >
           AITidBaan <span class="font-medium text-muted">AIติดบ้าน</span>
         </a>
-        {
-          headerCta && (
-            <a
-              id="header-cta"
-              href="/wizard#step-1"
-              tabindex="-1"
-              aria-hidden="true"
-              class="pointer-events-none translate-y-1 rounded-full bg-accent px-5 py-2 text-sm font-semibold text-accent-ink opacity-0 transition duration-300 active:scale-[0.98] data-[show]:pointer-events-auto data-[show]:translate-y-0 data-[show]:opacity-100"
-            >
-              เช็กเครื่องของฉัน
-            </a>
-          )
-        }
       </div>
     </header>
     <slot />
     <script>
       import '../scripts/reveal';
     </script>
-    {
-      headerCta && (
-        <script>
-          const heroCta = document.getElementById('hero-cta');
-          const headerCta = document.getElementById('header-cta');
-          if (heroCta && headerCta) {
-            new IntersectionObserver(([entry]) => {
-              const show = !entry.isIntersecting;
-              headerCta.toggleAttribute('data-show', show);
-              headerCta.setAttribute('aria-hidden', String(!show));
-              headerCta.tabIndex = show ? 0 : -1;
-            }).observe(heroCta);
-          }
-        </script>
-      )
-    }
   </body>
 </html>
