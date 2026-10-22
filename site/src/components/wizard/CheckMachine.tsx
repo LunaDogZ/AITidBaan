@@ -4,30 +4,69 @@ import type { Gpu, Ram, Task, Vram } from '../../lib/recommend';
 import { TASKS } from '../../data/models';
 import { toMachine, type Answers } from './answers';
 import { Choice, ScreenshotSlot, Trouble } from './ui';
+import { useLang } from './lang';
 
-const RAM: { value: Ram; label: string }[] = [
-  { value: 4, label: '4GB' },
-  { value: 8, label: '8GB' },
-  { value: 16, label: '16GB' },
-  { value: 32, label: '32GB ขึ้นไป' },
-  { value: 'unsure', label: 'ไม่แน่ใจ' },
-];
-
-const GPU: { value: Gpu; label: string; hint?: string }[] = [
-  { value: 'nvidia', label: 'มี', hint: 'เห็นคำว่า NVIDIA' },
-  { value: 'none', label: 'ไม่มี', hint: 'หรือเห็นแต่ AMD / Intel' },
-  { value: 'unsure', label: 'ไม่แน่ใจ' },
-];
-
-const VRAM: { value: Vram; label: string }[] = [
-  { value: 4, label: '4GB' },
-  { value: 6, label: '6GB' },
-  { value: 8, label: '8GB' },
-  { value: 12, label: '12GB ขึ้นไป' },
-  { value: 'unsure', label: 'ไม่แน่ใจ' },
-];
-
-const UNSURE_NOTE = 'ไม่เป็นไร เราจะแนะนำแบบปลอดภัยไว้ก่อน ถ้ารู้สเปกทีหลัง กลับมาเปลี่ยนได้';
+const T = {
+  th: {
+    orMore: 'ขึ้นไป',
+    unsure: 'ไม่แน่ใจ',
+    gpu: { nvidia: 'มี', nvidiaHint: 'เห็นคำว่า NVIDIA', none: 'ไม่มี', noneHint: 'หรือเห็นแต่ AMD / Intel' },
+    unsureNote: 'ไม่เป็นไร เราจะแนะนำแบบปลอดภัยไว้ก่อน ถ้ารู้สเปกทีหลัง กลับมาเปลี่ยนได้',
+    question: (n: number) => `คำถาม ${n} จาก 3`,
+    ramTitle: 'เครื่องของคุณมี RAM เท่าไร',
+    ramHow: 'กด Ctrl + Shift + Esc เพื่อเปิด Task Manager แล้วไปที่แท็บ Performance เลือก Memory ดูตัวเลขมุมขวาบน',
+    ramNote: 'ถ้าเห็นตัวเลขอย่าง 15.8GB ให้เลือก 16GB เพราะ Windows กันหน่วยความจำไว้ใช้เองบางส่วน',
+    gpuTitle: 'ในแท็บ Performance มีคำว่า NVIDIA ไหม',
+    gpuHow: 'ดูที่รายการด้านซ้าย ส่วนที่ขึ้นต้นด้วย GPU',
+    gpuLegend: 'การ์ดจอ NVIDIA',
+    gpuNoneNote: 'ถ้าเห็นแต่ AMD หรือ Intel ใช้ได้ แต่จะคำนวณเหมือนเครื่องที่ไม่มีการ์ดจอแยก',
+    vramLegend: 'Dedicated GPU memory (VRAM หรือหน่วยความจำของการ์ดจอ) เท่าไร',
+    tasksTitle: 'อยากให้ AI ช่วยงานแบบไหน',
+    tasksLead: 'เลือกได้หลายข้อ เราจะดูผลทดสอบของงานที่คุณเลือก',
+    tasksLegend: 'งานที่ใช้',
+    back: 'ย้อนกลับ',
+    done: 'ทำเสร็จแล้ว ไปต่อ',
+    next: 'ถัดไป',
+    trouble: [
+      { symptom: 'กด Ctrl + Shift + Esc แล้วได้หน้าต่างเล็กๆ ไม่มีแท็บ', fix: 'กด "More details" ที่มุมซ้ายล่างของหน้าต่าง' },
+      {
+        symptom: 'ไม่เห็นรายการ GPU ในแท็บ Performance',
+        fix: 'เลือก "ไม่แน่ใจ" ไปก่อนได้ เราจะคำนวณแบบเครื่องที่ไม่มีการ์ดจอแยก',
+      },
+    ],
+  },
+  en: {
+    orMore: 'or more',
+    unsure: 'Not sure',
+    gpu: { nvidia: 'Yes', nvidiaHint: 'I see the word NVIDIA', none: 'No', noneHint: 'Or I only see AMD / Intel' },
+    unsureNote: "That's fine. We'll play it safe for now, and you can come back and change it once you know.",
+    question: (n: number) => `Question ${n} of 3`,
+    ramTitle: 'How much RAM does your computer have?',
+    ramHow: 'Press Ctrl + Shift + Esc to open Task Manager, go to the Performance tab, choose Memory, and look at the number in the top right.',
+    ramNote: 'If you see something like 15.8GB, choose 16GB. Windows reserves a little memory for itself.',
+    gpuTitle: 'Does the Performance tab show the word NVIDIA?',
+    gpuHow: 'Look at the list on the left, at the entries starting with GPU.',
+    gpuLegend: 'NVIDIA graphics card',
+    gpuNoneNote: "AMD or Intel is fine, but we'll treat it like a computer without a separate graphics card.",
+    vramLegend: 'How much Dedicated GPU memory (VRAM, the graphics card memory) does it have?',
+    tasksTitle: 'What do you want AI to help with?',
+    tasksLead: "Pick as many as you like. We'll look at the test results for those tasks.",
+    tasksLegend: 'Tasks',
+    back: 'Back',
+    done: 'Done, next',
+    next: 'Next',
+    trouble: [
+      {
+        symptom: 'Ctrl + Shift + Esc opens a small window with no tabs',
+        fix: 'Click "More details" in the bottom left of the window.',
+      },
+      {
+        symptom: "There's no GPU entry in the Performance tab",
+        fix: 'Choose "Not sure" for now. We\'ll treat it like a computer without a separate graphics card.',
+      },
+    ],
+  },
+};
 
 interface Props {
   answers: Answers;
@@ -38,6 +77,27 @@ interface Props {
 }
 
 export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ, onDone }: Props) {
+  const lang = useLang();
+  const t = T[lang];
+  const RAM: { value: Ram; label: string }[] = [
+    { value: 4, label: '4GB' },
+    { value: 8, label: '8GB' },
+    { value: 16, label: '16GB' },
+    { value: 32, label: `32GB ${t.orMore}` },
+    { value: 'unsure', label: t.unsure },
+  ];
+  const GPU: { value: Gpu; label: string; hint?: string }[] = [
+    { value: 'nvidia', label: t.gpu.nvidia, hint: t.gpu.nvidiaHint },
+    { value: 'none', label: t.gpu.none, hint: t.gpu.noneHint },
+    { value: 'unsure', label: t.unsure },
+  ];
+  const VRAM: { value: Vram; label: string }[] = [
+    { value: 4, label: '4GB' },
+    { value: 6, label: '6GB' },
+    { value: 8, label: '8GB' },
+    { value: 12, label: `12GB ${t.orMore}` },
+    { value: 'unsure', label: t.unsure },
+  ];
   // จำคำถามก่อนหน้าไว้ เพื่อเลือกทิศทางที่คำถามใหม่เลื่อนเข้ามา
   const prevQ = useRef(q);
   const direction = q >= prevQ.current ? 'slide-next' : 'slide-prev';
@@ -57,24 +117,21 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
     <section aria-labelledby="q-title">
       {/* กรอบสูงคงที่ ปุ่มด้านล่างจะได้ไม่ขยับเวลาเปลี่ยนคำถาม */}
       <div className="flex min-h-[680px] flex-col rounded-2xl border border-line bg-surface p-6 sm:p-8">
-        <p className="text-sm text-muted">คำถาม {q + 1} จาก 3</p>
+        <p className="text-sm text-muted">{t.question(q + 1)}</p>
 
         <div key={q} className={`${direction} flex-1`}>
           {q === 0 && (
             <>
               <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
-                เครื่องของคุณมี RAM เท่าไร
+                {t.ramTitle}
               </h1>
-              <p className="mt-2 text-lg text-muted">
-                กด Ctrl + Shift + Esc เพื่อเปิด Task Manager แล้วไปที่แท็บ Performance เลือก Memory
-                ดูตัวเลขมุมขวาบน
-              </p>
+              <p className="mt-2 text-lg text-muted">{t.ramHow}</p>
               <div className="mt-4">
                 <ScreenshotSlot caption="Task Manager > Performance > Memory (Windows 11)" />
               </div>
               <p className="mt-3 flex gap-2 text-sm text-muted">
                 <InfoIcon size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
-                ถ้าเห็นตัวเลขอย่าง 15.8GB ให้เลือก 16GB เพราะ Windows กันหน่วยความจำไว้ใช้เองบางส่วน
+                {t.ramNote}
               </p>
               <fieldset className="mt-5">
                 <legend className="sr-only">RAM</legend>
@@ -91,21 +148,21 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
                   ))}
                 </div>
               </fieldset>
-              {answers.ram === 'unsure' && <p className="mt-3 text-sm text-muted">{UNSURE_NOTE}</p>}
+              {answers.ram === 'unsure' && <p className="mt-3 text-sm text-muted">{t.unsureNote}</p>}
             </>
           )}
 
           {q === 1 && (
             <>
               <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
-                ในแท็บ Performance มีคำว่า NVIDIA ไหม
+                {t.gpuTitle}
               </h1>
-              <p className="mt-2 text-lg text-muted">ดูที่รายการด้านซ้าย ส่วนที่ขึ้นต้นด้วย GPU</p>
+              <p className="mt-2 text-lg text-muted">{t.gpuHow}</p>
               <div className="mt-4">
                 <ScreenshotSlot caption="Task Manager > Performance > GPU (Windows 11)" />
               </div>
               <fieldset className="mt-5">
-                <legend className="sr-only">การ์ดจอ NVIDIA</legend>
+                <legend className="sr-only">{t.gpuLegend}</legend>
                 <div className="grid gap-2 sm:grid-cols-3">
                   {GPU.map((o) => (
                     <Choice
@@ -121,16 +178,12 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
                 </div>
               </fieldset>
               {answers.gpu === 'none' && (
-                <p className="mt-3 text-sm text-muted">
-                  ถ้าเห็นแต่ AMD หรือ Intel ใช้ได้ แต่จะคำนวณเหมือนเครื่องที่ไม่มีการ์ดจอแยก
-                </p>
+                <p className="mt-3 text-sm text-muted">{t.gpuNoneNote}</p>
               )}
-              {answers.gpu === 'unsure' && <p className="mt-3 text-sm text-muted">{UNSURE_NOTE}</p>}
+              {answers.gpu === 'unsure' && <p className="mt-3 text-sm text-muted">{t.unsureNote}</p>}
               {answers.gpu === 'nvidia' && (
                 <fieldset className="fade-in mt-6">
-                  <legend className="font-semibold">
-                    Dedicated GPU memory (VRAM หรือหน่วยความจำของการ์ดจอ) เท่าไร
-                  </legend>
+                  <legend className="font-semibold">{t.vramLegend}</legend>
                   <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-5">
                     {VRAM.map((o) => (
                       <Choice
@@ -151,21 +204,21 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
           {q === 2 && (
             <>
               <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
-                อยากให้ AI ช่วยงานแบบไหน
+                {t.tasksTitle}
               </h1>
-              <p className="mt-2 text-lg text-muted">เลือกได้หลายข้อ เราจะดูผลทดสอบของงานที่คุณเลือก</p>
+              <p className="mt-2 text-lg text-muted">{t.tasksLead}</p>
               <fieldset className="mt-5">
-                <legend className="sr-only">งานที่ใช้</legend>
+                <legend className="sr-only">{t.tasksLegend}</legend>
                 <div className="grid gap-2 sm:grid-cols-2">
-                  {TASKS.map((t) => (
+                  {TASKS[lang].map((task) => (
                     <Choice
-                      key={t.id}
+                      key={task.id}
                       type="checkbox"
                       name="tasks"
-                      label={t.label}
-                      hint={t.hint}
-                      checked={answers.tasks.includes(t.id)}
-                      onChange={() => toggleTask(t.id)}
+                      label={task.label}
+                      hint={task.hint}
+                      checked={answers.tasks.includes(task.id)}
+                      onChange={() => toggleTask(task.id)}
                     />
                   ))}
                 </div>
@@ -182,7 +235,7 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
               onClick={() => setQ(q - 1)}
               className="inline-flex items-center gap-1.5 font-semibold text-muted hover:text-ink"
             >
-              <ArrowLeftIcon size={18} aria-hidden="true" /> ย้อนกลับ
+              <ArrowLeftIcon size={18} aria-hidden="true" /> {t.back}
             </button>
           ) : (
             <span />
@@ -193,23 +246,12 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
             onClick={() => (last ? onDone() : setQ(q + 1))}
             className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {last ? 'ทำเสร็จแล้ว ไปต่อ' : 'ถัดไป'} <ArrowRightIcon size={18} weight="bold" aria-hidden="true" />
+            {last ? t.done : t.next} <ArrowRightIcon size={18} weight="bold" aria-hidden="true" />
           </button>
         </div>
       </div>
 
-      <Trouble
-        items={[
-          {
-            symptom: 'กด Ctrl + Shift + Esc แล้วได้หน้าต่างเล็กๆ ไม่มีแท็บ',
-            fix: 'กด "More details" ที่มุมซ้ายล่างของหน้าต่าง',
-          },
-          {
-            symptom: 'ไม่เห็นรายการ GPU ในแท็บ Performance',
-            fix: 'เลือก "ไม่แน่ใจ" ไปก่อนได้ เราจะคำนวณแบบเครื่องที่ไม่มีการ์ดจอแยก',
-          },
-        ]}
-      />
+      <Trouble items={t.trouble} />
     </section>
   );
 }

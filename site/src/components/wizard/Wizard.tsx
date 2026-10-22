@@ -11,6 +11,8 @@ import { Resume } from './Resume';
 import { recommend } from '../../lib/recommend';
 import { MODELS } from '../../data/models';
 import { clearProgress, loadProgress, resumeLink, saveProgress, type Progress as Saved } from '../../lib/progress';
+import type { Lang } from '../../i18n';
+import { LangContext } from './lang';
 
 // ขั้นอยู่ใน URL hash (#step-1) เพื่อให้ปุ่ม back ของเบราว์เซอร์ใช้ได้
 function stepFromHash(): number {
@@ -18,7 +20,7 @@ function stepFromHash(): number {
   return n >= 1 && n <= 6 ? n : 1;
 }
 
-export default function Wizard() {
+export default function Wizard({ lang }: { lang: Lang }) {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<Answers>({ tasks: [] });
   const [question, setQuestion] = useState(0);
@@ -34,7 +36,7 @@ export default function Wizard() {
     if (saved) {
       setAnswers(saved.answers);
       setDone(saved.done);
-      if (first === 1 && resumeLink(saved)) setResume(saved);
+      if (first === 1 && resumeLink(saved, lang)) setResume(saved);
     }
     setStep(first);
     setLoaded(true);
@@ -81,52 +83,56 @@ export default function Wizard() {
   if (!loaded) return null;
   if (resume) {
     return (
-      <div className="mx-auto max-w-3xl px-4 pt-[5.25rem] pb-20">
-        <div className="fade-in">
-          <Resume
-            step={resume.step}
-            done={resume.done}
-            modelName={model?.name}
-            onContinue={() => go(resume.done ? 5 : resume.step)}
-            onRestart={restart}
-          />
+      <LangContext.Provider value={lang}>
+        <div className="mx-auto max-w-3xl px-4 pt-[5.25rem] pb-20">
+          <div className="fade-in">
+            <Resume
+              step={resume.step}
+              done={resume.done}
+              modelName={model?.name}
+              onContinue={() => go(resume.done ? 5 : resume.step)}
+              onRestart={restart}
+            />
+          </div>
         </div>
-      </div>
+      </LangContext.Provider>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-[5.25rem] pb-20">
-      <Progress current={shown} />
-      <div key={shown} className="fade-in mt-6">
-        {shown === 1 && (
-          <CheckMachine
-            answers={answers}
-            onChange={setAnswers}
-            question={question}
-            onQuestion={setQuestion}
-            onDone={() => go(2)}
-          />
-        )}
-        {shown === 2 && machine && (
-          <Recommendation
-            machine={machine}
-            tasks={answers.tasks}
-            onEdit={() => go(1)}
-            onEditQuestion={(q) => {
-              setQuestion(q);
-              go(1);
-            }}
-            onNext={() => go(3)}
-          />
-        )}
-        {shown === 3 && model && <InstallApp model={model} onBack={() => go(2)} onNext={() => go(4)} />}
-        {shown === 4 && model && <LoadModel model={model} onBack={() => go(3)} onNext={() => go(5)} />}
-        {shown === 5 && model && (
-          <TryIt model={model} tasks={answers.tasks} onBack={() => go(4)} onNext={() => go(6)} />
-        )}
-        {shown === 6 && model && <GoOffline done={done} onDone={() => setDone(true)} onBack={() => go(5)} />}
+    <LangContext.Provider value={lang}>
+      <div className="mx-auto max-w-3xl px-4 pt-[5.25rem] pb-20">
+        <Progress current={shown} />
+        <div key={shown} className="fade-in mt-6">
+          {shown === 1 && (
+            <CheckMachine
+              answers={answers}
+              onChange={setAnswers}
+              question={question}
+              onQuestion={setQuestion}
+              onDone={() => go(2)}
+            />
+          )}
+          {shown === 2 && machine && (
+            <Recommendation
+              machine={machine}
+              tasks={answers.tasks}
+              onEdit={() => go(1)}
+              onEditQuestion={(q) => {
+                setQuestion(q);
+                go(1);
+              }}
+              onNext={() => go(3)}
+            />
+          )}
+          {shown === 3 && model && <InstallApp model={model} onBack={() => go(2)} onNext={() => go(4)} />}
+          {shown === 4 && model && <LoadModel model={model} onBack={() => go(3)} onNext={() => go(5)} />}
+          {shown === 5 && model && (
+            <TryIt model={model} tasks={answers.tasks} onBack={() => go(4)} onNext={() => go(6)} />
+          )}
+          {shown === 6 && model && <GoOffline done={done} onDone={() => setDone(true)} onBack={() => go(5)} />}
+        </div>
       </div>
-    </div>
+    </LangContext.Provider>
   );
 }

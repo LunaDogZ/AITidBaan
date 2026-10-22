@@ -10,6 +10,26 @@ import {
   LifebuoyIcon,
   WarningIcon,
 } from '@phosphor-icons/react';
+import { useLang } from './lang';
+
+const T = {
+  th: {
+    next: 'ทำเสร็จแล้ว ไปต่อ',
+    back: 'ย้อนกลับ',
+    copied: 'คัดลอกแล้ว',
+    screenshot: 'ภาพแคปหน้าจอ',
+    trouble: 'ติดปัญหา?',
+    troubleCount: (n: number) => `${n} เรื่องที่เจอบ่อย`,
+  },
+  en: {
+    next: 'Done, next',
+    back: 'Back',
+    copied: 'Copied',
+    screenshot: 'Screenshot',
+    trouble: 'Stuck?',
+    troubleCount: (n: number) => `${n} common issues`,
+  },
+};
 
 interface StepShellProps {
   title: string;
@@ -22,7 +42,8 @@ interface StepShellProps {
 
 // ขั้น ③-⑥ เป็นหน้าคู่มือที่อ่านยาว วางบนพื้นหน้าโดยไม่มีกรอบการ์ด (ไม่ให้เป็นกล่องซ้อนกล่อง)
 // แถบปุ่มติดขอบล่างของจอเหมือนขั้นเช็กเครื่อง
-export function StepShell({ title, lead, children, onBack, onNext, nextLabel = 'ทำเสร็จแล้ว ไปต่อ' }: StepShellProps) {
+export function StepShell({ title, lead, children, onBack, onNext, nextLabel }: StepShellProps) {
+  const t = T[useLang()];
   return (
     <div className="flex flex-col">
       <h1 className="text-[2.1rem] leading-tight font-bold tracking-tight text-balance sm:text-4xl">{title}</h1>
@@ -34,7 +55,7 @@ export function StepShell({ title, lead, children, onBack, onNext, nextLabel = '
           onClick={onBack}
           className="inline-flex items-center gap-1.5 font-semibold text-muted hover:text-ink"
         >
-          <ArrowLeftIcon size={18} aria-hidden="true" /> <span className="max-sm:sr-only">ย้อนกลับ</span>
+          <ArrowLeftIcon size={18} aria-hidden="true" /> <span className="max-sm:sr-only">{t.back}</span>
         </button>
         {onNext && (
           <button
@@ -42,7 +63,7 @@ export function StepShell({ title, lead, children, onBack, onNext, nextLabel = '
             onClick={onNext}
             className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-semibold whitespace-nowrap text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
           >
-            {nextLabel} <ArrowRightIcon size={18} weight="bold" aria-hidden="true" />
+            {nextLabel ?? t.next} <ArrowRightIcon size={18} weight="bold" aria-hidden="true" />
           </button>
         )}
       </div>
@@ -83,6 +104,7 @@ export function Warn({ children }: { children: ReactNode }) {
 }
 
 export function CopyButton({ text, label }: { text: string; label: string }) {
+  const t = T[useLang()];
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     await navigator.clipboard.writeText(text);
@@ -96,7 +118,7 @@ export function CopyButton({ text, label }: { text: string; label: string }) {
       className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-semibold transition duration-300 ease-[var(--ease-out)] active:scale-[0.98] ${copied ? 'bg-good text-white' : 'bg-accent text-accent-ink hover:brightness-110'}`}
     >
       {copied ? <CheckIcon size={18} weight="bold" aria-hidden="true" /> : <CopyIcon size={18} aria-hidden="true" />}
-      <span aria-live="polite">{copied ? 'คัดลอกแล้ว' : label}</span>
+      <span aria-live="polite">{copied ? t.copied : label}</span>
     </button>
   );
 }
@@ -132,21 +154,23 @@ export function Choice({ type, name, checked, onChange, label, hint }: ChoicePro
 
 export function ScreenshotSlot({ caption }: { caption: string }) {
   // TODO: ใส่ภาพแคปจริงจาก Windows 10 และ 11 (PRD ข้อ 9)
+  const t = T[useLang()];
   return (
     <div className="flex aspect-[16/4] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-line bg-sunk px-4 text-center text-sm text-muted">
       <ImageIcon size={28} aria-hidden="true" />
-      <span>ภาพแคปหน้าจอ: {caption}</span>
+      <span>{t.screenshot}: {caption}</span>
     </div>
   );
 }
 
 export function Trouble({ items }: { items: { symptom: string; fix: ReactNode }[] }) {
+  const t = T[useLang()];
   return (
     <details className="group mt-8 rounded-2xl bg-sunk">
       <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-5 py-4 transition-colors hover:bg-line/50">
         <LifebuoyIcon size={24} className="shrink-0 text-accent" aria-hidden="true" />
-        <span className="font-semibold">ติดปัญหา?</span>
-        <span className="text-muted">{items.length} เรื่องที่เจอบ่อย</span>
+        <span className="font-semibold">{t.trouble}</span>
+        <span className="text-muted">{t.troubleCount(items.length)}</span>
         <CaretDownIcon
           size={18}
           className="ml-auto transition-transform duration-500 ease-[var(--ease-out)] group-open:rotate-180"
