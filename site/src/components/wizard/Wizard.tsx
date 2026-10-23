@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { toMachine, type Answers } from './answers';
 import { Progress } from './Progress';
 import { CheckMachine } from './CheckMachine';
@@ -29,6 +29,22 @@ function stepFromHash(): number {
   return n >= 1 && n <= 6 ? n : 1;
 }
 
+// รีโหลดแล้วให้กลับไปตำแหน่งเดิมในขั้นเดิม เบราว์เซอร์คืนให้เองไม่ได้ เพราะตอนหน้าโหลดวิซาร์ดยังไม่ render
+const SCROLL_KEY = 'aitidbaan:wizard-scroll';
+function savedScroll(): number {
+  try {
+    const v = JSON.parse(sessionStorage.getItem(SCROLL_KEY) ?? '');
+    return v.hash === location.hash && typeof v.y === 'number' ? v.y : 0;
+  } catch {
+    return 0;
+  }
+}
+function saveScroll() {
+  try {
+    sessionStorage.setItem(SCROLL_KEY, JSON.stringify({ hash: location.hash, y: scrollY }));
+  } catch {}
+}
+
 export default function Wizard({ lang }: { lang: Lang }) {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<Answers>({ tasks: [] });
@@ -52,7 +68,11 @@ export default function Wizard({ lang }: { lang: Lang }) {
     setLoaded(true);
     const sync = () => setStep(stepFromHash());
     addEventListener('hashchange', sync);
-    return () => removeEventListener('hashchange', sync);
+    addEventListener('pagehide', saveScroll);
+    return () => {
+      removeEventListener('hashchange', sync);
+      removeEventListener('pagehide', saveScroll);
+    };
   }, []);
 
   const machine = toMachine(answers);
@@ -77,9 +97,14 @@ export default function Wizard({ lang }: { lang: Lang }) {
   };
   // เลื่อนขึ้นบนหลังขั้นใหม่แสดงแล้ว และไม่ใช้แบบนุ่มนวล: ถ้าสั่งก่อนเนื้อหาเปลี่ยน
   // Firefox จะหยุดการเลื่อนแบบนุ่มนวลกลางทาง หน้าค้างอยู่ด้านล่าง
+  // ครั้งแรกที่แสดง (เปิดหรือรีโหลด) กลับไปตำแหน่งที่จำไว้ของขั้นนั้นแทน
+  const restored = useRef(false);
   useLayoutEffect(() => {
-    scrollTo({ top: 0, behavior: 'instant' });
-  }, [shown, resume]);
+    if (!loaded) return;
+    const top = restored.current ? 0 : savedScroll();
+    restored.current = true;
+    scrollTo({ top, behavior: 'instant' });
+  }, [loaded, shown, resume]);
   const restart = () => {
     clearProgress();
     setAnswers({ tasks: [] });
