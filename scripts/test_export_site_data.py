@@ -123,6 +123,15 @@ class ReadSheetTest(unittest.TestCase):
             export_site_data.main()
         self.assertIn("CSV UTF-8", str(ctx.exception.code))
 
+    def test_main_missing_key_explains_it_is_not_in_git(self):
+        path = self.write(CSV.encode("utf-8"))
+        with mock.patch("sys.argv", ["export_site_data.py", path, path]), \
+                mock.patch.object(export_site_data, "KEY", Path(path).with_name("ไม่มีไฟล์นี้.json")), \
+                self.assertRaises(SystemExit) as ctx:
+            export_site_data.main()
+        self.assertIn("ไม่อยู่ใน git", str(ctx.exception.code))
+        self.assertIn("สำรอง", str(ctx.exception.code))
+
 
 if __name__ == "__main__":
     unittest.main()

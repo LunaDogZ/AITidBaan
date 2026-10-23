@@ -3,6 +3,8 @@
     python3 scripts/export_site_data.py <scores คนที่ 1>.csv <scores คนที่ 2>.csv
 
 อ่าน results/blind/key.json เพื่อแปลงป้าย ก ข ค ... กลับเป็นโมเดล แล้วเขียน site/src/data/ratings.json
+key.json ไม่อยู่ใน git (.gitignore) มีแค่ในเครื่องที่รัน blind.py ต้องสำรองไว้เอง ถ้าหายจะจับคู่ผลกับโมเดลไม่ได้
+และสร้างใหม่ไม่ได้ เพราะ blind.py สลับป้ายใหม่ ผลที่ผู้ให้คะแนนกรอกไปแล้วจะใช้ไม่ได้
 - สองคนให้ไม่ตรงกัน ใช้ระดับที่ต่ำกว่า
 - ได้ "แดง" ในข้อหลอก (TRAPS) ถือว่าโมเดลเคยแต่งข้อมูลที่ไม่มีในเอกสาร (trapFail)
 - ช่องว่างหรือกรอกคำอื่นจะหยุดและบอกว่าข้อไหน ป้ายไหน
@@ -82,6 +84,9 @@ def main():
         sys.exit(__doc__)
     try:
         sheets = read_sheet(sys.argv[1]), read_sheet(sys.argv[2])
+        if not KEY.exists():
+            raise ValueError(f"ไม่เจอ {KEY} ไฟล์นี้ไม่อยู่ใน git ต้องเอาจากที่สำรองไว้มาวาง "
+                             "ห้ามรัน blind.py ใหม่ เพราะป้ายจะสลับใหม่ ผลที่กรอกไปแล้วจะจับคู่ผิด")
         key = json.loads(KEY.read_text(encoding="utf-8"))
         models = merge(*sheets, key, names=(sys.argv[1], sys.argv[2]))
     except ValueError as e:
