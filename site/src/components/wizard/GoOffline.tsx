@@ -1,3 +1,4 @@
+import confetti from 'canvas-confetti';
 import { ConfettiIcon } from '@phosphor-icons/react';
 import { href } from '../../i18n';
 import { Screenshot, StepShell, Steps, Trouble } from './ui';
@@ -69,6 +70,25 @@ const T = {
   },
 };
 
+// พลุยิงจากซ้ายและขวาสลับกันราว 3 วินาที (ไม่ยิงถ้าผู้ใช้ตั้งลดการเคลื่อนไหว)
+function fireworks() {
+  const end = Date.now() + 3000;
+  const timer = setInterval(() => {
+    if (Date.now() > end) return clearInterval(timer);
+    for (const x of [0.1 + Math.random() * 0.2, 0.7 + Math.random() * 0.2]) {
+      confetti({
+        particleCount: 40,
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
+        zIndex: 100,
+        origin: { x, y: Math.random() * 0.3 + 0.1 },
+        disableForReducedMotion: true,
+      });
+    }
+  }, 250);
+}
+
 export function GoOffline({ done, onDone, onBack }: Props) {
   const lang = useLang();
   const t = T[lang];
@@ -77,7 +97,14 @@ export function GoOffline({ done, onDone, onBack }: Props) {
       title={t.title}
       lead={t.lead}
       onBack={onBack}
-      onNext={done ? undefined : onDone}
+      onNext={
+        done
+          ? undefined
+          : () => {
+              fireworks();
+              onDone();
+            }
+      }
       nextLabel={t.stillWorks}
     >
       <Steps
