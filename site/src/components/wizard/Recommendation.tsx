@@ -27,6 +27,7 @@ const T = {
     and: ' และ',
     recheck: { ram: 'เช็ก RAM อีกครั้ง', gpu: 'เช็กการ์ดจออีกครั้ง' },
     fits: 'โมเดลที่เหมาะกับคุณ',
+    trapWarn: 'เคยแต่งตัวเลขที่ไม่มีในเอกสาร ตรวจตัวเลขกับต้นฉบับทุกครั้ง',
     fileSize: 'ขนาดไฟล์',
     speed: 'ความเร็ว',
     perSec: 'token/วินาที',
@@ -71,6 +72,7 @@ const T = {
     and: ' and ',
     recheck: { ram: 'Check RAM again', gpu: 'Check graphics card again' },
     fits: 'The model that fits you',
+    trapWarn: 'It has made up numbers that were not in the document. Always check numbers against the original.',
     fileSize: 'File size',
     speed: 'Speed',
     perSec: 'tokens/sec',
@@ -170,6 +172,11 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
           {model.name}
         </h1>
         <p className="mt-2 text-muted">{model.blurb[lang]}</p>
+        {model.trapFail && (
+          <p className="mt-4 flex items-start gap-2 text-xl font-bold text-bad">
+            <WarningCircleIcon size={28} weight="fill" className="shrink-0" aria-hidden="true" /> {t.trapWarn}
+          </p>
+        )}
 
         <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
           <Stat label={t.fileSize} value={`${model.fileGB} GB`} />

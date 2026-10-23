@@ -1,9 +1,11 @@
 import type { RatedModel, Task } from '../lib/recommend';
 import type { Lang } from '../i18n';
+import ratingsFile from './ratings.json';
 
-// ผลประเมิน (ratings) และความเร็วในไฟล์นี้เป็นข้อมูลตัวอย่างสำหรับ prototype
-// จนกว่าผู้ให้คะแนนจะส่งผลจริงและมี scripts/export_site_data.py (PRD ข้อ 9)
-export const SAMPLE_DATA = true;
+// ผลประเมินอยู่ใน ratings.json ซึ่ง scripts/export_site_data.py เขียนทับเมื่อผู้ให้คะแนนส่งผลจริง (PRD ข้อ 9)
+// ระหว่างรอยังเป็นข้อมูลตัวอย่าง ("sample": true)
+const RATINGS = ratingsFile as { sample: boolean; models: Record<string, Pick<Model, 'ratings' | 'trapFail'>> };
+export const SAMPLE_DATA = RATINGS.sample;
 export const TEST_DATE: Record<Lang, string> = { th: '19-20 ต.ค. 2569', en: '19-20 Oct 2026' };
 
 export interface Model extends RatedModel {
@@ -14,6 +16,7 @@ export interface Model extends RatedModel {
   tokPerSec: number;
   speedKind: 'estimate' | 'measured';
   hfUrl: string; // ลิงก์ GGUF ที่ให้ผู้ใช้วางในช่องค้นหาของ LM Studio (ใช้ไฟล์ Q4_K_M)
+  trapFail: boolean; // ได้ "ใช้ไม่ได้" ในข้อหลอก คือเคยแต่งข้อมูลที่ไม่มีในเอกสาร
 }
 
 export const SPEED_KIND: Record<Lang, Record<Model['speedKind'], string>> = {
@@ -41,9 +44,7 @@ export const TASKS: Record<Lang, { id: Task; label: string; hint: string }[]> = 
   ],
 };
 
-const r = (good: number, minor: number, bad: number) => ({ good, minor, bad });
-
-export const MODELS: Model[] = [
+const MODEL_INFO: Omit<Model, 'ratings' | 'trapFail'>[] = [
   {
     id: 'typhoon-2.5-4b',
     rawId: 'typhoon2.5-qwen3-4b',
@@ -57,7 +58,6 @@ export const MODELS: Model[] = [
     fileGB: 2.5,
     tokPerSec: 8,
     speedKind: 'estimate',
-    ratings: { summary: r(2, 2, 1), formal: r(3, 2, 0), spelling: r(1, 2, 2), extraction: r(2, 1, 2), translation: r(3, 2, 1), minutes: r(2, 2, 1) },
   },
   {
     id: 'gemma-4-e4b',
@@ -72,7 +72,6 @@ export const MODELS: Model[] = [
     fileGB: 5.34,
     tokPerSec: 6.9,
     speedKind: 'measured',
-    ratings: { summary: r(3, 2, 0), formal: r(4, 1, 0), spelling: r(4, 1, 0), extraction: r(3, 1, 1), translation: r(5, 1, 0), minutes: r(3, 2, 0) },
   },
   {
     id: 'openthaigpt-1.5-7b',
@@ -87,7 +86,6 @@ export const MODELS: Model[] = [
     fileGB: 4.68,
     tokPerSec: 6,
     speedKind: 'estimate',
-    ratings: { summary: r(3, 1, 1), formal: r(2, 2, 1), spelling: r(2, 2, 1), extraction: r(3, 1, 1), translation: r(3, 2, 1), minutes: r(2, 2, 1) },
   },
   {
     id: 'typhoon-2.1-12b',
@@ -102,7 +100,6 @@ export const MODELS: Model[] = [
     fileGB: 7.3,
     tokPerSec: 20,
     speedKind: 'estimate',
-    ratings: { summary: r(4, 1, 0), formal: r(5, 0, 0), spelling: r(3, 2, 0), extraction: r(4, 1, 0), translation: r(5, 1, 0), minutes: r(4, 1, 0) },
   },
   {
     id: 'qwen-3.5-9b',
@@ -117,9 +114,14 @@ export const MODELS: Model[] = [
     fileGB: 5.63,
     tokPerSec: 25,
     speedKind: 'estimate',
-    ratings: { summary: r(3, 2, 0), formal: r(3, 1, 1), spelling: r(3, 1, 1), extraction: r(4, 1, 0), translation: r(4, 1, 1), minutes: r(3, 1, 1) },
   },
 ];
+
+export const MODELS: Model[] = MODEL_INFO.map((m) => {
+  const r = RATINGS.models[m.rawId];
+  if (!r) throw new Error(`ratings.json ไม่มีผลประเมินของ ${m.rawId}`);
+  return { ...m, ...r };
+});
 
 export const TIER_LABEL = {
   th: { notEnough: 'ยังไม่พอ', small: 'เครื่องเล็ก', medium: 'เครื่องกลาง', strong: 'เครื่องแรง' },

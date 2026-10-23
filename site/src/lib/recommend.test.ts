@@ -40,14 +40,49 @@ describe('machineTier', () => {
 
 describe('recommend', () => {
   const models = [
-    { id: 'a', tier: 'small', ratings: { spelling: { good: 1, minor: 2, bad: 2 }, summary: { good: 5, minor: 0, bad: 0 } } },
-    { id: 'b', tier: 'small', ratings: { spelling: { good: 4, minor: 1, bad: 0 }, summary: { good: 2, minor: 2, bad: 1 } } },
-    { id: 'c', tier: 'medium', ratings: { spelling: { good: 5, minor: 0, bad: 0 }, summary: { good: 5, minor: 0, bad: 0 } } },
+    { id: 'a', tier: 'small', fileGB: 3, ratings: { spelling: { good: 1, minor: 2, bad: 2 }, summary: { good: 5, minor: 0, bad: 0 } } },
+    { id: 'b', tier: 'small', fileGB: 3, ratings: { spelling: { good: 4, minor: 1, bad: 0 }, summary: { good: 2, minor: 2, bad: 1 } } },
+    { id: 'c', tier: 'medium', fileGB: 5, ratings: { spelling: { good: 5, minor: 0, bad: 0 }, summary: { good: 5, minor: 0, bad: 0 } } },
   ] as const;
 
-  it('เลือกโมเดลในระดับเครื่องเดียวกันที่ได้ "ใช้ได้เลย" มากที่สุดในงานที่ผู้ใช้เลือก', () => {
+  it('เลือกโมเดลที่ทำงานที่ผู้ใช้เลือกได้ดีที่สุด', () => {
     expect(recommend({ ram: 8, gpu: 'none' }, ['spelling'], models)?.id).toBe('b');
     expect(recommend({ ram: 8, gpu: 'none' }, ['summary'], models)?.id).toBe('a');
+  });
+
+  it('"ต้องแก้นิดหน่อย" ได้ครึ่งแต้ม: 🟢3 🟡2 ชนะ 🟢4 🔴1', () => {
+    const pair = [
+      { id: 'mixed', tier: 'small', fileGB: 3, ratings: { summary: { good: 3, minor: 2, bad: 0 } } },
+      { id: 'risky', tier: 'small', fileGB: 3, ratings: { summary: { good: 4, minor: 0, bad: 1 } } },
+    ] as const;
+    expect(recommend({ ram: 8, gpu: 'none' }, ['summary'], pair)?.id).toBe('mixed');
+  });
+
+  it('คิดเป็น % ต่องานก่อนเฉลี่ย งานแปล 6 ข้อจึงไม่มีน้ำหนักมากกว่างานอื่น', () => {
+    // x: แปล 6/6 + สรุป 0/5 = (100% + 0%) / 2 = 50%
+    // y: แปล 3/6 + สรุป 3/5 = (50% + 60%) / 2 = 55% (ถ้านับรวมข้อตรงๆ x ได้ 6 ชนะ y ได้ 6 เสมอ)
+    const pair = [
+      { id: 'x', tier: 'small', fileGB: 3, ratings: { translation: { good: 6, minor: 0, bad: 0 }, summary: { good: 0, minor: 0, bad: 5 } } },
+      { id: 'y', tier: 'small', fileGB: 3, ratings: { translation: { good: 3, minor: 0, bad: 3 }, summary: { good: 3, minor: 0, bad: 2 } } },
+    ] as const;
+    expect(recommend({ ram: 8, gpu: 'none' }, ['translation', 'summary'], pair)?.id).toBe('y');
+  });
+
+  it('เครื่องที่แรงกว่าเลือกโมเดลระดับต่ำกว่าได้ ถ้าทำงานที่เลือกได้ดีกว่า แต่ไม่เลือกโมเดลที่เกินเครื่อง', () => {
+    const set = [
+      { id: 'small-good', tier: 'small', fileGB: 3, ratings: { spelling: { good: 5, minor: 0, bad: 0 } } },
+      { id: 'medium-weak', tier: 'medium', fileGB: 5, ratings: { spelling: { good: 2, minor: 1, bad: 2 } } },
+      { id: 'strong-best', tier: 'strong', fileGB: 7, ratings: { spelling: { good: 5, minor: 0, bad: 0 } } },
+    ] as const;
+    expect(recommend({ ram: 16, gpu: 'none' }, ['spelling'], set)?.id).toBe('small-good');
+  });
+
+  it('คะแนนเสมอกัน เลือกตัวที่ไฟล์เล็กกว่าเพราะเร็วกว่า', () => {
+    const set = [
+      { id: 'big', tier: 'strong', fileGB: 7, ratings: { spelling: { good: 5, minor: 0, bad: 0 } } },
+      { id: 'small', tier: 'small', fileGB: 3, ratings: { spelling: { good: 5, minor: 0, bad: 0 } } },
+    ] as const;
+    expect(recommend({ ram: 16, gpu: 'nvidia', vram: 8 }, ['spelling'], set)?.id).toBe('small');
   });
 
   it('RAM 4GB ไม่แนะนำโมเดลใดเลย', () => {

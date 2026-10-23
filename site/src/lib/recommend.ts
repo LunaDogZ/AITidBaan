@@ -43,6 +43,7 @@ export interface RatingCount {
 export interface RatedModel {
   id: string;
   tier: Tier;
+  fileGB: number;
   ratings: Partial<Record<Task, RatingCount>>;
 }
 
@@ -50,15 +51,34 @@ export function goodCount(m: RatedModel, tasks: readonly Task[]): number {
   return tasks.reduce((sum, t) => sum + (m.ratings[t]?.good ?? 0), 0);
 }
 
+// 🟢 = 2 แต้ม 🟡 = 1 🔴 = 0 คิดเป็นสัดส่วนของแต้มเต็มในแต่ละงานแล้วเฉลี่ย งานที่มีจำนวนข้อต่างกันจึงมีน้ำหนักเท่ากัน
+export function score(m: RatedModel, tasks: readonly Task[]): number {
+  if (tasks.length === 0) return 0;
+  return (
+    tasks.reduce((sum, t) => {
+      const r = m.ratings[t];
+      const n = r ? r.good + r.minor + r.bad : 0;
+      return sum + (n ? (2 * r!.good + r!.minor) / (2 * n) : 0);
+    }, 0) / tasks.length
+  );
+}
+
 export function recommend<M extends RatedModel>(
   machine: MachineAnswers,
   tasks: readonly Task[],
   models: readonly M[],
 ): M | null {
-  const tier = machineTier(machine);
+  const rank = TIER_RANK[machineTier(machine)];
   let best: M | null = null;
   for (const m of models) {
-    if (m.tier === tier && (best === null || goodCount(m, tasks) > goodCount(best, tasks))) best = m;
+    if (m.tier === 'notEnough' || TIER_RANK[m.tier] > rank) continue;
+    if (best === null) {
+      best = m;
+      continue;
+    }
+    const diff = score(m, tasks) - score(best, tasks);
+    // เสมอกัน เลือกตัวที่ไฟล์เล็กกว่าเพราะเร็วกว่า
+    if (diff > 0 || (diff === 0 && m.fileGB < best.fileGB)) best = m;
   }
   return best;
 }

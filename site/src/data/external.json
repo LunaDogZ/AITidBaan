@@ -1,0 +1,78 @@
+{
+ "note": "ตัวเลขจากแหล่งภายนอก ใช้แสดงเทียบข้างผลทดสอบของเราเท่านั้น ไม่ใช้คิดคะแนนแนะนำ (ดู docs/research/external-benchmarks.md) ทุกแหล่งทดสอบโมเดลเต็มความละเอียด ไม่ใช่ไฟล์ Q4",
+ "sources": [
+  {
+   "id": "sea-helm",
+   "name": "SEA-HELM",
+   "owner": "AI Singapore",
+   "kind": "independent",
+   "url": "https://leaderboard.sea-lion.ai/detailed/TH",
+   "dataDate": "2026-09-18",
+   "fetched": "2026-10-23",
+   "caveat": "รันเต็มความละเอียดบน vLLM และเปิดโหมดคิดของ Qwen3.5 กับ Gemma 4",
+   "license": "CC BY-SA 4.0",
+   "scores": [
+    { "rawId": "qwen3.5-9b", "metric": "ภาษาไทยรวม", "value": 68.8, "max": 100 },
+    { "rawId": "qwen3.5-9b", "metric": "แปล (FLORES, MetricX-24)", "value": 91.7, "max": 100 },
+    { "rawId": "qwen3.5-9b", "metric": "สรุป (XL-Sum, ROUGE-L)", "value": 22.6, "max": 100 },
+    { "rawId": "qwen3.5-9b", "metric": "ทำตามคำสั่ง (IFEval-TH)", "value": 87.6, "max": 100 },
+    { "rawId": "qwen3.5-9b", "metric": "MT-Bench-TH", "value": 81.0, "max": 100 },
+    { "rawId": "qwen3.5-9b", "metric": "ThaiExam", "value": 70.4, "max": 100 },
+    { "rawId": "gemma-4-e4b-it", "metric": "ภาษาไทยรวม", "value": 66.3, "max": 100 },
+    { "rawId": "gemma-4-e4b-it", "metric": "แปล (FLORES, MetricX-24)", "value": 92.6, "max": 100 },
+    { "rawId": "gemma-4-e4b-it", "metric": "สรุป (XL-Sum, ROUGE-L)", "value": 22.6, "max": 100 },
+    { "rawId": "gemma-4-e4b-it", "metric": "ทำตามคำสั่ง (IFEval-TH)", "value": 80.4, "max": 100 },
+    { "rawId": "gemma-4-e4b-it", "metric": "MT-Bench-TH", "value": 78.1, "max": 100 },
+    { "rawId": "gemma-4-e4b-it", "metric": "ThaiExam", "value": 63.2, "max": 100 },
+    { "rawId": "typhoon2.1-gemma3-12b", "baseModel": "gemma-3-12b-it", "metric": "ภาษาไทยรวม", "value": 60.5, "max": 100 },
+    { "rawId": "typhoon2.1-gemma3-12b", "baseModel": "gemma-3-12b-it", "metric": "แปล (FLORES, MetricX-24)", "value": 92.3, "max": 100 },
+    { "rawId": "typhoon2.1-gemma3-12b", "baseModel": "gemma-3-12b-it", "metric": "สรุป (XL-Sum, ROUGE-L)", "value": 23.5, "max": 100 },
+    { "rawId": "typhoon2.1-gemma3-12b", "baseModel": "gemma-3-12b-it", "metric": "ทำตามคำสั่ง (IFEval-TH)", "value": 68.2, "max": 100 },
+    { "rawId": "typhoon2.1-gemma3-12b", "baseModel": "gemma-3-12b-it", "metric": "MT-Bench-TH", "value": 73.8, "max": 100 },
+    { "rawId": "typhoon2.1-gemma3-12b", "baseModel": "gemma-3-12b-it", "metric": "ThaiExam", "value": 43.9, "max": 100 }
+   ]
+  },
+  {
+   "id": "typhoon2.5-card",
+   "name": "การ์ดโมเดล Typhoon 2.5 4B",
+   "owner": "SCB 10X",
+   "kind": "vendor",
+   "url": "https://huggingface.co/scb10x/typhoon2.5-qwen3-4b",
+   "fetched": "2026-10-23",
+   "caveat": "ผู้ทำโมเดลวัดเอง รันแบบ bf16 ตัวเลขอยู่ในรูปภาพบนการ์ดโมเดล",
+   "scores": [
+    { "rawId": "typhoon2.5-qwen3-4b", "metric": "Thai HotpotQA", "value": 25.0, "max": 100 },
+    { "rawId": "typhoon2.5-qwen3-4b", "metric": "ทำตามคำสั่ง (IFEval-TH)", "value": 50.6, "max": 100 },
+    { "rawId": "typhoon2.5-qwen3-4b", "metric": "MT-Bench-TH", "value": 69.3, "max": 100 }
+   ]
+  },
+  {
+   "id": "typhoon2.1-card",
+   "name": "การ์ดโมเดล Typhoon 2.1 Gemma3 12B",
+   "owner": "SCB 10X",
+   "kind": "vendor",
+   "url": "https://huggingface.co/scb10x/typhoon2.1-gemma3-12b",
+   "fetched": "2026-10-23",
+   "caveat": "ผู้ทำโมเดลวัดเอง รันแบบ bf16",
+   "scores": [
+    { "rawId": "typhoon2.1-gemma3-12b", "metric": "ทำตามคำสั่ง (IFEval-TH)", "value": 83.0, "max": 100 },
+    { "rawId": "typhoon2.1-gemma3-12b", "metric": "MT-Bench-TH", "value": 7.5, "max": 10 },
+    { "rawId": "typhoon2.1-gemma3-12b", "metric": "ตอบเป็นภาษาไทยไม่ปนภาษาอื่น (code-switching)", "value": 98.0, "max": 100 }
+   ]
+  },
+  {
+   "id": "openthaigpt1.5-card",
+   "name": "การ์ดโมเดล OpenThaiGPT 1.5 7B",
+   "owner": "OpenThaiGPT",
+   "kind": "vendor",
+   "url": "https://huggingface.co/openthaigpt/openthaigpt1.5-7b-instruct",
+   "fetched": "2026-10-23",
+   "caveat": "ผู้ทำโมเดลวัดเอง เป็นข้อสอบปรนัยทั้งหมด",
+   "scores": [
+    { "rawId": "openthaigpt1.5-7b-instruct", "metric": "OpenThaiGPT eval เฉลี่ย", "value": 65.78, "max": 100 },
+    { "rawId": "openthaigpt1.5-7b-instruct", "metric": "ThaiExam", "value": 52.04, "max": 100 },
+    { "rawId": "openthaigpt1.5-7b-instruct", "metric": "M3Exam", "value": 54.01, "max": 100 }
+   ]
+  }
+ ]
+}
