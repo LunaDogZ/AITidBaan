@@ -7,7 +7,6 @@ import {
   CheckIcon,
   CopyIcon,
   ExclamationMarkIcon,
-  ImageIcon,
   LifebuoyIcon,
 } from '@phosphor-icons/react';
 import { useLang } from './lang';
@@ -17,7 +16,6 @@ const T = {
     next: 'ทำเสร็จแล้ว ไปต่อ',
     back: 'ย้อนกลับ',
     copied: 'คัดลอกแล้ว',
-    screenshot: 'ภาพแคปหน้าจอ',
     trouble: 'ติดปัญหา?',
     troubleCount: (n: number) => `${n} เรื่องที่เจอบ่อย`,
   },
@@ -25,7 +23,6 @@ const T = {
     next: 'Done, next',
     back: 'Back',
     copied: 'Copied',
-    screenshot: 'Screenshot',
     trouble: 'Stuck?',
     troubleCount: (n: number) => `${n} common issues`,
   },
@@ -152,17 +149,6 @@ export function Choice({ type, name, checked, onChange, label, hint }: ChoicePro
       <span className="pr-6 text-lg font-semibold">{label}</span>
       {hint && <span className="text-sm text-muted">{hint}</span>}
     </label>
-  );
-}
-
-export function ScreenshotSlot({ caption }: { caption: string }) {
-  // TODO: ใส่ภาพแคปจริงจาก Windows 10 และ 11 (PRD ข้อ 9)
-  const t = T[useLang()];
-  return (
-    <div className="flex aspect-[16/4] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-line bg-sunk px-4 text-center text-sm text-muted">
-      <ImageIcon size={28} aria-hidden="true" />
-      <span>{t.screenshot}: {caption}</span>
-    </div>
   );
 }
 

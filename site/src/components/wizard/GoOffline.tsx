@@ -1,6 +1,6 @@
 import { ConfettiIcon } from '@phosphor-icons/react';
 import { href } from '../../i18n';
-import { ScreenshotSlot, StepShell, Steps, Trouble } from './ui';
+import { Screenshot, StepShell, Steps, Trouble } from './ui';
 import { useLang } from './lang';
 
 interface Props {
@@ -15,8 +15,9 @@ const T = {
     lead: 'ขั้นนี้พิสูจน์ด้วยตาตัวเองว่า AI ประมวลผลบนเครื่องคุณ ไม่ได้ส่งเอกสารไปที่ไหน',
     stillWorks: 'AI ยังตอบได้',
     off: 'ปิด Wi-Fi หรือถอดสาย LAN',
-    offHow: 'กดไอคอนเน็ตที่มุมขวาล่างของจอ แล้วกดปิด Wi-Fi หรือเปิดโหมดเครื่องบิน',
-    offShot: 'แถบมุมขวาล่าง > ปิด Wi-Fi (Windows 11)',
+    offHow: 'กดไอคอน Wi-Fi มุมขวาล่างของจอ แล้วกดปุ่ม Wi-Fi',
+    before: 'กดตรงนี้',
+    after: 'ปิดแล้ว ปุ่มเป็นสีเทา',
     check: 'ลองเปิดเว็บไหนก็ได้ ให้แน่ใจว่าเข้าไม่ได้แล้ว',
     ask: 'กลับไปที่ LM Studio แล้วถามอะไรก็ได้อีกครั้ง',
     doneTitle: 'เครื่องของคุณมี AI ออฟไลน์แล้ว',
@@ -42,8 +43,9 @@ const T = {
     lead: 'This step lets you see for yourself that the AI runs on your computer and sends your documents nowhere.',
     stillWorks: 'The AI still answers',
     off: 'Turn off Wi-Fi or unplug the network cable',
-    offHow: 'Click the network icon in the bottom right of the screen and turn off Wi-Fi, or turn on airplane mode.',
-    offShot: 'Bottom-right tray > Wi-Fi off (Windows 11)',
+    offHow: 'Click the Wi-Fi icon in the bottom right of the screen, then click the Wi-Fi button.',
+    before: 'Click here',
+    after: 'Off: the button turns grey',
     check: 'Try opening any website to make sure it no longer loads.',
     ask: 'Go back to LM Studio and ask anything again.',
     doneTitle: 'Your computer now has offline AI',
@@ -83,8 +85,16 @@ export function GoOffline({ done, onDone, onBack }: Props) {
           <>
             <p>{t.off}</p>
             <p className="text-muted">{t.offHow}</p>
-            <div className="mt-3">
-              <ScreenshotSlot caption={t.offShot} />
+            {/* ก่อนและหลังปิดวางคู่กัน ให้เทียบเองว่าปิดสำเร็จ */}
+            <div className="mt-3 grid max-w-xl grid-cols-2 gap-3">
+              <figure>
+                <Screenshot src="/screens/go-offline/wifi-on.jpeg" width={462} height={567} alt={t.offHow} />
+                <figcaption className="mt-1 text-sm text-muted">{t.before}</figcaption>
+              </figure>
+              <figure>
+                <Screenshot src="/screens/go-offline/wifi-off.jpeg" width={477} height={575} alt={t.after} />
+                <figcaption className="mt-1 text-sm text-muted">{t.after}</figcaption>
+              </figure>
             </div>
           </>,
           <p>{t.check}</p>,
