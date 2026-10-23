@@ -110,6 +110,13 @@ class ReadSheetTest(unittest.TestCase):
         sheet = read_sheet(self.write(CSV.encode("utf-8")))
         self.assertEqual([r["_line"] for r in sheet], [2, 4])
 
+    def test_row_with_missing_cells_stops_with_item_and_label(self):
+        # แถวที่แก้ด้วยมือแล้วลบคอมมาท้ายแถวทิ้ง csv ให้ช่องที่ขาดเป็น None
+        sheet = read_sheet(self.write(
+            "id,คำตอบ,ผลประเมิน (เขียว/เหลือง/แดง),หมายเหตุ\nsummary-01,ก\nsummary-01,ข,เขียว,\n".encode("utf-8")))
+        with self.assertRaisesRegex(ValueError, "summary-01 ก"):
+            merge(sheet, sheet, {"summary-01": {"ก": "model-a", "ข": "model-b"}})
+
     def test_unreadable_encoding_names_the_file_and_suggests_csv_utf8(self):
         path = self.write(b"id,\xff\xfe\xdb\xdc\n")
         with self.assertRaisesRegex(ValueError, "CSV UTF-8") as ctx:

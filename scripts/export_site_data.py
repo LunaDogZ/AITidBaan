@@ -31,8 +31,10 @@ TRAPS = {"extraction-04", "extraction-05"}
 def grades(sheet, name):
     out, lines = {}, {}
     for i, row in enumerate(sheet):
-        item, label = row["id"].strip(), row["คำตอบ"].strip()
-        level, line = LEVEL.get(row[GRADE].strip()), row.get("_line", i + 2)
+        # แถวที่ช่องไม่ครบ csv ให้ช่องที่ขาดเป็น None ถือเป็นช่องว่าง merge จะหยุดและบอกว่าข้อไหน
+        cell = lambda k: (row.get(k) or "").strip()
+        item, label = cell("id"), cell("คำตอบ")
+        level, line = LEVEL.get(cell(GRADE)), row.get("_line", i + 2)
         if (item, label) in out:
             where = f"{name}: {item} {label} ซ้ำที่บรรทัด {lines[(item, label)]} และ {line}"
             if out[(item, label)] != level:
