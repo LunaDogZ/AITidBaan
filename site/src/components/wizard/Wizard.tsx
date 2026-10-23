@@ -10,7 +10,7 @@ import { GoOffline } from './GoOffline';
 import { Resume } from './Resume';
 import { recommend } from '../../lib/recommend';
 import { MODELS } from '../../data/models';
-import { clearProgress, loadProgress, resumeLink, saveProgress, type Progress as Saved } from '../../lib/progress';
+import { clearProgress, isDone, loadProgress, resumeLink, saveProgress, type Progress as Saved } from '../../lib/progress';
 import type { Lang } from '../../i18n';
 import { LangContext } from './lang';
 
@@ -24,7 +24,8 @@ export default function Wizard({ lang }: { lang: Lang }) {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<Answers>({ tasks: [] });
   const [question, setQuestion] = useState(0);
-  const [done, setDone] = useState(false);
+  // โมเดลที่ทำครบขั้น ⑥ (ไม่เก็บเป็น true/false เพราะเปลี่ยนคำตอบแล้วอาจได้โมเดลอื่นที่ยังไม่ได้โหลด)
+  const [doneModel, setDoneModel] = useState<string>();
   // ค่าที่จำไว้ต้องโหลดก่อนเช็กขั้นด้านล่าง ไม่งั้นลิงก์ #step-4 จากปุ่ม "ทำต่อ" หน้าแรกจะโดนดึงกลับขั้นแรก
   const [loaded, setLoaded] = useState(false);
   // เข้าวิซาร์ดตรงๆ (ไม่ได้ระบุขั้น) ขณะที่มีความคืบหน้าเดิม ให้ถามก่อนว่าจะทำต่อไหม
@@ -35,7 +36,7 @@ export default function Wizard({ lang }: { lang: Lang }) {
     const first = stepFromHash();
     if (saved) {
       setAnswers(saved.answers);
-      setDone(saved.done);
+      setDoneModel(saved.doneModel);
       if (first === 1 && resumeLink(saved, lang)) setResume(saved);
     }
     setStep(first);
@@ -52,6 +53,7 @@ export default function Wizard({ lang }: { lang: Lang }) {
   // ขั้น ③-⑥ ต้องมีโมเดลที่แนะนำ ถ้าไม่มี (RAM 4GB) ให้อยู่ที่หน้าผลแนะนำ
   const model = machine ? recommend(machine, answers.tasks, MODELS) : null;
   const allowed = !ready ? 1 : !model ? 2 : 6;
+  const done = model !== null && doneModel === model.id;
   useEffect(() => {
     if (loaded && step > allowed) {
       history.replaceState(null, '', `#step-${allowed}`);
@@ -71,14 +73,14 @@ export default function Wizard({ lang }: { lang: Lang }) {
   const restart = () => {
     clearProgress();
     setAnswers({ tasks: [] });
-    setDone(false);
+    setDoneModel(undefined);
     setQuestion(0);
     go(1);
   };
 
   useEffect(() => {
-    if (loaded && !resume) saveProgress({ answers, step: shown, done });
-  }, [loaded, resume, answers, shown, done]);
+    if (loaded && !resume) saveProgress({ answers, step: shown, doneModel });
+  }, [loaded, resume, answers, shown, doneModel]);
 
   if (!loaded) return null;
   if (resume) {
@@ -88,9 +90,9 @@ export default function Wizard({ lang }: { lang: Lang }) {
           <div className="fade-in">
             <Resume
               step={resume.step}
-              done={resume.done}
+              done={isDone(resume)}
               modelName={model?.name}
-              onContinue={() => go(resume.done ? 5 : resume.step)}
+              onContinue={() => go(isDone(resume) ? 5 : resume.step)}
               onRestart={restart}
             />
           </div>
@@ -130,7 +132,7 @@ export default function Wizard({ lang }: { lang: Lang }) {
           {shown === 5 && model && (
             <TryIt model={model} tasks={answers.tasks} onBack={() => go(4)} onNext={() => go(6)} />
           )}
-          {shown === 6 && model && <GoOffline done={done} onDone={() => setDone(true)} onBack={() => go(5)} />}
+          {shown === 6 && model && <GoOffline done={done} onDone={() => setDoneModel(model.id)} onBack={() => go(5)} />}
         </div>
       </div>
     </LangContext.Provider>

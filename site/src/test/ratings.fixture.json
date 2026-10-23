@@ -1,0 +1,10 @@
+{
+ "sample": true,
+ "models": {
+  "typhoon2.5-qwen3-4b": { "ratings": { "summary": { "good": 4, "minor": 1, "bad": 0 } }, "trapFail": false },
+  "gemma-4-e4b-it": { "ratings": { "summary": { "good": 2, "minor": 1, "bad": 2 } }, "trapFail": false },
+  "openthaigpt1.5-7b-instruct": { "ratings": { "summary": { "good": 5, "minor": 0, "bad": 0 } }, "trapFail": false },
+  "typhoon2.1-gemma3-12b": { "ratings": { "summary": { "good": 3, "minor": 1, "bad": 1 } }, "trapFail": false },
+  "qwen3.5-9b": { "ratings": { "summary": { "good": 3, "minor": 0, "bad": 2 } }, "trapFail": false }
+ }
+}

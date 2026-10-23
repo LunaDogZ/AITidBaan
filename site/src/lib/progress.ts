@@ -1,11 +1,14 @@
-import type { Gpu, Ram, Task, Vram } from './recommend';
+import { recommend, type Gpu, type Ram, type Task, type Vram } from './recommend';
 import { href, type Lang } from '../i18n';
+import { MODELS } from '../data/models';
+import { toMachine } from '../components/wizard/answers';
 
 // ความคืบหน้าของวิซาร์ดที่จำไว้ใน localStorage ของผู้ใช้ (PRD ข้อ 4) ไม่ได้ส่งออกนอกเครื่อง
 export interface Progress {
   answers: { ram?: Ram; gpu?: Gpu; vram?: Vram; tasks: Task[] };
   step: number;
-  done: boolean;
+  // id ของโมเดลที่ทำครบขั้น ⑥ ถ้าคำตอบเปลี่ยนจนได้โมเดลอื่น ถือว่ายังไม่เสร็จ (ดู isDone)
+  doneModel?: string;
 }
 
 const KEY = 'aitidbaan:wizard';
@@ -32,7 +35,21 @@ export function parseProgress(raw: string | null): Progress | null {
   if (RAMS.includes(a.ram)) answers.ram = a.ram;
   if (GPUS.includes(a.gpu)) answers.gpu = a.gpu;
   if (VRAMS.includes(a.vram)) answers.vram = a.vram;
-  return { answers, step: v.step, done: v.done === true };
+  const p: Progress = { answers, step: v.step };
+  // รูปแบบเก่าเก็บ done: true ถือว่าเสร็จกับโมเดลที่แนะนำจากคำตอบที่บันทึกไว้ตอนนั้น
+  const doneModel = typeof v.doneModel === 'string' ? v.doneModel : v.done === true ? recommendedId(answers) : undefined;
+  if (doneModel) p.doneModel = doneModel;
+  return p;
+}
+
+export function recommendedId(answers: Progress['answers']): string | undefined {
+  const machine = toMachine(answers);
+  return machine ? recommend(machine, answers.tasks, MODELS)?.id : undefined;
+}
+
+// เสร็จก็ต่อเมื่อโมเดลที่ทำครบตรงกับโมเดลที่แนะนำจากคำตอบตอนนี้ คำตอบที่ไม่มีโมเดลแนะนำ (RAM 4GB) ไม่มีวันเสร็จ
+export function isDone(p: Progress): boolean {
+  return p.doneModel !== undefined && p.doneModel === recommendedId(p.answers);
 }
 
 const RESUME_LABEL = {
@@ -43,7 +60,7 @@ const RESUME_LABEL = {
 export function resumeLink(p: Progress | null, lang: Lang): { href: string; label: string } | null {
   if (!p) return null;
   const t = RESUME_LABEL[lang];
-  if (p.done) return { href: href(lang, '/wizard'), label: t.done };
+  if (isDone(p)) return { href: href(lang, '/wizard'), label: t.done };
   if (p.step < 2) return null;
   return { href: href(lang, `/wizard#step-${p.step}`), label: t.step(CIRCLED[p.step - 1]) };
 }
