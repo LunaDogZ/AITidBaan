@@ -98,7 +98,7 @@ Claude ทำ prototype ให้ดู แล้วเจ้าของโป�
 | ระดับเครื่อง | โมเดล | ประเภท | ไฟล์ GGUF | หมายเหตุ |
 |---|---|---|---|---|
 | เล็ก | Typhoon 2.5 4B | ไทยโดยเฉพาะ | ทางการ (ทดสอบ) / mradermacher (แนะนำบนเว็บ) | Q4_K_M 2.50GB, Apache-2.0 ไฟล์ทางการไม่มี chat template ("Assistant:" หลุดในคำตอบ) ตอนทดสอบใช้ไฟล์ทางการที่ฝัง template เองแล้ว แต่บนเว็บแนะนำ `mradermacher/typhoon2.5-qwen3-4b-GGUF` ซึ่งมี template ติดมาครบ ต้องรันทดสอบสั้น (~3 ข้อ) ยืนยันก่อน และบอกบนหน้าผลทดสอบว่าทดสอบไฟล์ไหน แนะนำไฟล์ไหนเพราะอะไร |
-| เล็ก | Gemma 4 E4B | ทั่วไป | lmstudio-community | Q4_K_M 5.34GB, Apache-2.0 ต้องวัดว่าเครื่อง RAM 8GB รับไหว ถ้าไม่ไหวใช้ Gemma 4 E2B แทน **ห้ามใช้ build ที่ตัด vocab ทิ้ง** (build หลักทุกตัวมีภาษาไทยครบ) |
+| กลาง | Gemma 4 E4B | ทั่วไป | lmstudio-community | Q4_K_M 5.34GB, Apache-2.0 ย้ายจากระดับเล็ก (23 ต.ค. 2569): llama-server ใช้ RAM ~5.9GB ที่ context 8192 รวม Windows ~3GB และตัวแอปเกินเครื่อง 8GB ราว 1.5GB **ห้ามใช้ build ที่ตัด vocab ทิ้ง** (build หลักทุกตัวมีภาษาไทยครบ) |
 | กลาง | OpenThaiGPT 1.5 7B | ไทยโดยเฉพาะ | ทางการ | Q4_K_M 4.68GB, Qwen License ออก ก.ย. 2024 ถือว่าเริ่มเก่า |
 | แรง | Typhoon 2.1 Gemma3 12B | ไทยโดยเฉพาะ | ทางการ | Q4_K_M 7.30GB, Gemma License |
 | แรง | Qwen3.5-9B | ทั่วไป | lmstudio-community | Q4_K_M 5.63GB, Apache-2.0 รันแบบปิดโหมดคิด (LM Studio เปิดให้เอง ต้องส่ง `"reasoning_effort": "none"`) |

@@ -64,7 +64,8 @@ const MODEL_INFO: Omit<Model, 'ratings' | 'trapFail'>[] = [
     rawId: 'gemma-4-e4b-it',
     hfUrl: 'https://huggingface.co/lmstudio-community/gemma-4-E4B-it-GGUF',
     name: 'Gemma 4 E4B',
-    tier: 'small',
+    // ไฟล์ 5.34GB แต่ใช้ RAM จริง ~5.9GB รวม Windows เกินเครื่อง 8GB (มากกว่า OpenThaiGPT ที่อยู่ระดับกลาง)
+    tier: 'medium',
     blurb: {
       th: 'โมเดลทั่วไปจาก Google ที่อ่านเขียนภาษาไทยได้ดี',
       en: 'A general model from Google that reads and writes Thai well.',
