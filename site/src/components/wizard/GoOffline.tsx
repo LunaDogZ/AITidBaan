@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { ConfettiIcon } from '@phosphor-icons/react';
 import { href } from '../../i18n';
@@ -71,9 +72,18 @@ const T = {
 };
 
 // พลุยิงจากซ้ายและขวาสลับกันราว 3 วินาที (ไม่ยิงถ้าผู้ใช้ตั้งลดการเคลื่อนไหว)
+// เก็บตัวจับเวลาไว้ เพื่อไม่ให้ยิงซ้อนเมื่อกดซ้ำ และหยุดได้เมื่อออกจากขั้นนี้
+let timer: ReturnType<typeof setInterval> | undefined;
+
+function stopFireworks() {
+  clearInterval(timer);
+  confetti.reset();
+}
+
 function fireworks() {
+  stopFireworks();
   const end = Date.now() + 3000;
-  const timer = setInterval(() => {
+  timer = setInterval(() => {
     if (Date.now() > end) return clearInterval(timer);
     for (const x of [0.1 + Math.random() * 0.2, 0.7 + Math.random() * 0.2]) {
       confetti({
@@ -92,6 +102,7 @@ function fireworks() {
 export function GoOffline({ done, onDone, onBack }: Props) {
   const lang = useLang();
   const t = T[lang];
+  useEffect(() => stopFireworks, []);
   return (
     <StepShell
       title={t.title}
