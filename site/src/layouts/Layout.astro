@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { href, LANGS, switchPath, type Lang } from '../i18n';
+import { alternates, href, LANGS, switchPath, type Lang } from '../i18n';
 
 interface Props {
   lang: Lang;
@@ -26,7 +26,7 @@ const T = {
     <script is:inline>document.documentElement.classList.add("js");</script>
     <title>{title}</title>
     <meta name="description" content={description} />
-    {LANGS.map((l) => <link rel="alternate" hreflang={l} href={switchPath(Astro.url.pathname, l)} />)}
+    {alternates(Astro.url.pathname, Astro.site!).map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
   </head>
   <body class="min-h-[100dvh] font-sans antialiased">
     <!-- header เป็น pill เล็กลอยมุมซ้ายแบบ fastwork hero จะได้ดูโปร่ง -->

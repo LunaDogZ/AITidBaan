@@ -12,3 +12,9 @@ export const href = (lang: Lang, path: string) => (lang === 'th' ? path : `/en${
 
 // path ของหน้านี้ในอีกภาษา (ใช้กับปุ่มเปลี่ยนภาษา)
 export const switchPath = (pathname: string, to: Lang) => href(to, pathname.replace(/^\/en(?=\/|$)/, '') || '/');
+
+// <link rel="alternate" hreflang> ต้องเป็น URL เต็ม และมี x-default สำหรับภาษาอื่น (ใช้หน้าภาษาไทย)
+export const alternates = (pathname: string, site: URL) => [
+  ...LANGS.map((l) => ({ hreflang: l, href: new URL(switchPath(pathname, l), site).href })),
+  { hreflang: 'x-default', href: new URL(switchPath(pathname, 'th'), site).href },
+];
