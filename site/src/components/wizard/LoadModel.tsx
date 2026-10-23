@@ -1,6 +1,7 @@
+import { CaretDownIcon, HardDrivesIcon } from '@phosphor-icons/react';
 import type { Model } from '../../data/models';
 import { downloadMinutes } from '../../lib/install';
-import { CopyButton, Key, Screenshot, StepShell, Steps, Trouble, Warn } from './ui';
+import { CopyButton, Key, Screenshot, ShotSteps, StepShell, Steps, Trouble, Warn } from './ui';
 import { useLang } from './lang';
 
 const pasteKeys = (
@@ -14,6 +15,9 @@ const T = {
     title: (name: string) => `โหลด ${name} ลงเครื่อง`,
     lead: 'โหลดครั้งเดียว หลังจากนี้ใช้ได้โดยไม่ต้องต่อเน็ต',
     copy: 'คัดลอกลิงก์โมเดล',
+    driveD: 'อยากเก็บโมเดลไว้ไดรฟ์ D?',
+    driveDWhen: 'ทำก่อนกด Download',
+    driveDSteps: ['กด Library แล้วกด ··· มุมขวาล่าง', 'กด เปลี่ยน...', 'เลือกไดรฟ์ D และโฟลเดอร์ที่จะเก็บ แล้วกด Select Folder'],
     paste: <>ใน LM Studio กด Model Search แล้ววางลิงก์ด้วย {pasteKeys}</>,
     pick: 'เช็กว่าเป็น Q4_K_M แล้วกด Download',
     notQ4: 'ถ้าไม่ใช่ กดลูกศรตรงชื่อไฟล์แล้วเลือก Q4_K_M',
@@ -48,6 +52,13 @@ const T = {
     title: (name: string) => `Download ${name}`,
     lead: 'You download it once. After that it works without the internet.',
     copy: 'Copy model link',
+    driveD: 'Want to keep models on drive D?',
+    driveDWhen: 'Do this before clicking Download',
+    driveDSteps: [
+      'Click Library, then the ··· in the bottom right.',
+      'Click Change...',
+      'Choose drive D and a folder for the models, then click Select Folder.',
+    ],
     paste: <>In LM Studio, click Model Search and paste the link with {pasteKeys}.</>,
     pick: 'Check it says Q4_K_M, then click Download.',
     notQ4: 'If not, click the arrows next to the file name and pick Q4_K_M.',
@@ -83,6 +94,12 @@ const T = {
   },
 };
 
+const FOLDER_SHOTS = [
+  { src: '/screens/load-model/folder-library.jpeg', width: 1917, height: 1018 },
+  { src: '/screens/load-model/folder-change.jpeg', width: 332, height: 237 },
+  { src: '/screens/load-model/folder-pick.jpeg', width: 970, height: 602 },
+];
+
 const SHOT_MODEL_ID = 'openthaigpt-1.5-7b';
 
 const shot = (name: string, width: number, height: number, alt: string) => (
@@ -103,6 +120,23 @@ export function LoadModel({ model, onBack, onNext }: Props) {
 
   return (
     <StepShell title={t.title(model.name)} lead={t.lead} onBack={onBack} onNext={onNext}>
+      {/* ทางเลือก ส่วนใหญ่ใช้ไดรฟ์ C จึงพับไว้ ไม่ให้ขวางขั้นตอนหลัก */}
+      <details className="group mt-8 rounded-2xl bg-sunk">
+        <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-5 py-4 transition-colors hover:bg-line/50">
+          <HardDrivesIcon size={24} className="shrink-0 text-accent" aria-hidden="true" />
+          <span className="font-semibold">{t.driveD}</span>
+          <span className="text-muted">{t.driveDWhen}</span>
+          <CaretDownIcon
+            size={18}
+            className="ml-auto transition-transform duration-500 ease-[var(--ease-out)] group-open:rotate-180"
+            aria-hidden="true"
+          />
+        </summary>
+        <div className="fade-in px-5 pb-5">
+          <ShotSteps shots={FOLDER_SHOTS.map((shot, i) => ({ ...shot, text: t.driveDSteps[i] }))} />
+        </div>
+      </details>
+
       <Steps
         items={[
           <>

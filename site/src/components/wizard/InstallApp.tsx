@@ -51,7 +51,7 @@ const T = {
         symptom: 'ติดตั้งแล้วเปิดไม่ขึ้น หรือแจ้งว่า CPU ไม่รองรับ',
         fix: 'LM Studio ต้องใช้ CPU ที่รองรับ AVX2 เครื่องที่เก่ามากอาจไม่รองรับ',
       },
-      { symptom: 'ไดรฟ์ C เต็ม', fix: 'เก็บโมเดลไว้ไดรฟ์ D แทน (เปลี่ยนที่แท็บ My Models ของ LM Studio) หรือลบไฟล์ในโฟลเดอร์ Downloads ก่อน' },
+      { symptom: 'ไดรฟ์ C เต็ม', fix: 'เก็บโมเดลไว้ไดรฟ์ D แทน (ดูวิธีในขั้นถัดไป) หรือลบไฟล์ในโฟลเดอร์ Downloads ก่อน' },
     ],
   },
   en: {
@@ -93,7 +93,7 @@ const T = {
         symptom: "It won't open after installing, or says the CPU is not supported",
         fix: 'LM Studio needs a CPU that supports AVX2. Very old computers may not.',
       },
-      { symptom: 'Drive C is full', fix: 'Keep models on drive D instead (change it in the My Models tab of LM Studio), or delete files in your Downloads folder first.' },
+      { symptom: 'Drive C is full', fix: 'Keep models on drive D instead (see how in the next step), or delete files in your Downloads folder first.' },
     ],
   },
 };
