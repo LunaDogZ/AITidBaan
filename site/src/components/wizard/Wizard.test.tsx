@@ -158,3 +158,33 @@ describe('สถานะเสร็จผูกกับโมเดล (doneM
     expect(text()).not.toContain('คุณติดตั้งเสร็จแล้ว');
   });
 });
+
+describe('ปุ่ม "เปลี่ยนคำตอบ" พากลับไปคำถาม RAM', () => {
+  // ตอบครบ 3 ข้อในรอบเดียวกัน (ไม่รีโหลดหน้า) แล้วไปขั้น ②
+  async function answerAll(ram: string) {
+    mount();
+    choose(ram);
+    click(button('ถัดไป'));
+    choose('ไม่มี');
+    click(button('ถัดไป'));
+    choose('สรุปเอกสาร');
+    click(button('ทำเสร็จแล้ว ไปต่อ'));
+    await settle();
+  }
+
+  it('จากหน้า RAM 4GB ยังไม่พอ', async () => {
+    await answerAll('4GB');
+    expect(text()).toContain('RAM 4GB ยังไม่พอ');
+    click(button('เปลี่ยนคำตอบ'));
+    await settle();
+    expect(text()).toContain('คำถาม 1 จาก 3');
+  });
+
+  it('จากหน้าผลแนะนำ', async () => {
+    await answerAll('8GB');
+    expect(text()).toContain('Typhoon 2.5 4B');
+    click(button('เปลี่ยนคำตอบ'));
+    await settle();
+    expect(text()).toContain('คำถาม 1 จาก 3');
+  });
+});

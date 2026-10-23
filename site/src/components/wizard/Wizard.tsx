@@ -129,7 +129,10 @@ export default function Wizard({ lang }: { lang: Lang }) {
             <Recommendation
               machine={machine}
               tasks={answers.tasks}
-              onEdit={() => go(1)}
+              onEdit={() => {
+                setQuestion(0);
+                go(1);
+              }}
               onEditQuestion={(q) => {
                 setQuestion(q);
                 go(1);
