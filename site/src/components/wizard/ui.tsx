@@ -163,6 +163,19 @@ export function ScreenshotSlot({ caption }: { caption: string }) {
   );
 }
 
+export function Screenshot({ src, alt, width, height }: { src: string; alt: string; width: number; height: number }) {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading="lazy"
+      className="h-auto max-h-96 w-auto max-w-full rounded-xl border border-line"
+    />
+  );
+}
+
 export function Trouble({ items }: { items: { symptom: string; fix: ReactNode }[] }) {
   const t = T[useLang()];
   return (

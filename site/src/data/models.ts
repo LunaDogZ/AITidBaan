@@ -96,8 +96,8 @@ export const MODELS: Model[] = [
     name: 'Typhoon 2.1 Gemma3 12B',
     tier: 'strong',
     blurb: {
-      th: 'โมเดลภาษาไทยตัวใหญ่ ต้องใช้การ์ดจอ NVIDIA 8GB ขึ้นไป',
-      en: 'A large Thai model. Needs an NVIDIA graphics card with 8GB or more.',
+      th: 'โมเดลภาษาไทยตัวใหญ่ ต้องใช้การ์ดจอแยก NVIDIA หรือ AMD 8GB ขึ้นไป',
+      en: 'A large Thai model. Needs a separate NVIDIA or AMD graphics card with 8GB or more.',
     },
     fileGB: 7.3,
     tokPerSec: 20,

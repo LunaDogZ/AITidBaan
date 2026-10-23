@@ -1,4 +1,5 @@
 export type Ram = 4 | 8 | 16 | 32 | 'unsure';
+// 'nvidia' = การ์ดจอแยก NVIDIA หรือ AMD Radeon (ชื่อเดิมคงไว้ เพราะคำตอบที่บันทึกในเครื่องผู้ใช้ใช้ค่านี้)
 export type Gpu = 'nvidia' | 'none' | 'unsure';
 export type Vram = 4 | 6 | 8 | 12 | 'unsure';
 

@@ -3,23 +3,27 @@ import { ArrowLeftIcon, ArrowRightIcon, InfoIcon } from '@phosphor-icons/react';
 import type { Gpu, Ram, Task, Vram } from '../../lib/recommend';
 import { TASKS } from '../../data/models';
 import { toMachine, type Answers } from './answers';
-import { Choice, ScreenshotSlot, Trouble } from './ui';
+import { Choice, Screenshot, Trouble } from './ui';
 import { useLang } from './lang';
 
 const T = {
   th: {
     orMore: 'ขึ้นไป',
     unsure: 'ไม่แน่ใจ',
-    gpu: { nvidia: 'มี', nvidiaHint: 'เห็นคำว่า NVIDIA', none: 'ไม่มี', noneHint: 'หรือเห็นแต่ AMD / Intel' },
+    gpu: { nvidia: 'มี', nvidiaHint: 'เห็น NVIDIA หรือ AMD Radeon RX', none: 'ไม่มี', noneHint: 'หรือเห็นแต่ Intel / AMD Radeon Graphics' },
     unsureNote: 'ไม่เป็นไร เราจะแนะนำแบบปลอดภัยไว้ก่อน ถ้ารู้สเปกทีหลัง กลับมาเปลี่ยนได้',
     question: (n: number) => `คำถาม ${n} จาก 3`,
     ramTitle: 'เครื่องของคุณมี RAM เท่าไร',
-    ramHow: 'กด Ctrl + Shift + Esc เพื่อเปิด Task Manager แล้วไปที่แท็บ Performance เลือก Memory ดูตัวเลขมุมขวาบน',
+    ramSteps: [
+      'คลิกขวาที่แถบด้านล่างของจอ (taskbar) แล้วเลือก Task Manager หรือกด Ctrl + Shift + Esc',
+      'เลือก Performance ที่เมนูด้านซ้าย',
+      'เลือก Memory แล้วดูตัวเลขมุมขวาบน (ในภาพคือ 16.0 GB)',
+    ],
     ramNote: 'ถ้าเห็นตัวเลขอย่าง 15.8GB ให้เลือก 16GB เพราะ Windows กันหน่วยความจำไว้ใช้เองบางส่วน',
-    gpuTitle: 'ในแท็บ Performance มีคำว่า NVIDIA ไหม',
-    gpuHow: 'ดูที่รายการด้านซ้าย ส่วนที่ขึ้นต้นด้วย GPU',
-    gpuLegend: 'การ์ดจอ NVIDIA',
-    gpuNoneNote: 'ถ้าเห็นแต่ AMD หรือ Intel ใช้ได้ แต่จะคำนวณเหมือนเครื่องที่ไม่มีการ์ดจอแยก',
+    gpuTitle: 'ในแท็บ Performance มีการ์ดจอ NVIDIA หรือ AMD Radeon ไหม',
+    gpuHow: 'ดูที่รายการด้านซ้าย ส่วนที่ขึ้นต้นด้วย GPU ถ้ามี NVIDIA หรือ AMD Radeon RX ให้คลิกเข้าไปดู Dedicated GPU memory ด้านล่าง (ในภาพคือ 4.0 GB)',
+    gpuLegend: 'การ์ดจอแยก NVIDIA หรือ AMD',
+    gpuNoneNote: 'ถ้าเห็นแต่ Intel หรือ AMD Radeon Graphics นั่นคือการ์ดจอในตัว ใช้ได้ แต่จะคำนวณเหมือนเครื่องที่ไม่มีการ์ดจอแยก',
     vramLegend: 'Dedicated GPU memory (VRAM หรือหน่วยความจำของการ์ดจอ) เท่าไร',
     tasksTitle: 'อยากให้ AI ช่วยงานแบบไหน',
     tasksLead: 'เลือกได้หลายข้อ เราจะดูผลทดสอบของงานที่คุณเลือก',
@@ -30,6 +34,10 @@ const T = {
     trouble: [
       { symptom: 'กด Ctrl + Shift + Esc แล้วได้หน้าต่างเล็กๆ ไม่มีแท็บ', fix: 'กด "More details" ที่มุมซ้ายล่างของหน้าต่าง' },
       {
+        symptom: 'เห็น AMD Radeon Graphics แต่ไม่มีเลขรุ่น RX',
+        fix: 'นั่นคือการ์ดจอในตัวของ CPU ให้เลือก "ไม่มี"',
+      },
+      {
         symptom: 'ไม่เห็นรายการ GPU ในแท็บ Performance',
         fix: 'เลือก "ไม่แน่ใจ" ไปก่อนได้ เราจะคำนวณแบบเครื่องที่ไม่มีการ์ดจอแยก',
       },
@@ -38,16 +46,20 @@ const T = {
   en: {
     orMore: 'or more',
     unsure: 'Not sure',
-    gpu: { nvidia: 'Yes', nvidiaHint: 'I see the word NVIDIA', none: 'No', noneHint: 'Or I only see AMD / Intel' },
+    gpu: { nvidia: 'Yes', nvidiaHint: 'I see NVIDIA or AMD Radeon RX', none: 'No', noneHint: 'Or I only see Intel / AMD Radeon Graphics' },
     unsureNote: "That's fine. We'll play it safe for now, and you can come back and change it once you know.",
     question: (n: number) => `Question ${n} of 3`,
     ramTitle: 'How much RAM does your computer have?',
-    ramHow: 'Press Ctrl + Shift + Esc to open Task Manager, go to the Performance tab, choose Memory, and look at the number in the top right.',
+    ramSteps: [
+      'Right-click the bar at the bottom of the screen (taskbar) and choose Task Manager, or press Ctrl + Shift + Esc.',
+      'Choose Performance in the menu on the left.',
+      'Choose Memory and look at the number in the top right (16.0 GB in this picture).',
+    ],
     ramNote: 'If you see something like 15.8GB, choose 16GB. Windows reserves a little memory for itself.',
-    gpuTitle: 'Does the Performance tab show the word NVIDIA?',
-    gpuHow: 'Look at the list on the left, at the entries starting with GPU.',
-    gpuLegend: 'NVIDIA graphics card',
-    gpuNoneNote: "AMD or Intel is fine, but we'll treat it like a computer without a separate graphics card.",
+    gpuTitle: 'Does the Performance tab show an NVIDIA or AMD Radeon graphics card?',
+    gpuHow: 'Look at the list on the left, at the entries starting with GPU. If one says NVIDIA or AMD Radeon RX, click it and look for Dedicated GPU memory near the bottom (4.0 GB in this picture).',
+    gpuLegend: 'Separate NVIDIA or AMD graphics card',
+    gpuNoneNote: "Intel or AMD Radeon Graphics is built into the CPU. That's fine, but we'll treat it like a computer without a separate graphics card.",
     vramLegend: 'How much Dedicated GPU memory (VRAM, the graphics card memory) does it have?',
     tasksTitle: 'What do you want AI to help with?',
     tasksLead: "Pick as many as you like. We'll look at the test results for those tasks.",
@@ -61,12 +73,22 @@ const T = {
         fix: 'Click "More details" in the bottom left of the window.',
       },
       {
+        symptom: 'I see AMD Radeon Graphics with no RX model number',
+        fix: 'That\'s the graphics built into the CPU. Choose "No".',
+      },
+      {
         symptom: "There's no GPU entry in the Performance tab",
         fix: 'Choose "Not sure" for now. We\'ll treat it like a computer without a separate graphics card.',
       },
     ],
   },
 };
+
+const RAM_SHOTS = [
+  { src: '/screens/check-machine/flow01.jpeg', width: 687, height: 213 },
+  { src: '/screens/check-machine/flow02.jpeg', width: 305, height: 475 },
+  { src: '/screens/check-machine/flow03.jpeg', width: 1917, height: 1018 },
+];
 
 interface Props {
   answers: Answers;
@@ -125,10 +147,18 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
               <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
                 {t.ramTitle}
               </h1>
-              <p className="mt-2 text-lg text-muted">{t.ramHow}</p>
-              <div className="mt-4">
-                <ScreenshotSlot caption="Task Manager > Performance > Memory (Windows 11)" />
-              </div>
+              <ol className="mt-4 space-y-5">
+                {RAM_SHOTS.map((shot, i) => (
+                  <li key={shot.src}>
+                    <p className="text-lg text-muted">
+                      <span className="font-semibold text-ink">{i + 1}.</span> {t.ramSteps[i]}
+                    </p>
+                    <div className="mt-2">
+                      <Screenshot {...shot} alt={t.ramSteps[i]} />
+                    </div>
+                  </li>
+                ))}
+              </ol>
               <p className="mt-3 flex gap-2 text-sm text-muted">
                 <InfoIcon size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
                 {t.ramNote}
@@ -159,7 +189,7 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
               </h1>
               <p className="mt-2 text-lg text-muted">{t.gpuHow}</p>
               <div className="mt-4">
-                <ScreenshotSlot caption="Task Manager > Performance > GPU (Windows 11)" />
+                <Screenshot src="/screens/check-machine/gpu.jpeg" width={1917} height={1018} alt={t.gpuHow} />
               </div>
               <fieldset className="mt-5">
                 <legend className="sr-only">{t.gpuLegend}</legend>
