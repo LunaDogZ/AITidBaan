@@ -26,7 +26,7 @@ type Text = {
   };
 };
 
-const T: Text = {
+const TEXT: Record<Lang, Text> = {
   th: {
     title: 'ทำไมบริษัทถึงระวังเรื่อง AI บน cloud',
     leak: {
@@ -103,7 +103,8 @@ const T: Text = {
       note: "This site is not legal advice. Using offline AI doesn't mean you comply with PDPA or ISO. Ask your company's IT or legal team.",
     },
   },
-}[lang];
+};
+const T = TEXT[lang];
 const { leak, compare } = T;
 ---
 

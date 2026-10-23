@@ -1,0 +1,26 @@
+---
+// Cloudflare Pages ใช้ไฟล์นี้กับทุก URL ที่ไม่มีอยู่จริง ถ้าไม่มีจะส่งหน้าแรกกลับไปแทน (ถือว่าเป็น SPA)
+// หน้าเดียวใช้ทั้งสองภาษา จึงมีข้อความอังกฤษต่อท้าย
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout lang="th" title="ไม่พบหน้านี้ | AITidBaan" description="ไม่พบหน้าที่คุณเปิด" notFound>
+  <main class="mx-auto flex min-h-[100dvh] max-w-3xl flex-col justify-center px-4 py-28">
+    <p class="font-semibold tabular-nums text-accent">404</p>
+    <h1 class="mt-2 text-4xl leading-snug font-bold tracking-tight">ไม่พบหน้านี้</h1>
+    <p class="mt-3 text-xl text-muted">ลิงก์อาจพิมพ์ผิด หรือหน้านี้ถูกย้ายไปแล้ว</p>
+    <p class="mt-1 text-muted" lang="en">Page not found. The link may be mistyped or the page has moved.</p>
+    <div class="mt-8 flex flex-wrap gap-x-6 gap-y-4">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 font-semibold text-accent-ink transition hover:brightness-110 active:scale-[0.98]"
+      >
+        กลับหน้าแรก <ArrowRightIcon size={20} weight="bold" aria-hidden="true" />
+      </a>
+      <a href="/en/" lang="en" class="inline-flex items-center font-semibold text-accent underline underline-offset-4">
+        Go to the English home page
+      </a>
+    </div>
+  </main>
+</Layout>

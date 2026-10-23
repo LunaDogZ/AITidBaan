@@ -64,12 +64,12 @@ describe('isDone', () => {
 
 describe('resumeLink', () => {
   it('ทำถึงขั้น 2 ขึ้นไป ได้ลิงก์ทำต่อพร้อมเลขขั้น', () => {
-    expect(resumeLink(saved, 'th')).toEqual({ href: '/wizard#step-4', label: 'ทำต่อจากขั้น ④' });
+    expect(resumeLink(saved, 'th')).toEqual({ href: '/wizard/#step-4', label: 'ทำต่อจากขั้น ④' });
   });
 
   it('ทำเสร็จแล้ว ได้ลิงก์ไปดูการติดตั้ง', () => {
     expect(resumeLink({ ...saved, step: 6, doneModel: 'openthaigpt-1.5-7b' }, 'th')).toEqual({
-      href: '/wizard',
+      href: '/wizard/',
       label: 'ดูการติดตั้งของฉัน',
     });
   });
@@ -79,14 +79,14 @@ describe('resumeLink', () => {
   });
 
   it('ภาษาอังกฤษ ลิงก์อยู่ใต้ /en/', () => {
-    expect(resumeLink(saved, 'en')).toEqual({ href: '/en/wizard#step-4', label: 'Continue from step ④' });
-    expect(resumeLink({ ...saved, doneModel: 'openthaigpt-1.5-7b' }, 'en')?.href).toBe('/en/wizard');
+    expect(resumeLink(saved, 'en')).toEqual({ href: '/en/wizard/#step-4', label: 'Continue from step ④' });
+    expect(resumeLink({ ...saved, doneModel: 'openthaigpt-1.5-7b' }, 'en')?.href).toBe('/en/wizard/');
   });
 
   it('ขั้นที่บันทึกไว้เกินกว่าที่คำตอบไปถึงได้ ลิงก์ชี้ขั้นที่ไปได้จริง', () => {
     // RAM 4GB ไม่มีโมเดลแนะนำ ไปได้ถึงขั้น ② เท่านั้น
     expect(resumeLink({ answers: { ...small, ram: 4 }, step: 5 }, 'th')).toEqual({
-      href: '/wizard#step-2',
+      href: '/wizard/#step-2',
       label: 'ทำต่อจากขั้น ②',
     });
     // คำตอบว่าง (ข้อมูลเสีย) อยู่ขั้น ① ไม่ต้องเปลี่ยนปุ่ม

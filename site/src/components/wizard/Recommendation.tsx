@@ -46,7 +46,7 @@ const T = {
       { symptom: 'ไม่แน่ใจว่าตอบสเปกถูก', fix: 'กด "เปลี่ยนคำตอบ" ด้านบนเพื่อกลับไปแก้ได้ทุกเมื่อ' },
       {
         symptom: 'อยากเห็นโมเดลตัวอื่นด้วย',
-        fix: 'หน้านี้แนะนำตัวเดียวเพื่อไม่ให้ต้องเลือกเอง ถ้าอยากเทียบ ดูได้ที่ตารางเปรียบเทียบทั้งหมด',
+        fix: 'หน้านี้แนะนำตัวเดียวเพื่อไม่ให้ต้องเลือกเอง ถ้าอยากเทียบ ตารางเปรียบเทียบทั้งหมดจะมาเร็วๆ นี้',
       },
     ],
     exampleTitle: (task: string) => `ตัวอย่างคำตอบจริง: ${task}`,
@@ -91,7 +91,7 @@ const T = {
       { symptom: "I'm not sure my answers are right", fix: 'Click "Change answers" above to go back and fix them at any time.' },
       {
         symptom: 'I want to see other models too',
-        fix: 'This page recommends just one so you do not have to choose. To compare, see the full comparison table.',
+        fix: 'This page recommends just one so you do not have to choose. A full comparison table is coming soon.',
       },
     ],
     exampleTitle: (task: string) => `Real answer example: ${task}`,
