@@ -1,0 +1,146 @@
+---
+// ภาพจำลองแชตที่พิมพ์เองเมื่อเลื่อนมาเห็น แล้วข้อมูลวิ่งไปที่ปลายทาง (ใช้ใน WhyOffline)
+import { FileLockIcon, PaperPlaneRightIcon, WifiSlashIcon } from '@phosphor-icons/react/dist/ssr';
+
+// มี reply = AI ออฟไลน์: ไม่มีเส้นทางออกไปนอกเครื่อง คำตอบโผล่ในการ์ดพร้อมป้าย dest แทน
+export type Mock = { label: string; attach?: string; secret?: string; typed: string; dest: string; reply?: string };
+
+const { mock, Dest, tone } = Astro.props as {
+  mock: Mock;
+  Dest: (props: Record<string, unknown>) => unknown;
+  tone: string;
+};
+const offline = !!mock.reply;
+---
+
+<!-- กรอบสีจางตามความหมาย: แดง = ข้อมูลออกไปนอกเครื่อง เขียว = อยู่ในเครื่อง -->
+<div
+  data-flow
+  class:list={['rounded-[2rem] p-3 text-ink sm:p-8', offline ? 'bg-[oklch(0.86_0.05_155)]' : 'bg-[oklch(0.86_0.04_25)]']}
+>
+  <div class="rounded-2xl bg-surface p-4 shadow-[0_24px_40px_-26px_oklch(0.3_0.06_262/0.55)] sm:p-5">
+    <p class="flex items-center gap-1.5 text-sm font-semibold text-muted">
+      {offline && <WifiSlashIcon size={18} weight="bold" className="text-good" aria-hidden="true" />}
+      {mock.label}
+    </p>
+    {
+      mock.attach && (
+        <p class="mt-3 inline-flex items-center gap-2 rounded-xl border border-line px-3 py-2 text-sm font-medium">
+          <FileLockIcon size={20} weight="bold" className="text-muted" aria-hidden="true" />
+          <span class="whitespace-nowrap">{mock.attach}</span>
+          <span class="rounded-full bg-bad-soft px-2 text-xs font-semibold text-bad">{mock.secret}</span>
+        </p>
+      )
+    }
+    <div class="mt-3 flex min-h-[4.5rem] items-end gap-3 rounded-xl bg-sunk p-3 sm:p-4">
+      <p class="flex-1 leading-relaxed sm:text-lg">
+        <span data-typed={mock.typed}></span>
+        <span class="caret ml-0.5 inline-block h-[1.1em] w-0.5 translate-y-[0.15em] bg-accent" aria-hidden="true"></span>
+      </p>
+      <span class="send grid size-10 shrink-0 place-items-center rounded-full bg-accent text-accent-ink">
+        <PaperPlaneRightIcon size={20} weight="fill" aria-hidden="true" />
+      </span>
+    </div>
+    {
+      offline && (
+        <div class="reply mt-3 rounded-xl bg-good-soft p-3 sm:p-4">
+          <p class="leading-relaxed sm:text-lg">{mock.reply}</p>
+          <p class="mt-2 flex items-center gap-1.5 text-sm font-semibold text-good">
+            <Dest size={18} weight="bold" aria-hidden="true" />
+            {mock.dest}
+          </p>
+        </div>
+      )
+    }
+  </div>
+  {
+    !offline && (
+      <div class="mt-6 flex items-center justify-end gap-3">
+        <span
+          class="trail h-0.5 flex-1 origin-left bg-[repeating-linear-gradient(90deg,var(--ink)_0_8px,transparent_8px_14px)] opacity-40"
+          aria-hidden="true"
+        />
+        <span class="server inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2 font-semibold shadow-[0_14px_24px_-18px_oklch(0.3_0.06_262/0.6)]">
+          <Dest size={22} weight="bold" className={tone} aria-hidden="true" />
+          {mock.dest}
+        </span>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  /* ก่อนพิมพ์เสร็จ: ซ่อนเส้นทาง ป้ายปลายทาง และคำตอบ พิมพ์เสร็จแล้ว (data-sent) ค่อยแสดง */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) [data-flow] .trail {
+      transform: scaleX(0);
+      transition: transform 0.9s var(--ease-out) 0.25s;
+    }
+    :global(.js) [data-flow] .server,
+    :global(.js) [data-flow] .reply {
+      opacity: 0;
+      translate: 0 12px;
+      transition:
+        opacity 0.5s var(--ease-out) 0.9s,
+        translate 0.5s var(--ease-out) 0.9s;
+    }
+    :global(.js) [data-flow] .send {
+      transition: scale 0.3s var(--ease-out);
+    }
+    :global(.js) [data-flow][data-sent] .trail {
+      transform: none;
+    }
+    :global(.js) [data-flow][data-sent] .server,
+    :global(.js) [data-flow][data-sent] .reply {
+      opacity: 1;
+      translate: 0;
+    }
+    :global(.js) [data-flow][data-sent] .send {
+      scale: 0.88;
+    }
+    .caret {
+      animation: blink 1s steps(1) infinite;
+    }
+    [data-sent] .caret {
+      animation: none;
+      opacity: 0;
+    }
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+  }
+</style>
+
+<script>
+  import { inView } from 'motion';
+
+  // เลื่อนมาเห็นภาพจำลองแล้วค่อยพิมพ์ทีละตัว พิมพ์จบแล้วใส่ data-sent ให้ CSS วาดข้อมูลวิ่งออกไป
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (const mock of document.querySelectorAll<HTMLElement>('[data-flow]')) {
+    const out = mock.querySelector<HTMLElement>('[data-typed]')!;
+    const text = out.dataset.typed!;
+    if (reduce) {
+      out.textContent = text;
+      mock.toggleAttribute('data-sent', true);
+      continue;
+    }
+    inView(
+      mock,
+      () => {
+        // Intl.Segmenter แบ่งตามตัวอักษรที่มองเห็น สระและวรรณยุกต์ไทยจะไม่โผล่มาลอยๆ
+        const chars = [...new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(text)].map((s) => s.segment);
+        let n = 0;
+        const tick = setInterval(() => {
+          out.textContent = chars.slice(0, ++n).join('');
+          if (n >= chars.length) {
+            clearInterval(tick);
+            setTimeout(() => mock.toggleAttribute('data-sent', true), 350);
+          }
+        }, 45);
+      },
+      { amount: 0.5 },
+    );
+  }
+</script>

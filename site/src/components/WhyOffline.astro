@@ -1,0 +1,168 @@
+---
+// ทำไมบริษัทระวัง AI บน cloud: แถบเข้มคั่นระหว่างแผ่นขาว
+// แถวแรกภาพจำลองคู่ข้อความ แถวที่สองเทียบไฟล์ลับไฟล์เดียวกัน ส่งขึ้น cloud กับเก็บไว้ในเครื่อง
+// ข้อมูลกฎหมายอ้างจาก docs/research/standards-company-policy.md ห้ามเขียนว่าใช้ cloud = ผิดกฎหมาย หรือใช้ AI ออฟไลน์ = ผ่านมาตรฐาน
+import { CloudArrowUpIcon, GlobeHemisphereEastIcon, LaptopIcon } from '@phosphor-icons/react/dist/ssr';
+import ChatMock, { type Mock } from './ChatMock.astro';
+import type { Lang } from '../i18n';
+
+const { lang } = Astro.props as { lang: Lang };
+
+type Text = {
+  title: string;
+  leak: { lead: string; rest: string; body: string; source: { text: string; href: string }; mock: Mock };
+  compare: {
+    lead: string;
+    rest: string;
+    body: string;
+    source: { text: string; href: string };
+    // หัวคอลัมน์เหนือภาพจำลองคู่
+    sides: [string, string];
+    cloud: Mock;
+    offline: Mock;
+    permit: string;
+    // ไม่ใช่คำแนะนำทางกฎหมาย
+    note: string;
+  };
+};
+
+const T: Text = {
+  th: {
+    title: 'ทำไมบริษัทถึงระวังเรื่อง AI บน cloud',
+    leak: {
+      lead: 'ข้อมูลลูกค้า',
+      rest: 'ที่วางในแชต อาจออกไปต่างประเทศ',
+      body: 'AI บน cloud ประมวลผลบนเซิร์ฟเวอร์ของผู้ให้บริการ ซึ่งมักอยู่ต่างประเทศ การส่งข้อมูลส่วนบุคคลออกนอกประเทศมีเงื่อนไขตาม PDPA มาตรา 28 และ 29',
+      source: { text: 'สคส. ยกกรณีนี้ไว้ในแนวทางเรื่อง AI (ต.ค. 2569)', href: 'https://www.pdpc.or.th/28888/' },
+      mock: {
+        label: 'แชต AI บน cloud',
+        typed: 'ช่วยสรุปเรื่องร้อง⁠เรียนของคุณพิมพ์ชนก ศรี⁠วงศ์ เบอร์ 089‑41x‑xxxx ให้⁠หน่อย',
+        dest: 'เซิร์ฟเวอร์ต่างประเทศ',
+      },
+    },
+    compare: {
+      lead: 'เอกสารลับ',
+      rest: 'ฉบับ\u2060เดียวกัน ไปคนละที่',
+      body: 'บริษัทที่ใช้มาตรฐาน ISO/IEC 27001 ต้องจัดระดับความลับของข้อมูล และกำหนดว่าข้อมูลแต่ละระดับส่งไปไหนได้ รวมถึงบริการ cloud ด้วย ส่วน AI ออฟไลน์ทำงานบนเครื่องคุณ ลองตัดเน็ตแล้วถามดูได้เลย',
+      source: { text: 'ISO/IEC 27001:2022 ที่ iso.org', href: 'https://www.iso.org/standard/27001' },
+      sides: ['AI บน cloud', 'AI ออฟไลน์'],
+      cloud: {
+        label: 'แชต AI บน cloud',
+        attach: 'สัญญาจ้าง_ลูกค้า.pdf',
+        secret: 'ลับ',
+        typed: 'สรุปเงื่อนไขค่าปรับในสัญญานี้ให้⁠หน่อย',
+        dest: 'cloud ของผู้ให้บริการ',
+      },
+      offline: {
+        label: 'AI ออฟไลน์ ไม่ได้ต่อเน็ต',
+        attach: 'สัญญาจ้าง_ลูกค้า.pdf',
+        secret: 'ลับ',
+        typed: 'สรุปเงื่อนไขค่าปรับในสัญญานี้ให้⁠หน่อย',
+        reply: 'ค่าปรับวันละ 0.1% ของมูลค่างาน รวมแล้วไม่เกิน 10%',
+        dest: 'ประมวลผลบนเครื่องนี้',
+      },
+      permit: 'แต่ถ้าจะติดตั้งบนเครื่องของบริษัท ยังต้องขออนุญาตฝ่าย IT ก่อน',
+      note: 'เว็บนี้ไม่ใช่คำแนะนำทางกฎหมาย ใช้ AI ออฟไลน์ไม่ได้แปลว่าผ่าน PDPA หรือ ISO ให้ถามฝ่าย IT หรือฝ่ายกฎหมายของบริษัท',
+    },
+  },
+  en: {
+    title: 'Why companies are careful with cloud AI',
+    leak: {
+      lead: 'Customer data',
+      rest: 'pasted into a chat may leave the country',
+      body: "Cloud AI runs on the provider's servers, which are often abroad. Thailand's PDPA (sections 28 and 29) sets conditions for sending personal data out of the country.",
+      source: { text: "Thailand's PDPC uses this exact case in its AI guideline (Oct 2026)", href: 'https://www.pdpc.or.th/28888/' },
+      mock: {
+        label: 'Cloud AI chat',
+        typed: 'Summarize the complaint from Pimchanok Sriwong, tel. 089-41x-xxxx',
+        dest: 'Server abroad',
+      },
+    },
+    compare: {
+      lead: 'The same confidential file,',
+      rest: 'two different destinations',
+      body: 'Companies that follow ISO/IEC 27001 classify their information and set where each level may go, cloud services included. Offline AI runs on your computer. Turn off the internet and try it.',
+      source: { text: 'ISO/IEC 27001:2022 on iso.org', href: 'https://www.iso.org/standard/27001' },
+      sides: ['Cloud AI', 'Offline AI'],
+      cloud: {
+        label: 'Cloud AI chat',
+        attach: 'client_contract.pdf',
+        secret: 'Confidential',
+        typed: 'Summarize the penalty terms in this contract',
+        dest: "Provider's cloud",
+      },
+      offline: {
+        label: 'Offline AI, no internet',
+        attach: 'client_contract.pdf',
+        secret: 'Confidential',
+        typed: 'Summarize the penalty terms in this contract',
+        reply: 'Late penalty is 0.1% of the contract value per day, capped at 10%.',
+        dest: 'Processed on this computer',
+      },
+      permit: "Before installing it on a company computer, you still need IT's permission.",
+      note: "This site is not legal advice. Using offline AI doesn't mean you comply with PDPA or ISO. Ask your company's IT or legal team.",
+    },
+  },
+}[lang];
+const { leak, compare } = T;
+---
+
+<section id="why-offline" class="bg-ink text-bg">
+  <!-- ขอบล่างโค้งของแผ่นขาวด้านบน -->
+  <div class="h-10 rounded-b-[2rem] bg-bg" aria-hidden="true"></div>
+
+  <div class="mx-auto max-w-6xl px-4 py-24 md:py-32">
+    <h2 data-reveal class="text-center text-3xl leading-snug font-medium tracking-tight text-balance md:text-4xl">{T.title}</h2>
+
+    <article class="mt-16 grid grid-cols-1 items-center gap-10 md:mt-24 md:grid-cols-[1fr_1.15fr] md:gap-16">
+      <div data-reveal>
+        <h3 class="text-3xl leading-snug tracking-tight text-balance md:text-[2.6rem] md:leading-[1.25]">
+          <strong class="font-bold text-[oklch(0.82_0.08_262)]">{leak.lead}</strong>{' '}
+          <span class="font-normal">{leak.rest}</span>
+        </h3>
+        <p class="mt-5 max-w-[46ch] text-lg leading-relaxed text-[oklch(0.82_0.015_255)]">{leak.body}</p>
+        <a href={leak.source.href} target="_blank" rel="noopener" class="mt-4 inline-block text-[oklch(0.82_0.08_262)] underline underline-offset-4 hover:text-bg">
+          {leak.source.text}
+        </a>
+      </div>
+      <div data-reveal style="--i: 1">
+        <ChatMock mock={leak.mock} Dest={GlobeHemisphereEastIcon} tone="text-bad" />
+      </div>
+    </article>
+
+    <!-- สลับกับแถวแรก: การ์ดคู่ซ้าย (บน cloud ออกไปนอกเครื่อง ล่างออฟไลน์อยู่ในเครื่อง) ข้อความขวา จอเล็กข้อความขึ้นก่อน -->
+    <article class="mt-28 grid grid-cols-1 items-center gap-10 md:mt-40 md:grid-cols-[1.15fr_1fr] md:gap-16">
+      <div data-reveal class="md:order-2">
+        <h3 class="text-3xl leading-snug tracking-tight text-balance md:text-[2.6rem] md:leading-[1.25]">
+          <strong class="font-bold text-[oklch(0.82_0.08_262)]">{compare.lead}</strong>{' '}
+          <span class="font-normal">{compare.rest}</span>
+        </h3>
+        <p class="mt-5 max-w-[46ch] text-lg leading-relaxed text-[oklch(0.82_0.015_255)]">{compare.body}</p>
+        <a href={compare.source.href} target="_blank" rel="noopener" class="mt-4 inline-block text-[oklch(0.82_0.08_262)] underline underline-offset-4 hover:text-bg">
+          {compare.source.text}
+        </a>
+        <p class="mt-8 text-xl font-semibold text-balance">{compare.permit}</p>
+        <p class="mt-3 max-w-[46ch] text-sm leading-relaxed text-[oklch(0.72_0.015_255)]">{compare.note}</p>
+      </div>
+      <div class="grid gap-10 md:order-1">
+        <div data-reveal>
+          <p class="mb-4 flex items-center gap-2 text-2xl font-bold">
+            <CloudArrowUpIcon size={28} weight="bold" className="text-[oklch(0.75_0.14_25)]" aria-hidden="true" />
+            {compare.sides[0]}
+          </p>
+          <ChatMock mock={compare.cloud} Dest={CloudArrowUpIcon} tone="text-bad" />
+        </div>
+        <div data-reveal style="--i: 1">
+          <p class="mb-4 flex items-center gap-2 text-2xl font-bold">
+            <LaptopIcon size={28} weight="bold" className="text-[oklch(0.8_0.14_155)]" aria-hidden="true" />
+            {compare.sides[1]}
+          </p>
+          <ChatMock mock={compare.offline} Dest={LaptopIcon} tone="text-good" />
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- ขอบบนโค้งของแผ่นขาวที่มีปุ่มท้ายหน้า -->
+  <div class="h-10 rounded-t-[2rem] bg-bg" aria-hidden="true"></div>
+</section>
