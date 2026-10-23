@@ -4,7 +4,7 @@
 // จอเล็กกว่า lg หรือตั้ง reduced motion: การ์ดเรียงลงมาธรรมดา
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
 import examples from '../data/examples.json';
-import { MODELS, SAMPLE_DATA, TASKS, TEST_DATE } from '../data/models';
+import { MODELS, SAMPLE_DATA, TASKS, TEST_DATE, TIER_LABEL } from '../data/models';
 import type { Task } from '../lib/recommend';
 import { renderMd } from '../lib/markdown';
 import type { Lang } from '../i18n';
@@ -27,7 +27,7 @@ const items = TASKS[lang].map((t) => ({
 const T = {
   th: {
     title: 'ดูคำตอบจริงทีละงาน',
-    lead: `คำตอบจาก ${model.name} โมเดลสำหรับโน้ตบุ๊กทั่วไป ทดสอบเมื่อ ${TEST_DATE.th}`,
+    lead: `คำตอบจาก ${model.name} โมเดลสำหรับ${TIER_LABEL.th[model.tier]} ทดสอบเมื่อ ${TEST_DATE.th}`,
     nav: 'งานทดสอบ',
     prompt: 'คำสั่งที่ใช้ทดสอบ',
     answer: `คำตอบจริงจาก ${model.name}`,
@@ -38,7 +38,7 @@ const T = {
   },
   en: {
     title: 'Real answers, task by task',
-    lead: `Answers from ${model.name}, a model for ordinary laptops, tested ${TEST_DATE.en}. The documents and answers are in Thai, because that is what we test.`,
+    lead: `Answers from ${model.name}, a model for a ${TIER_LABEL.en[model.tier].toLowerCase()}, tested ${TEST_DATE.en}. The documents and answers are in Thai, because that is what we test.`,
     nav: 'Test tasks',
     prompt: 'Test prompt',
     answer: `Real answer from ${model.name}`,
