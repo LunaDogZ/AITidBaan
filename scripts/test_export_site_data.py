@@ -1,8 +1,14 @@
 """python3 -m unittest scripts/test_export_site_data.py"""
 
+import contextlib
+import io
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 
-from export_site_data import merge
+import export_site_data
+from export_site_data import merge, read_sheet
 
 GRADE = "ผลประเมิน (เขียว/เหลือง/แดง)"
 KEY = {
@@ -59,6 +65,63 @@ class MergeTest(unittest.TestCase):
                     ("extraction-04", "ก", "เขียว"), ("extraction-04", "ข", "เขียว"))
         with self.assertRaisesRegex(ValueError, "extraction-04 ข"):
             merge(full, full[:3], KEY)
+
+
+    def test_duplicate_row_with_same_grade_warns_with_line_numbers(self):
+        sheet = rows(("summary-01", "ก", "เขียว"), ("summary-01", "ข", "เขียว"),
+                     ("extraction-04", "ก", "เขียว"), ("extraction-04", "ข", "เขียว"),
+                     ("summary-01", "ก", "เขียว"))
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err):
+            out = merge(sheet, sheet, KEY)
+        self.assertEqual(out["model-a"]["ratings"]["summary"], {"good": 1, "minor": 0, "bad": 0})
+        self.assertIn("summary-01 ก", err.getvalue())
+        self.assertIn("บรรทัด 2 และ 6", err.getvalue())
+
+    def test_duplicate_row_with_conflicting_grade_stops_with_line_numbers(self):
+        sheet = rows(("summary-01", "ก", "เขียว"), ("summary-01", "ข", "เขียว"),
+                     ("extraction-04", "ก", "เขียว"), ("extraction-04", "ข", "เขียว"),
+                     ("summary-01", "ก", "แดง"))
+        with self.assertRaisesRegex(ValueError, "summary-01 ก.*บรรทัด 2 และ 6"):
+            merge(sheet, sheet, KEY)
+
+
+CSV = "id,คำตอบ,ผลประเมิน (เขียว/เหลือง/แดง),หมายเหตุ\nsummary-01,ก,เขียว,\"สองบรรทัด\nยังเป็นแถวเดียว\"\nsummary-01,ข,แดง,\n"
+
+
+class ReadSheetTest(unittest.TestCase):
+    def write(self, data):
+        f = tempfile.NamedTemporaryFile("wb", suffix=".csv", delete=False)
+        f.write(data)
+        f.close()
+        self.addCleanup(Path(f.name).unlink)
+        return f.name
+
+    def test_reads_utf8_with_bom(self):
+        sheet = read_sheet(self.write(CSV.encode("utf-8-sig")))
+        self.assertEqual([r[GRADE] for r in sheet], ["เขียว", "แดง"])
+
+    def test_reads_cp874_saved_by_thai_excel(self):
+        sheet = read_sheet(self.write(CSV.encode("cp874")))
+        self.assertEqual([(r["id"], r["คำตอบ"], r[GRADE]) for r in sheet],
+                         [("summary-01", "ก", "เขียว"), ("summary-01", "ข", "แดง")])
+
+    def test_line_numbers_follow_the_file_even_with_multiline_notes(self):
+        sheet = read_sheet(self.write(CSV.encode("utf-8")))
+        self.assertEqual([r["_line"] for r in sheet], [2, 4])
+
+    def test_unreadable_encoding_names_the_file_and_suggests_csv_utf8(self):
+        path = self.write(b"id,\xff\xfe\xdb\xdc\n")
+        with self.assertRaisesRegex(ValueError, "CSV UTF-8") as ctx:
+            read_sheet(path)
+        self.assertIn(path, str(ctx.exception))
+
+    def test_main_reports_bad_file_without_traceback(self):
+        path = self.write(b"\xff\xfe\xdb\xdc")
+        with mock.patch("sys.argv", ["export_site_data.py", path, path]), \
+                self.assertRaises(SystemExit) as ctx:
+            export_site_data.main()
+        self.assertIn("CSV UTF-8", str(ctx.exception.code))
 
 
 if __name__ == "__main__":

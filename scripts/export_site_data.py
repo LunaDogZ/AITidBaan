@@ -6,6 +6,8 @@
 - สองคนให้ไม่ตรงกัน ใช้ระดับที่ต่ำกว่า
 - ได้ "แดง" ในข้อหลอก (TRAPS) ถือว่าโมเดลเคยแต่งข้อมูลที่ไม่มีในเอกสาร (trapFail)
 - ช่องว่างหรือกรอกคำอื่นจะหยุดและบอกว่าข้อไหน ป้ายไหน
+- แถวซ้ำ (id + ป้ายเดียวกัน) ผลตรงกันจะเตือน ผลขัดกันจะหยุด พร้อมบอกเลขบรรทัด
+- อ่านไฟล์ UTF-8 ก่อน ไม่ได้จึงลอง cp874 (Excel ภาษาไทยเซฟ CSV ธรรมดาเป็นแบบนี้)
 """
 
 import csv
@@ -24,16 +26,23 @@ FIELD = {0: "bad", 1: "minor", 2: "good"}
 TRAPS = {"extraction-04", "extraction-05"}
 
 
-def grades(sheet):
-    out = {}
-    for row in sheet:
+def grades(sheet, name):
+    out, lines = {}, {}
+    for i, row in enumerate(sheet):
         item, label = row["id"].strip(), row["คำตอบ"].strip()
-        out[(item, label)] = LEVEL.get(row[GRADE].strip())
+        level, line = LEVEL.get(row[GRADE].strip()), row.get("_line", i + 2)
+        if (item, label) in out:
+            where = f"{name}: {item} {label} ซ้ำที่บรรทัด {lines[(item, label)]} และ {line}"
+            if out[(item, label)] != level:
+                raise ValueError(f"{where} ผลประเมินไม่ตรงกัน แก้ให้เหลือแถวเดียว")
+            print(f"เตือน {where} (ผลเหมือนกัน ใช้ได้)", file=sys.stderr)
+            continue
+        out[(item, label)], lines[(item, label)] = level, line
     return out
 
 
-def merge(sheet_a, sheet_b, key):
-    a, b = grades(sheet_a), grades(sheet_b)
+def merge(sheet_a, sheet_b, key, names=("ไฟล์ที่ 1", "ไฟล์ที่ 2")):
+    a, b = grades(sheet_a, names[0]), grades(sheet_b, names[1])
     models = {}
     for item, labels in key.items():
         task = item.rsplit("-", 1)[0]
@@ -51,15 +60,32 @@ def merge(sheet_a, sheet_b, key):
 
 
 def read_sheet(path):
-    with open(path, encoding="utf-8-sig", newline="") as f:
-        return list(csv.DictReader(f))
+    """อ่านแถวพร้อมเลขบรรทัดในไฟล์ (_line) ช่องหมายเหตุที่ขึ้นบรรทัดใหม่ก็ยังนับตรง"""
+    for encoding in ("utf-8-sig", "cp874"):
+        try:
+            with open(path, encoding=encoding, newline="") as f:
+                reader = csv.DictReader(f)
+                rows, start = [], 2
+                for row in reader:
+                    row["_line"] = start
+                    rows.append(row)
+                    start = reader.line_num + 1
+                return rows
+        except UnicodeDecodeError:
+            continue
+    raise ValueError(f"อ่านไฟล์ {path} ไม่ได้ (ไม่ใช่ UTF-8 หรือ cp874) "
+                     'เปิดใน Excel แล้วเซฟใหม่เป็น "CSV UTF-8 (Comma delimited)"')
 
 
 def main():
     if len(sys.argv) != 3:
         sys.exit(__doc__)
-    key = json.loads(KEY.read_text(encoding="utf-8"))
-    models = merge(read_sheet(sys.argv[1]), read_sheet(sys.argv[2]), key)
+    try:
+        sheets = read_sheet(sys.argv[1]), read_sheet(sys.argv[2])
+        key = json.loads(KEY.read_text(encoding="utf-8"))
+        models = merge(*sheets, key, names=(sys.argv[1], sys.argv[2]))
+    except ValueError as e:
+        sys.exit(str(e))
     OUT.write_text(json.dumps({"sample": False, "models": models}, ensure_ascii=False, indent=1) + "\n",
                    encoding="utf-8")
     print(f"เขียน {OUT.relative_to(ROOT)} แล้ว ({len(models)} โมเดล)")
