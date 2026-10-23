@@ -59,6 +59,27 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+describe('go(n) เปลี่ยนขั้นทันที', () => {
+  it('กด "ทำต่อ" จากหน้า Resume ไม่เรนเดอร์และไม่บันทึกขั้น ① ระหว่างรอ hashchange', async () => {
+    seed({ answers: RAM8, step: 4 });
+    mount();
+    const writes: string[] = [];
+    const real = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k, v) {
+      writes.push(v);
+      real.call(this, k, v);
+    });
+    click(button('ทำต่อ'));
+    // ยังไม่ถึงคิว hashchange: หน้าต้องเป็นขั้น ④ แล้ว
+    expect(text()).not.toContain('คำถาม 1 จาก 3');
+    expect(text()).toContain('โหลด Typhoon 2.5 4B ลงเครื่อง');
+    await settle();
+    expect(text()).toContain('โหลด Typhoon 2.5 4B ลงเครื่อง');
+    expect(writes.map((w) => JSON.parse(w).step)).not.toContain(1);
+    expect(saved().step).toBe(4);
+  });
+});
+
 describe('สถานะเสร็จผูกกับโมเดล (doneModel)', () => {
   it('ทำครบด้วย RAM 8 → เปลี่ยนเป็น 16: ไม่บอกว่ามี OpenThaiGPT แล้ว และขั้น ⑥ ยังมีปุ่ม "AI ยังตอบได้" → เปลี่ยนกลับ 8 สถานะเสร็จกลับมา', async () => {
     seed({ answers: RAM8, step: 6 });

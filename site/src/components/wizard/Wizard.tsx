@@ -61,8 +61,10 @@ export default function Wizard({ lang }: { lang: Lang }) {
     }
   }, [loaded, step, allowed]);
   const shown = Math.min(step, allowed);
+  // hashchange มาทีหลังแบบ async ตั้งขั้นเองทันที ไม่งั้นจะเห็นขั้นเดิม (และบันทึกขั้นเดิม) อยู่หนึ่งเฟรม
   const go = (n: number) => {
     setResume(null);
+    setStep(n);
     location.hash = `step-${n}`;
   };
   // เลื่อนขึ้นบนหลังขั้นใหม่แสดงแล้ว และไม่ใช้แบบนุ่มนวล: ถ้าสั่งก่อนเนื้อหาเปลี่ยน
