@@ -52,14 +52,11 @@ const T = {
 </Layout>
 
 <script>
+  import { copyText } from '../../lib/clipboard';
+
   const btn = document.getElementById('copy-link');
   btn?.addEventListener('click', async () => {
-    const label = btn.querySelector('span')!;
-    try {
-      await navigator.clipboard.writeText(location.href.split('#')[0]);
-      label.textContent = btn.dataset.copied!;
-    } catch {
-      label.textContent = btn.dataset.failed!;
-    }
+    const ok = await copyText(location.href.split('#')[0]);
+    btn.querySelector('span')!.textContent = ok ? btn.dataset.copied! : btn.dataset.failed!;
   });
 </script>

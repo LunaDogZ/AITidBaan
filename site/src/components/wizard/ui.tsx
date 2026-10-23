@@ -10,12 +10,14 @@ import {
   LifebuoyIcon,
 } from '@phosphor-icons/react';
 import { useLang } from './lang';
+import { copyText } from '../../lib/clipboard';
 
 const T = {
   th: {
     next: 'ทำเสร็จแล้ว ไปต่อ',
     back: 'ย้อนกลับ',
     copied: 'คัดลอกแล้ว',
+    copyFailed: 'คัดลอกไม่ได้ ลองเลือกข้อความแล้วกด Ctrl + C',
     trouble: 'ติดปัญหา?',
     troubleCount: (n: number) => `${n} เรื่องที่เจอบ่อย`,
   },
@@ -23,6 +25,7 @@ const T = {
     next: 'Done, next',
     back: 'Back',
     copied: 'Copied',
+    copyFailed: "Couldn't copy. Select the text and press Ctrl + C",
     trouble: 'Stuck?',
     troubleCount: (n: number) => `${n} common issues`,
   },
@@ -105,11 +108,13 @@ export function Warn({ children }: { children: ReactNode }) {
 
 export function CopyButton({ text, label }: { text: string; label: string }) {
   const t = T[useLang()];
-  const [copied, setCopied] = useState(false);
+  const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const copied = state === 'copied';
   const copy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const ok = await copyText(text);
+    setState(ok ? 'copied' : 'failed');
+    // ข้อความคัดลอกไม่ได้ยาวกว่า ให้อยู่นานพอให้อ่านจบ
+    setTimeout(() => setState('idle'), ok ? 2000 : 4000);
   };
   return (
     <button
@@ -118,7 +123,7 @@ export function CopyButton({ text, label }: { text: string; label: string }) {
       className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-semibold transition duration-300 ease-[var(--ease-out)] active:scale-[0.98] ${copied ? 'bg-good text-white' : 'bg-accent text-accent-ink hover:brightness-110'}`}
     >
       {copied ? <CheckIcon size={18} weight="bold" aria-hidden="true" /> : <CopyIcon size={18} aria-hidden="true" />}
-      <span aria-live="polite">{copied ? t.copied : label}</span>
+      <span aria-live="polite">{copied ? t.copied : state === 'failed' ? t.copyFailed : label}</span>
     </button>
   );
 }
