@@ -124,7 +124,7 @@ GGUF จากชุมชนที่มี Q4_K_M
 | ระดับเครื่อง | โมเดลที่แนะนำ | repo GGUF + ไฟล์ | ขนาด | License | ความมั่นใจ |
 |---|---|---|---|---|---|
 | เล็ก | Typhoon 2.5 4B | `typhoon-ai/typhoon2.5-qwen3-4b-gguf` / `typhoon2.5-qwen3-4b-q4_k_m.gguf` | 2.50 GB | Apache-2.0 | สูง |
-| เล็ก | Gemma 4 E4B (สำรอง: Gemma 4 E2B) | `lmstudio-community/gemma-4-E4B-it-GGUF` / `gemma-4-E4B-it-Q4_K_M.gguf` | 5.34 GB | Apache-2.0 | กลาง (ต้องวัดบน RAM 8GB) |
+| ~~เล็ก~~ กลาง | Gemma 4 E4B | `lmstudio-community/gemma-4-E4B-it-GGUF` / `gemma-4-E4B-it-Q4_K_M.gguf` | 5.34 GB | Apache-2.0 | ย้ายไประดับกลาง 23 ต.ค. 2569 (ใช้ RAM ~5.9GB เกินเครื่อง 8GB) ตัวที่สองของระดับเล็กให้เลือกจากโมเดลที่ฝึกภาษาไทย (ข้อ 5) |
 | กลาง | OpenThaiGPT 1.5 7B | `openthaigpt/openthaigpt1.5-7b-instruct-GGUF` / `openthaigpt1.5-7b-instruct.Q4_K_M.gguf` | 4.68 GB | Qwen License | สูง |
 | กลาง | Pathumma-ThaiLLM-8B-Think-3.0.0 (แทน Sailor2) | `nectec/pathumma-thaillm-8b-think-3.0.0-GGUF` / `pathumma-thaillm-8b-think-3-Q4_K_M.gguf` | 5.03 GB | Apache-2.0 | กลาง (โหมดคิดอาจช้า) |
 | กลาง (ถ้าเก็บ Sailor2) | Sailor2 8B Chat | `mradermacher/Sailor2-8B-Chat-GGUF` / `Sailor2-8B-Chat.Q4_K_M.gguf` | 5.24 GB | Apache-2.0 | สูง (เรื่องไฟล์) แต่ไม่แนะนำเพราะ context 4K |
