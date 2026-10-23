@@ -6,9 +6,9 @@ import {
   CheckCircleIcon,
   CheckIcon,
   CopyIcon,
+  ExclamationMarkIcon,
   ImageIcon,
   LifebuoyIcon,
-  WarningIcon,
 } from '@phosphor-icons/react';
 import { useLang } from './lang';
 
@@ -96,9 +96,12 @@ export function Steps({ items }: { items: ReactNode[] }) {
 // คำเตือนสำคัญที่ต้องอยู่ในเนื้อหาหลัก ไม่พับไว้ใน "ติดปัญหา?"
 export function Warn({ children }: { children: ReactNode }) {
   return (
-    <div className="mt-8 flex gap-3 rounded-xl border-l-4 border-minor bg-minor-soft py-4 pr-5 pl-4">
-      <WarningIcon size={22} weight="fill" className="mt-0.5 shrink-0 text-minor" aria-hidden="true" />
-      <div>{children}</div>
+    // วงกลมขนาดเดียวกับเลขใน Steps อ่านเป็นภาษาภาพเดียวกัน ไม่ทำเป็นกล่องพื้นสี
+    <div className="mt-8 flex gap-5">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-minor text-white">
+        <ExclamationMarkIcon size={20} weight="bold" aria-hidden="true" />
+      </span>
+      <div className="min-w-0 flex-1 pt-1">{children}</div>
     </div>
   );
 }
@@ -173,6 +176,24 @@ export function Screenshot({ src, alt, width, height }: { src: string; alt: stri
       loading="lazy"
       className="h-auto max-h-96 w-auto max-w-full rounded-xl border border-line"
     />
+  );
+}
+
+// ขั้นตอนพร้อมภาพแคปทีละขั้น (ข้อความแต่ละขั้นใช้เป็น alt ของภาพด้วย)
+export function ShotSteps({ shots }: { shots: { src: string; width: number; height: number; text: string }[] }) {
+  return (
+    <ol className="mt-4 space-y-5">
+      {shots.map(({ text, ...shot }, i) => (
+        <li key={shot.src}>
+          <p className="text-lg text-muted">
+            <span className="font-semibold text-ink">{i + 1}.</span> {text}
+          </p>
+          <div className="mt-2">
+            <Screenshot {...shot} alt={text} />
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
 

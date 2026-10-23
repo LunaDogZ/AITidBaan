@@ -1,6 +1,6 @@
 import type { Model } from '../../data/models';
 import { downloadMinutes } from '../../lib/install';
-import { CopyButton, Key, ScreenshotSlot, StepShell, Steps, Trouble, Warn } from './ui';
+import { CopyButton, Key, Screenshot, StepShell, Steps, Trouble, Warn } from './ui';
 import { useLang } from './lang';
 
 const pasteKeys = (
@@ -14,16 +14,17 @@ const T = {
     title: (name: string) => `โหลด ${name} ลงเครื่อง`,
     lead: 'โหลดครั้งเดียว หลังจากนี้ใช้ได้โดยไม่ต้องต่อเน็ต',
     copy: 'คัดลอกลิงก์โมเดล',
-    paste: <>ใน LM Studio กดแท็บ Discover (รูปแว่นขยายแถบซ้าย) แล้ววางลิงก์ในช่องค้นหาด้วย {pasteKeys}</>,
-    pasteShot: 'LM Studio > Discover วางลิงก์ในช่องค้นหา',
-    pick: 'เลือกไฟล์ที่ชื่อมีคำว่า Q4_K_M แล้วกด Download',
+    paste: <>ใน LM Studio กด Model Search แล้ววางลิงก์ด้วย {pasteKeys}</>,
+    pick: 'เช็กว่าเป็น Q4_K_M แล้วกด Download',
+    notQ4: 'ถ้าไม่ใช่ กดลูกศรตรงชื่อไฟล์แล้วเลือก Q4_K_M',
+    sample: 'ภาพตัวอย่างจาก OpenThaiGPT ชื่อและขนาดไฟล์ของคุณจะต่างไป',
     q4: (fileGB: number, fast: number, slow: number) =>
       `Q4_K_M คือแบบที่บีบให้เล็กลงจนเปิดบนโน้ตบุ๊กได้ แต่ยังตอบได้ดี ไฟล์ ${fileGB} GB ใช้เวลาประมาณ ${fast}-${slow} นาที`,
-    load: 'โหลดเสร็จแล้ว กดเลือกโมเดลที่แถบด้านบนของหน้าแชท แล้วตั้ง Context Length ก่อนกดโหลด',
-    loadShot: 'LM Studio > เลือกโมเดล > ตั้ง Context Length เป็น 8192',
-    ctxTitle: 'ตั้ง Context Length เป็น 8192 ทุกครั้งที่โหลดโมเดล',
-    ctxBody:
-      'Context Length คือความยาวที่ AI จำได้ในแชทหนึ่ง ถ้าน้อยไป เอกสารภาษาไทยแค่ 1-2 หน้าก็ล้น แล้ว AI จะอ่านแค่บางท่อน',
+    close: 'รอจนปุ่มขึ้นว่า Use in New Chat แล้วกดกากบาทปิดหน้าต่าง',
+    newChat: 'กด New chat',
+    choose: 'กด Pick a model แล้วเลือกโมเดลที่โหลดมา',
+    context: 'ตั้งความยาวบริบท (Context Length) เป็น 8192 แล้วกดโหลดโมเดล',
+    contextWhy: 'ตั้งทุกครั้งที่โหลด ถ้าน้อยกว่านี้ เอกสารแค่ 1-2 หน้าก็ล้น',
     bigTitle: 'ปิดเบราว์เซอร์ก่อนใช้โมเดลตัวนี้',
     bigBody: 'โมเดลตัวใหญ่ใช้หน่วยความจำมาก ถ้าเปิด Chrome หรือ Firefox ค้างไว้ด้วย เครื่องอาจช้าจนแทบขยับไม่ได้',
     trouble: (repo: string) => [
@@ -31,7 +32,7 @@ const T = {
         symptom: 'วางลิงก์แล้วไม่เจอโมเดล',
         fix: (
           <>
-            พิมพ์ชื่อ <code className="break-all">{repo}</code> ในช่องค้นหาของแท็บ Discover แทน
+            พิมพ์ชื่อ <code className="break-all">{repo}</code> ในช่องค้นหาของ Model Search แทน
           </>
         ),
       },
@@ -47,16 +48,17 @@ const T = {
     title: (name: string) => `Download ${name}`,
     lead: 'You download it once. After that it works without the internet.',
     copy: 'Copy model link',
-    paste: <>In LM Studio, open the Discover tab (the magnifying glass on the left) and paste the link into the search box with {pasteKeys}.</>,
-    pasteShot: 'LM Studio > Discover, link pasted in the search box',
-    pick: 'Choose the file with Q4_K_M in its name and click Download.',
+    paste: <>In LM Studio, click Model Search and paste the link with {pasteKeys}.</>,
+    pick: 'Check it says Q4_K_M, then click Download.',
+    notQ4: 'If not, click the arrows next to the file name and pick Q4_K_M.',
+    sample: 'Example showing OpenThaiGPT. Your model name and file size will differ.',
     q4: (fileGB: number, fast: number, slow: number) =>
       `Q4_K_M is a version compressed enough to run on a laptop while still answering well. The ${fileGB} GB file takes about ${fast}-${slow} minutes.`,
-    load: 'When it finishes, pick the model from the bar at the top of the chat screen, and set Context Length before loading it.',
-    loadShot: 'LM Studio > select model > set Context Length to 8192',
-    ctxTitle: 'Set Context Length to 8192 every time you load the model',
-    ctxBody:
-      'Context Length is how much the AI can remember in one chat. If it is too small, even 1-2 pages of Thai text overflow and the AI only reads part of it.',
+    close: 'Wait until the button says Use in New Chat, then close the window with the X.',
+    newChat: 'Click New chat.',
+    choose: 'Click Pick a model and choose the model you downloaded.',
+    context: 'Set Context Length to 8192 and click Load Model.',
+    contextWhy: 'Do this every time. Any lower and even 1-2 pages of text overflow.',
     bigTitle: 'Close your browser before using this model',
     bigBody: 'Large models use a lot of memory. With Chrome or Firefox open too, the computer can slow to a crawl.',
     trouble: (repo: string) => [
@@ -64,7 +66,7 @@ const T = {
         symptom: 'Pasting the link finds nothing',
         fix: (
           <>
-            Type <code className="break-all">{repo}</code> into the Discover search box instead.
+            Type <code className="break-all">{repo}</code> into the Model Search box instead.
           </>
         ),
       },
@@ -80,6 +82,14 @@ const T = {
     ],
   },
 };
+
+const SHOT_MODEL_ID = 'openthaigpt-1.5-7b';
+
+const shot = (name: string, width: number, height: number, alt: string) => (
+  <div className="mt-3">
+    <Screenshot src={`/screens/load-model/${name}.jpeg`} width={width} height={height} alt={alt} />
+  </div>
+);
 
 interface Props {
   model: Model;
@@ -104,29 +114,38 @@ export function LoadModel({ model, onBack, onNext }: Props) {
           </>,
           <>
             <p>{t.paste}</p>
-            <div className="mt-3">
-              <ScreenshotSlot caption={t.pasteShot} />
-            </div>
+            {shot('search', 302, 417, 'Model Search')}
           </>,
           <>
             <p>{t.pick}</p>
+            <p className="text-muted">{t.notQ4}</p>
             <p className="text-muted">
               {t.q4(model.fileGB, downloadMinutes(model.fileGB, 100), downloadMinutes(model.fileGB, 30))}
             </p>
+            {shot('download', 1344, 765, t.pick)}
+            {/* ภาพทุกขั้นแคปจาก OpenThaiGPT แต่ใช้ร่วมกับทุกโมเดล */}
+            {model.id !== SHOT_MODEL_ID && <p className="mt-1 text-sm text-muted">{t.sample}</p>}
           </>,
           <>
-            <p>{t.load}</p>
-            <div className="mt-3">
-              <ScreenshotSlot caption={t.loadShot} />
-            </div>
+            <p>{t.close}</p>
+            {shot('done', 791, 192, 'Use in New Chat')}
+            {shot('close', 1353, 777, t.close)}
+          </>,
+          <>
+            <p>{t.newChat}</p>
+            {shot('new-chat', 820, 300, t.newChat)}
+          </>,
+          <>
+            <p>{t.choose}</p>
+            {shot('pick', 520, 255, t.choose)}
+          </>,
+          <>
+            <p>{t.context}</p>
+            <p className="text-muted">{t.contextWhy}</p>
+            {shot('context', 1013, 488, t.context)}
           </>,
         ]}
       />
-
-      <Warn>
-        <p className="font-semibold">{t.ctxTitle}</p>
-        <p className="mt-1 text-muted">{t.ctxBody}</p>
-      </Warn>
 
       {model.tier === 'strong' && (
         <Warn>

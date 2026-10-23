@@ -3,7 +3,7 @@ import { ArrowLeftIcon, ArrowRightIcon, InfoIcon } from '@phosphor-icons/react';
 import type { Gpu, Ram, Task, Vram } from '../../lib/recommend';
 import { TASKS } from '../../data/models';
 import { toMachine, type Answers } from './answers';
-import { Choice, Screenshot, Trouble } from './ui';
+import { Choice, Screenshot, ShotSteps, Trouble } from './ui';
 import { useLang } from './lang';
 
 const T = {
@@ -147,18 +147,7 @@ export function CheckMachine({ answers, onChange, question: q, onQuestion: setQ,
               <h1 id="q-title" className="mt-1 text-3xl leading-snug font-bold">
                 {t.ramTitle}
               </h1>
-              <ol className="mt-4 space-y-5">
-                {RAM_SHOTS.map((shot, i) => (
-                  <li key={shot.src}>
-                    <p className="text-lg text-muted">
-                      <span className="font-semibold text-ink">{i + 1}.</span> {t.ramSteps[i]}
-                    </p>
-                    <div className="mt-2">
-                      <Screenshot {...shot} alt={t.ramSteps[i]} />
-                    </div>
-                  </li>
-                ))}
-              </ol>
+              <ShotSteps shots={RAM_SHOTS.map((shot, i) => ({ ...shot, text: t.ramSteps[i] }))} />
               <p className="mt-3 flex gap-2 text-sm text-muted">
                 <InfoIcon size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
                 {t.ramNote}
