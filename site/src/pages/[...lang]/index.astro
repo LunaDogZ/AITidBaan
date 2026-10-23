@@ -228,6 +228,11 @@ const notes = T.notes.map((text, i) => ({ text, ...NOTE_LOOK[i] }));
 <script>
   import { loadProgress, resumeLink } from '../../lib/progress';
 
+  // เข้าเว็บหรือรีโหลดเมื่อไหร่ก็เริ่มที่ hero เสมอ ไม่กระโดดตาม #anchor หรือตำแหน่งที่เลื่อนค้างไว้
+  history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  scrollTo(0, 0);
+
   // ผู้ใช้ที่เคยทำวิซาร์ดค้างไว้ ปุ่มทุกปุ่มพาไปทำต่อจากขั้นเดิม
   const resume = resumeLink(loadProgress(), document.documentElement.lang === 'en' ? 'en' : 'th');
   if (resume) {
