@@ -1,0 +1,9 @@
+# Cloudflare Pages อ่านไฟล์นี้ตอน deploy
+# ไฟล์ใน /_astro/ มี hash ในชื่อ เปลี่ยนเนื้อหาเมื่อไหร่ชื่อก็เปลี่ยน จึง cache ได้นาน
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
