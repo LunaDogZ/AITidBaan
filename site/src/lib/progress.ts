@@ -47,6 +47,17 @@ export function recommendedId(answers: Progress['answers']): string | undefined 
   return machine ? recommend(machine, answers.tasks, MODELS)?.id : undefined;
 }
 
+// ขั้นไกลสุดที่คำตอบนี้ไปถึงได้: ตอบไม่ครบอยู่ขั้น ① ไม่มีโมเดลแนะนำ (RAM 4GB) อยู่ขั้น ② ที่เหลือไปได้ถึง ⑥
+export function maxStep(answers: Progress['answers']): number {
+  if (!toMachine(answers) || answers.tasks.length === 0) return 1;
+  return recommendedId(answers) ? 6 : 2;
+}
+
+// ขั้นที่บันทึกไว้อาจเกินที่คำตอบไปถึงได้ (ข้อมูลเสียหรือมาจากเวอร์ชันเก่า) ใช้ขั้นที่ไปได้จริง
+export function reachableStep(p: Progress): number {
+  return Math.min(p.step, maxStep(p.answers));
+}
+
 // เสร็จก็ต่อเมื่อโมเดลที่ทำครบตรงกับโมเดลที่แนะนำจากคำตอบตอนนี้ คำตอบที่ไม่มีโมเดลแนะนำ (RAM 4GB) ไม่มีวันเสร็จ
 export function isDone(p: Progress): boolean {
   return p.doneModel !== undefined && p.doneModel === recommendedId(p.answers);
@@ -61,8 +72,9 @@ export function resumeLink(p: Progress | null, lang: Lang): { href: string; labe
   if (!p) return null;
   const t = RESUME_LABEL[lang];
   if (isDone(p)) return { href: href(lang, '/wizard'), label: t.done };
-  if (p.step < 2) return null;
-  return { href: href(lang, `/wizard#step-${p.step}`), label: t.step(CIRCLED[p.step - 1]) };
+  const step = reachableStep(p);
+  if (step < 2) return null;
+  return { href: href(lang, `/wizard#step-${step}`), label: t.step(CIRCLED[step - 1]) };
 }
 
 // localStorage อาจใช้ไม่ได้ (โหมดไม่ระบุตัวตนบางแบบ หรือปิด cookie) ให้เว็บทำงานต่อได้เหมือนไม่มีค่าที่จำไว้

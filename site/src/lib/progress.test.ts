@@ -83,6 +83,16 @@ describe('resumeLink', () => {
     expect(resumeLink({ ...saved, doneModel: 'openthaigpt-1.5-7b' }, 'en')?.href).toBe('/en/wizard');
   });
 
+  it('ขั้นที่บันทึกไว้เกินกว่าที่คำตอบไปถึงได้ ลิงก์ชี้ขั้นที่ไปได้จริง', () => {
+    // RAM 4GB ไม่มีโมเดลแนะนำ ไปได้ถึงขั้น ② เท่านั้น
+    expect(resumeLink({ answers: { ...small, ram: 4 }, step: 5 }, 'th')).toEqual({
+      href: '/wizard#step-2',
+      label: 'ทำต่อจากขั้น ②',
+    });
+    // คำตอบว่าง (ข้อมูลเสีย) อยู่ขั้น ① ไม่ต้องเปลี่ยนปุ่ม
+    expect(resumeLink({ answers: { tasks: [] }, step: 6 }, 'th')).toBeNull();
+  });
+
   it('ยังอยู่ขั้นแรก หรือไม่มีค่า ไม่ต้องเปลี่ยนปุ่ม', () => {
     expect(resumeLink({ ...saved, step: 1 }, 'th')).toBeNull();
     expect(resumeLink(null, 'th')).toBeNull();

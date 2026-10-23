@@ -80,6 +80,25 @@ describe('go(n) เปลี่ยนขั้นทันที', () => {
   });
 });
 
+describe('หน้า Resume ใช้ขั้นที่คำตอบไปถึงได้จริง', () => {
+  it('ข้อมูลเสีย (บันทึกขั้น ⑥ แต่คำตอบว่าง) ไม่ขึ้นหน้า Resume เริ่มขั้นแรกเลย', () => {
+    localStorage.setItem(KEY, '{"answers": 5, "step": 6}');
+    mount();
+    expect(text()).not.toContain('คุณทำถึงขั้น');
+    expect(text()).toContain('คำถาม 1 จาก 3');
+  });
+
+  it('RAM 4GB บันทึกขั้น ⑤ ไว้ บอกว่าถึงขั้น ② และกดทำต่อแล้วไม่เด้ง', async () => {
+    seed({ answers: { ...RAM8, ram: 4 }, step: 5 });
+    mount();
+    expect(text()).toContain('คุณทำถึงขั้น ② โมเดลของคุณ');
+    click(button('ทำต่อ'));
+    await settle();
+    expect(location.hash).toBe('#step-2');
+    expect(text()).toContain('RAM 4GB ยังไม่พอ');
+  });
+});
+
 describe('สถานะเสร็จผูกกับโมเดล (doneModel)', () => {
   it('ทำครบด้วย RAM 8 → เปลี่ยนเป็น 16: ไม่บอกว่ามี OpenThaiGPT แล้ว และขั้น ⑥ ยังมีปุ่ม "AI ยังตอบได้" → เปลี่ยนกลับ 8 สถานะเสร็จกลับมา', async () => {
     seed({ answers: RAM8, step: 6 });

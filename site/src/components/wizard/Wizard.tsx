@@ -10,7 +10,16 @@ import { GoOffline } from './GoOffline';
 import { Resume } from './Resume';
 import { recommend } from '../../lib/recommend';
 import { MODELS } from '../../data/models';
-import { clearProgress, isDone, loadProgress, resumeLink, saveProgress, type Progress as Saved } from '../../lib/progress';
+import {
+  clearProgress,
+  isDone,
+  loadProgress,
+  maxStep,
+  reachableStep,
+  resumeLink,
+  saveProgress,
+  type Progress as Saved,
+} from '../../lib/progress';
 import type { Lang } from '../../i18n';
 import { LangContext } from './lang';
 
@@ -37,7 +46,7 @@ export default function Wizard({ lang }: { lang: Lang }) {
     if (saved) {
       setAnswers(saved.answers);
       setDoneModel(saved.doneModel);
-      if (first === 1 && resumeLink(saved, lang)) setResume(saved);
+      if (first === 1 && resumeLink(saved, lang)) setResume({ ...saved, step: reachableStep(saved) });
     }
     setStep(first);
     setLoaded(true);
@@ -47,12 +56,11 @@ export default function Wizard({ lang }: { lang: Lang }) {
   }, []);
 
   const machine = toMachine(answers);
-  const ready = machine !== null && answers.tasks.length > 0;
   // เข้า #step-2 ตรงๆ โดยยังไม่ได้ตอบ ให้กลับไปขั้นแรก ทั้งหน้าจอและ URL
   // (ถ้าแก้แค่หน้าจอ พอตอบครบจะกระโดดไปขั้น 2 เองโดยไม่ได้กดไปต่อ)
   // ขั้น ③-⑥ ต้องมีโมเดลที่แนะนำ ถ้าไม่มี (RAM 4GB) ให้อยู่ที่หน้าผลแนะนำ
   const model = machine ? recommend(machine, answers.tasks, MODELS) : null;
-  const allowed = !ready ? 1 : !model ? 2 : 6;
+  const allowed = maxStep(answers);
   const done = model !== null && doneModel === model.id;
   useEffect(() => {
     if (loaded && step > allowed) {
