@@ -3,10 +3,10 @@ import reactRenderer from '@astrojs/react/server.js';
 import { expect, it } from 'vitest';
 import TaskShowcase from './TaskShowcase.astro';
 
-// Gemma 4 E4B อยู่ระดับกลาง (RAM 16GB) หัวข้อต้องไม่บอกว่าเป็นโมเดลสำหรับโน้ตบุ๊กทั่วไป
+// Gemma 4 E4B อยู่ระดับเล็ก (ย้ายกลับ 25 ต.ค. 2569) หัวข้อต้องบอกระดับตาม models.ts ไม่ใช่ระดับเดิม
 it.each([
-  ['th', 'เครื่องกลาง', 'โน้ตบุ๊กทั่วไป'],
-  ['en', 'mid-range machine', 'ordinary laptop'],
+  ['th', 'เครื่องเล็ก', 'เครื่องกลาง'],
+  ['en', 'light machine', 'mid-range machine'],
 ] as const)('หัวข้อตัวอย่างคำตอบบอกระดับเครื่องของโมเดลตามจริง (%s)', async (lang, tier, stale) => {
   const container = await AstroContainer.create();
   // ไอคอนเป็นคอมโพเนนต์ React

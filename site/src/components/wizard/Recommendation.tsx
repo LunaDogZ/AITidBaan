@@ -28,6 +28,7 @@ const T = {
     recheck: { ram: 'เช็ก RAM อีกครั้ง', gpu: 'เช็กการ์ดจออีกครั้ง' },
     fits: 'โมเดลที่เหมาะกับคุณ',
     trapWarn: 'เคยแต่งตัวเลขที่ไม่มีในเอกสาร ตรวจตัวเลขกับต้นฉบับทุกครั้ง',
+    ramWarn: 'ใช้ RAM เกือบเต็มเครื่อง 8GB ปิดเบราว์เซอร์และโปรแกรมอื่นก่อนใช้ และอาจตอบช้า',
     fileSize: 'ขนาดไฟล์',
     speed: 'ความเร็ว',
     perSec: 'token/วินาที',
@@ -73,6 +74,7 @@ const T = {
     recheck: { ram: 'Check RAM again', gpu: 'Check graphics card again' },
     fits: 'The model that fits you',
     trapWarn: 'It has made up numbers that were not in the document. Always check numbers against the original.',
+    ramWarn: 'It uses almost all of an 8GB computer\'s RAM. Close your browser and other programs first, and expect slow answers.',
     fileSize: 'File size',
     speed: 'Speed',
     perSec: 'tokens/sec',
@@ -175,6 +177,11 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
         {model.trapFail && (
           <p className="mt-4 flex items-start gap-2 text-xl font-bold text-bad">
             <WarningCircleIcon size={28} weight="fill" className="shrink-0" aria-hidden="true" /> {t.trapWarn}
+          </p>
+        )}
+        {tier === 'small' && model.tightOnSmall && (
+          <p className="mt-4 flex items-start gap-2 font-semibold text-minor">
+            <WarningCircleIcon size={22} weight="fill" className="mt-0.5 shrink-0" aria-hidden="true" /> {t.ramWarn}
           </p>
         )}
 

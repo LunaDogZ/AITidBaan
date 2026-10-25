@@ -17,6 +17,7 @@ export interface Model extends RatedModel {
   speedKind: 'estimate' | 'measured';
   hfUrl: string; // ลิงก์ GGUF ที่ให้ผู้ใช้วางในช่องค้นหาของ LM Studio (ใช้ไฟล์ Q4_K_M)
   trapFail: boolean; // ได้ "ใช้ไม่ได้" ในข้อหลอก คือเคยแต่งข้อมูลที่ไม่มีในเอกสาร
+  tightOnSmall?: boolean; // อยู่ระดับเครื่องเล็กแต่ใช้ RAM เกือบเต็มเครื่อง 8GB ต้องเตือนให้ปิดโปรแกรมอื่น
 }
 
 export const SPEED_KIND: Record<Lang, Record<Model['speedKind'], string>> = {
@@ -64,8 +65,10 @@ const MODEL_INFO: Omit<Model, 'ratings' | 'trapFail'>[] = [
     rawId: 'gemma-4-e4b-it',
     hfUrl: 'https://huggingface.co/lmstudio-community/gemma-4-E4B-it-GGUF',
     name: 'Gemma 4 E4B',
-    // ไฟล์ 5.34GB แต่ใช้ RAM จริง ~5.9GB รวม Windows เกินเครื่อง 8GB (มากกว่า OpenThaiGPT ที่อยู่ระดับกลาง)
-    tier: 'medium',
+    // ไฟล์ 5.34GB ใช้ RAM จริง ~5.9GB รวม Windows เกินเครื่อง 8GB เล็กน้อย แต่ผลประเมินดีกว่า Typhoon 2.5 4B มาก
+    // ผู้ใช้เลือกให้อยู่ระดับเล็กพร้อมคำเตือน (25 ต.ค. 2569)
+    tier: 'small',
+    tightOnSmall: true,
     blurb: {
       th: 'โมเดลทั่วไปจาก Google ที่อ่านเขียนภาษาไทยได้ดี',
       en: 'A general model from Google that reads and writes Thai well.',
