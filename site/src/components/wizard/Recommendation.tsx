@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowRightIcon, CheckCircleIcon, LightbulbIcon, PencilSimpleIcon, WarningCircleIcon, XCircleIcon } from '@phosphor-icons/react';
-import { goodCount, machineTier, recommend, unsureUpgrades, type MachineAnswers, type Task } from '../../lib/recommend';
+import { machineTier, recommend, unsureUpgrades, type MachineAnswers, type Task } from '../../lib/recommend';
 import { MODELS, SAMPLE_DATA, SPEED_KIND, TASKS, TEST_DATE, TIER_LABEL } from '../../data/models';
 import examples from '../../data/examples.json';
 import { renderMd } from '../../lib/markdown';
@@ -27,15 +27,17 @@ const T = {
     and: ' และ',
     recheck: { ram: 'เช็ก RAM อีกครั้ง', gpu: 'เช็กการ์ดจออีกครั้ง' },
     fits: 'โมเดลที่เหมาะกับคุณ',
-    trapWarn: 'เคยแต่งตัวเลขที่ไม่มีในเอกสาร ตรวจตัวเลขกับต้นฉบับทุกครั้ง',
-    ramWarn: 'ใช้ RAM เกือบเต็มเครื่อง 8GB ปิดเบราว์เซอร์และโปรแกรมอื่นก่อนใช้ และอาจตอบช้า',
+    beforeUse: 'ก่อนใช้งาน',
+    trapWarn: 'ตรวจตัวเลขกับเอกสารต้นฉบับก่อนส่งต่อ เพราะในการทดสอบเคยใส่ตัวเลขที่ไม่มีในเอกสาร',
+    ramWarn: 'ปิดเบราว์เซอร์และโปรแกรมอื่นก่อนเปิดโมเดล เพราะใช้ RAM เกือบเต็มเครื่อง 8GB และอาจตอบช้ากว่าเครื่องแรง',
     fileSize: 'ขนาดไฟล์',
     speed: 'ความเร็ว',
     perSec: 'token/วินาที',
     speedHelp: 'token คือชิ้นคำที่ AI พิมพ์ออกมา ยิ่งมากยิ่งตอบเร็ว',
     usable: 'ใช้ได้เลย',
     of: (n: number, total: number) => `${n} จาก ${total} ข้อ`,
-    inYourTasks: 'ในงานที่คุณเลือก',
+    workable: 'ใช้งานได้',
+    workableNote: 'รวมข้อที่แก้นิดหน่อย',
     tested: 'ทดสอบเมื่อ',
     scoresTitle: 'ผลประเมินตามงานที่คุณเลือก',
     sample: 'ข้อมูลตัวอย่าง ผลประเมินจริงจะมาเมื่อผู้ให้คะแนนส่งครบ',
@@ -73,15 +75,17 @@ const T = {
     and: ' and ',
     recheck: { ram: 'Check RAM again', gpu: 'Check graphics card again' },
     fits: 'The model that fits you',
-    trapWarn: 'It has made up numbers that were not in the document. Always check numbers against the original.',
-    ramWarn: 'It uses almost all of an 8GB computer\'s RAM. Close your browser and other programs first, and expect slow answers.',
+    beforeUse: 'Before you use it',
+    trapWarn: 'Check numbers against the original before passing the answer on. In our tests it sometimes added numbers that were not in the document.',
+    ramWarn: 'Close your browser and other programs before opening the model. It uses almost all of an 8GB computer\'s RAM and may answer more slowly.',
     fileSize: 'File size',
     speed: 'Speed',
     perSec: 'tokens/sec',
     speedHelp: 'A token is a piece of a word the AI types out. Higher means faster answers.',
     usable: 'Usable as-is',
     of: (n: number, total: number) => `${n} of ${total}`,
-    inYourTasks: 'in your tasks',
+    workable: 'Usable',
+    workableNote: 'including minor fixes',
     tested: 'Tested',
     scoresTitle: 'Scores for the tasks you picked',
     sample: 'Sample data. Real scores will come once all graders have submitted.',
@@ -127,11 +131,13 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
   const exampleTask = tasks[0];
   const answer = (examples.answers as Record<string, Record<Task, string>>)[model.rawId][exampleTask];
   const prompt = (examples.prompts as Record<Task, string>)[exampleTask];
-  const total = goodCount(model, tasks);
+  // ใช้ได้เลย + แก้นิดหน่อย (ตัวเลขแยกแต่ละระดับอยู่ในรายการผลประเมินด้านล่าง)
+  const workable = tasks.reduce((n, t) => n + (model.ratings[t] ? model.ratings[t]!.good + model.ratings[t]!.minor : 0), 0);
   const count = tasks.reduce((n, t) => {
     const r = model.ratings[t];
     return n + (r ? r.good + r.minor + r.bad : 0);
   }, 0);
+  const tips = [...(model.trapFail ? [t.trapWarn] : []), ...(tier === 'small' && model.tightOnSmall ? [t.ramWarn] : [])];
 
   return (
     <section aria-labelledby="rec-title">
@@ -174,16 +180,6 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
           {model.name}
         </h1>
         <p className="mt-2 text-muted">{model.blurb[lang]}</p>
-        {model.trapFail && (
-          <p className="mt-4 flex items-start gap-2 text-xl font-bold text-bad">
-            <WarningCircleIcon size={28} weight="fill" className="shrink-0" aria-hidden="true" /> {t.trapWarn}
-          </p>
-        )}
-        {tier === 'small' && model.tightOnSmall && (
-          <p className="mt-4 flex items-start gap-2 font-semibold text-minor">
-            <WarningCircleIcon size={22} weight="fill" className="mt-0.5 shrink-0" aria-hidden="true" /> {t.ramWarn}
-          </p>
-        )}
 
         <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
           <Stat label={t.fileSize} value={`${model.fileGB} GB`} />
@@ -193,7 +189,7 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
             note={SPEED_KIND[lang][model.speedKind]}
             help={t.speedHelp}
           />
-          <Stat label={t.usable} value={t.of(total, count)} note={t.inYourTasks} />
+          <Stat label={t.workable} value={t.of(workable, count)} note={t.workableNote} />
           <Stat label={t.tested} value={TEST_DATE[lang]} />
         </dl>
 
@@ -221,6 +217,19 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
             );
           })}
         </ul>
+
+        {tips.length > 0 && (
+          <>
+            <h2 className="mt-8 font-semibold">{t.beforeUse}</h2>
+            <ul className="mt-2 space-y-2">
+              {tips.map((tip) => (
+                <li key={tip} className="flex items-start gap-2">
+                  <WarningCircleIcon size={20} weight="fill" className="mt-0.5 shrink-0 text-minor" aria-hidden="true" /> {tip}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
 
         <Example task={exampleTask} prompt={prompt} answer={answer} />
 
