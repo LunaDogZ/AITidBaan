@@ -6,6 +6,7 @@ import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import TaskShowcase from '../../components/TaskShowcase.astro';
 import WhyOffline from '../../components/WhyOffline.astro';
+import Footer from '../../components/Footer.astro';
 import { TASKS } from '../../data/models';
 import { PROBLEMS, STEPS } from '../../data/home';
 import { href, langOf, langPaths } from '../../i18n';
@@ -47,7 +48,6 @@ const T = {
     finalLead: 'ฟรี ไม่ต้องสมัคร ใช้เวลาประมาณ 2 นาที',
     cta: 'มาเริ่มติดตั้งกันเลย!',
     floatNote: 'ฟรี ไม่ต้องสมัคร ประมาณ 2 นาที',
-    footer: ['AITidBaan (AIติดบ้าน) เว็บฟรี ทำโดย LunaDogZ', 'AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ'],
   },
   en: {
     title: 'AITidBaan | Offline AI for Thai office documents',
@@ -73,7 +73,6 @@ const T = {
     finalLead: 'Free, no sign-up, about 2 minutes',
     cta: "Let's get it installed!",
     floatNote: 'Free, no sign-up, about 2 minutes',
-    footer: ['AITidBaan (AIติดบ้าน) is a free site made by LunaDogZ', 'AI runs on your computer. This site only recommends'],
   },
 }[lang];
 const notes = T.notes.map((text, i) => ({ text, ...NOTE_LOOK[i] }));
@@ -200,12 +199,7 @@ const notes = T.notes.map((text, i) => ({ text, ...NOTE_LOOK[i] }));
     </section>
   </main>
 
-  <footer class="border-t border-line">
-    <div class="mx-auto flex max-w-5xl flex-col gap-2 px-4 py-8 text-sm text-muted sm:flex-row sm:justify-between">
-      <p>{T.footer[0]}</p>
-      <p>{T.footer[1]}</p>
-    </div>
-  </footer>
+  <Footer lang={lang} />
 
   <div
     id="float-cta"

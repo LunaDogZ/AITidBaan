@@ -1,0 +1,33 @@
+---
+// ส่วนล่างสุดของทุกหน้า: เครดิต และข้อความว่าเว็บแค่แนะนำ ไม่รับประกันผล
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const T = {
+  th: {
+    credit: 'AITidBaan (AIติดบ้าน) เว็บฟรี ทำโดย LunaDogZ',
+    local: 'AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ',
+    disclaimer:
+      'ข้อมูลในเว็บนี้ให้ไว้เพื่อแนะนำเท่านั้น ไม่รับประกันผลลัพธ์ ใช้ตามความเหมาะสมของคุณเอง ชื่อ บริษัท และตัวเลขในเอกสารตัวอย่างแต่งขึ้นทั้งหมด',
+  },
+  en: {
+    credit: 'AITidBaan (AIติดบ้าน) is a free site made by LunaDogZ',
+    local: 'AI runs on your computer. This site only recommends',
+    disclaimer:
+      'Everything on this site is a recommendation only, with no guarantee of results. Use it at your own discretion. All names, companies and numbers in the example documents are made up.',
+  },
+}[Astro.props.lang];
+---
+
+<footer class="border-t border-line">
+  <div class="mx-auto max-w-5xl px-4 py-8 text-sm text-muted">
+    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between">
+      <p>{T.credit}</p>
+      <p>{T.local}</p>
+    </div>
+    <p class="mt-3">{T.disclaimer}</p>
+  </div>
+</footer>
