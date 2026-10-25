@@ -42,12 +42,11 @@ const T = {
     minor: 'แก้นิดหน่อย',
     bad: 'ใช้ไม่ได้',
     start: 'เริ่มติดตั้ง',
-    compare: 'ดูตารางเปรียบเทียบทั้งหมด (เร็วๆ นี้)',
     trouble: [
       { symptom: 'ไม่แน่ใจว่าตอบสเปกถูก', fix: 'กด "เปลี่ยนคำตอบ" ด้านบนเพื่อกลับไปแก้ได้ทุกเมื่อ' },
       {
         symptom: 'อยากเห็นโมเดลตัวอื่นด้วย',
-        fix: 'หน้านี้แนะนำตัวเดียวเพื่อไม่ให้ต้องเลือกเอง ถ้าอยากเทียบ ตารางเปรียบเทียบทั้งหมดจะมาเร็วๆ นี้',
+        fix: 'หน้านี้แนะนำตัวเดียวที่เหมาะกับเครื่องและงานของคุณที่สุด เพื่อไม่ให้ต้องเลือกเอง',
       },
     ],
     exampleTitle: (task: string) => `ตัวอย่างคำตอบจริง: ${task}`,
@@ -60,7 +59,7 @@ const T = {
       'ตัว Windows ใช้ RAM ไปเกือบหมดแล้ว ถ้าเปิดโมเดลเพิ่ม เครื่องจะช้ามากจนใช้งานไม่ได้ ไม่ใช่ความผิดของคุณ แค่เครื่องรุ่นนี้ยังไม่เหมาะกับงานนี้',
     twoWays: 'ไปต่อได้ 2 ทาง',
     ways: [
-      { title: 'ดูผลทดสอบไปก่อน', body: 'อ่านคำตอบจริงของแต่ละโมเดลได้เลย ไม่ต้องติดตั้งอะไร (หน้าผลทดสอบเร็วๆ นี้)' },
+      { title: 'ดูผลทดสอบไปก่อน', body: 'อ่านตัวอย่างคำตอบจริงได้ที่หน้าแรก ไม่ต้องติดตั้งอะไร' },
       { title: 'ถ้าจะซื้อเครื่องหรือขอเครื่องจากบริษัท', body: 'ขอ RAM อย่างน้อย 8GB ถ้าได้ 16GB จะใช้โมเดลที่เก่งขึ้นได้' },
     ],
   },
@@ -88,12 +87,11 @@ const T = {
     minor: 'Minor fixes',
     bad: 'Unusable',
     start: 'Start installing',
-    compare: 'See the full comparison table (coming soon)',
     trouble: [
       { symptom: "I'm not sure my answers are right", fix: 'Click "Change answers" above to go back and fix them at any time.' },
       {
         symptom: 'I want to see other models too',
-        fix: 'This page recommends just one so you do not have to choose. A full comparison table is coming soon.',
+        fix: 'This page recommends the one that best fits your computer and tasks, so you do not have to choose.',
       },
     ],
     exampleTitle: (task: string) => `Real answer example: ${task}`,
@@ -106,7 +104,7 @@ const T = {
       "Windows already uses almost all of it. Opening a model on top would make the computer too slow to use. It's not your fault, this computer just isn't suited to the job yet.",
     twoWays: 'Two ways forward',
     ways: [
-      { title: 'Look at the test results first', body: "Read each model's real answers without installing anything (results page coming soon)." },
+      { title: 'Look at the test results first', body: "Read real example answers on the home page without installing anything." },
       { title: 'If you are buying a computer or asking your company for one', body: 'Ask for at least 8GB of RAM. With 16GB you can use a stronger model.' },
     ],
   },
@@ -219,7 +217,7 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
 
         <Example task={exampleTask} prompt={prompt} answer={answer} />
 
-        <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8">
           <button
             type="button"
             onClick={onNext}
@@ -227,8 +225,6 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
           >
             {t.start} <ArrowRightIcon size={18} weight="bold" aria-hidden="true" />
           </button>
-          {/* TODO: ลิงก์ไปหน้าผลทดสอบเต็มเมื่อมีหน้านั้น */}
-          <span className="text-sm text-muted">{t.compare}</span>
         </div>
       </article>
 
