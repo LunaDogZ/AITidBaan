@@ -34,6 +34,7 @@ const T = {
     scrollHint: 'เลื่อนในกรอบเพื่ออ่านคำตอบต่อ',
     good: (good: number, total: number) => `ใช้ได้เลย ${good} จาก ${total} ข้อ`,
     sample: 'ผลประเมินเป็นข้อมูลตัวอย่าง',
+    aiJudged: 'ให้คะแนนโดย AI ยังไม่มีคนตรวจ',
   },
   en: {
     title: 'Real answers, task by task',
@@ -45,6 +46,7 @@ const T = {
     scrollHint: 'Scroll inside the box to keep reading',
     good: (good: number, total: number) => `Usable as-is: ${good} of ${total}`,
     sample: 'Scores are sample data',
+    aiJudged: 'Scored by AI, not yet reviewed by a person',
   },
 }[lang];
 ---
@@ -109,7 +111,7 @@ const T = {
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-good-soft px-3 py-1 font-semibold text-good">
                   <CheckCircleIcon weight="fill" size={18} aria-hidden="true" /> {T.good(it.good, it.total)}
                 </span>
-                {SAMPLE_DATA && <span class="text-sm text-muted">{T.sample}</span>}
+                <span class="text-sm text-muted">{SAMPLE_DATA ? T.sample : T.aiJudged}</span>
               </p>
             </article>
           ))

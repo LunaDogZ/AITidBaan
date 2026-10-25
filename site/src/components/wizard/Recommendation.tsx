@@ -38,6 +38,7 @@ const T = {
     tested: 'ทดสอบเมื่อ',
     scoresTitle: 'ผลประเมินตามงานที่คุณเลือก',
     sample: 'ข้อมูลตัวอย่าง ผลประเมินจริงจะมาเมื่อผู้ให้คะแนนส่งครบ',
+    aiJudged: 'ให้คะแนนโดย AI (Claude) และสุ่มตรวจโดย AI อีกชุด ยังไม่มีคนตรวจ อาจมีข้อผิดพลาด',
     minor: 'แก้นิดหน่อย',
     bad: 'ใช้ไม่ได้',
     start: 'เริ่มติดตั้ง',
@@ -83,6 +84,7 @@ const T = {
     tested: 'Tested',
     scoresTitle: 'Scores for the tasks you picked',
     sample: 'Sample data. Real scores will come once all graders have submitted.',
+    aiJudged: 'Scored by AI (Claude) and spot-checked by a second AI. Not yet reviewed by a person, so errors are possible.',
     minor: 'Minor fixes',
     bad: 'Unusable',
     start: 'Start installing',
@@ -191,9 +193,7 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
         </dl>
 
         <h2 className="mt-8 font-semibold">{t.scoresTitle}</h2>
-        {SAMPLE_DATA && (
-          <p className="mt-1 text-sm text-minor">{t.sample}</p>
-        )}
+        <p className="mt-1 text-sm text-minor">{SAMPLE_DATA ? t.sample : t.aiJudged}</p>
         <ul className="mt-3 divide-y divide-line">
           {tasks.map((task) => {
             const r = model.ratings[task];

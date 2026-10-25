@@ -1,177 +1,177 @@
 {
- "sample": true,
+ "sample": false,
  "models": {
-  "typhoon2.5-qwen3-4b": {
-   "ratings": {
-    "summary": {
-     "good": 2,
-     "minor": 2,
-     "bad": 1
-    },
-    "formal": {
-     "good": 3,
-     "minor": 2,
-     "bad": 0
-    },
-    "spelling": {
-     "good": 1,
-     "minor": 2,
-     "bad": 2
-    },
-    "extraction": {
-     "good": 2,
-     "minor": 1,
-     "bad": 2
-    },
-    "translation": {
-     "good": 3,
-     "minor": 2,
-     "bad": 1
-    },
-    "minutes": {
-     "good": 2,
-     "minor": 2,
-     "bad": 1
-    }
-   },
-   "trapFail": false
-  },
-  "gemma-4-e4b-it": {
-   "ratings": {
-    "summary": {
-     "good": 3,
-     "minor": 2,
-     "bad": 0
-    },
-    "formal": {
-     "good": 4,
-     "minor": 1,
-     "bad": 0
-    },
-    "spelling": {
-     "good": 4,
-     "minor": 1,
-     "bad": 0
-    },
-    "extraction": {
-     "good": 3,
-     "minor": 1,
-     "bad": 1
-    },
-    "translation": {
-     "good": 5,
-     "minor": 1,
-     "bad": 0
-    },
-    "minutes": {
-     "good": 3,
-     "minor": 2,
-     "bad": 0
-    }
-   },
-   "trapFail": false
-  },
   "openthaigpt1.5-7b-instruct": {
    "ratings": {
-    "summary": {
-     "good": 3,
-     "minor": 1,
-     "bad": 1
-    },
-    "formal": {
-     "good": 2,
-     "minor": 2,
-     "bad": 1
-    },
-    "spelling": {
-     "good": 2,
-     "minor": 2,
-     "bad": 1
-    },
     "extraction": {
-     "good": 3,
-     "minor": 1,
-     "bad": 1
-    },
-    "translation": {
-     "good": 3,
-     "minor": 2,
-     "bad": 1
-    },
-    "minutes": {
-     "good": 2,
-     "minor": 2,
-     "bad": 1
-    }
-   },
-   "trapFail": false
-  },
-  "typhoon2.1-gemma3-12b": {
-   "ratings": {
-    "summary": {
-     "good": 4,
-     "minor": 1,
-     "bad": 0
+     "good": 0,
+     "minor": 3,
+     "bad": 2
     },
     "formal": {
-     "good": 5,
+     "good": 0,
      "minor": 0,
-     "bad": 0
-    },
-    "spelling": {
-     "good": 3,
-     "minor": 2,
-     "bad": 0
-    },
-    "extraction": {
-     "good": 4,
-     "minor": 1,
-     "bad": 0
-    },
-    "translation": {
-     "good": 5,
-     "minor": 1,
-     "bad": 0
+     "bad": 5
     },
     "minutes": {
-     "good": 4,
+     "good": 0,
      "minor": 1,
-     "bad": 0
+     "bad": 4
+    },
+    "spelling": {
+     "good": 0,
+     "minor": 1,
+     "bad": 4
+    },
+    "summary": {
+     "good": 0,
+     "minor": 1,
+     "bad": 4
+    },
+    "translation": {
+     "good": 0,
+     "minor": 1,
+     "bad": 5
     }
    },
    "trapFail": false
   },
   "qwen3.5-9b": {
    "ratings": {
-    "summary": {
-     "good": 3,
-     "minor": 2,
-     "bad": 0
+    "extraction": {
+     "good": 1,
+     "minor": 1,
+     "bad": 3
     },
     "formal": {
-     "good": 3,
-     "minor": 1,
-     "bad": 1
+     "good": 0,
+     "minor": 3,
+     "bad": 2
+    },
+    "minutes": {
+     "good": 0,
+     "minor": 2,
+     "bad": 3
     },
     "spelling": {
-     "good": 3,
-     "minor": 1,
+     "good": 0,
+     "minor": 2,
+     "bad": 3
+    },
+    "summary": {
+     "good": 0,
+     "minor": 4,
      "bad": 1
     },
+    "translation": {
+     "good": 1,
+     "minor": 2,
+     "bad": 3
+    }
+   },
+   "trapFail": true
+  },
+  "typhoon2.5-qwen3-4b": {
+   "ratings": {
     "extraction": {
-     "good": 4,
-     "minor": 1,
-     "bad": 0
+     "good": 1,
+     "minor": 2,
+     "bad": 2
+    },
+    "formal": {
+     "good": 0,
+     "minor": 0,
+     "bad": 5
+    },
+    "minutes": {
+     "good": 0,
+     "minor": 0,
+     "bad": 5
+    },
+    "spelling": {
+     "good": 0,
+     "minor": 0,
+     "bad": 5
+    },
+    "summary": {
+     "good": 1,
+     "minor": 3,
+     "bad": 1
     },
     "translation": {
-     "good": 4,
+     "good": 0,
      "minor": 1,
+     "bad": 5
+    }
+   },
+   "trapFail": true
+  },
+  "typhoon2.1-gemma3-12b": {
+   "ratings": {
+    "extraction": {
+     "good": 3,
+     "minor": 0,
+     "bad": 2
+    },
+    "formal": {
+     "good": 1,
+     "minor": 3,
      "bad": 1
     },
     "minutes": {
-     "good": 3,
-     "minor": 1,
+     "good": 0,
+     "minor": 2,
+     "bad": 3
+    },
+    "spelling": {
+     "good": 0,
+     "minor": 2,
+     "bad": 3
+    },
+    "summary": {
+     "good": 1,
+     "minor": 2,
+     "bad": 2
+    },
+    "translation": {
+     "good": 0,
+     "minor": 4,
+     "bad": 2
+    }
+   },
+   "trapFail": true
+  },
+  "gemma-4-e4b-it": {
+   "ratings": {
+    "extraction": {
+     "good": 1,
+     "minor": 4,
+     "bad": 0
+    },
+    "formal": {
+     "good": 0,
+     "minor": 4,
      "bad": 1
+    },
+    "minutes": {
+     "good": 2,
+     "minor": 2,
+     "bad": 1
+    },
+    "spelling": {
+     "good": 0,
+     "minor": 2,
+     "bad": 3
+    },
+    "summary": {
+     "good": 1,
+     "minor": 1,
+     "bad": 3
+    },
+    "translation": {
+     "good": 1,
+     "minor": 5,
+     "bad": 0
     }
    },
    "trapFail": false
