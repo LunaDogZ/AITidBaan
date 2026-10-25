@@ -11,8 +11,8 @@ const NOTE_LOOK = [
 const PROBLEM_TEXT: Record<Lang, { title: string; body: string }[]> = {
   th: [
     { title: 'เอกสารลับ ส่งขึ้น Cloud ไม่ได้', body: 'AI ออฟไลน์ประมวลผลบนเครื่องคุณ ลองตัดเน็ตแล้วใช้ดูได้เลย' },
-    { title: 'ศัพท์อย่าง 7B, Q4, VRAM อ่านแล้วงง', body: 'ตอบคำถามเป็นปุ่ม มีภาพสอนดูสเปกใน Windows ทุกขั้น' },
-    { title: 'ไม่รู้ว่าตัวไหนเก่งภาษาไทย', body: 'เราทดสอบกับงานเอกสารออฟฟิศภาษาไทยเอง และให้ดูคำตอบจริงทุกข้อ' },
+    { title: 'ศัพท์อย่าง 7B, Q4, VRAM อ่านแล้วงง', body: 'ตอบคำถามเป็นปุ่ม มีภาพสอนดู RAM และการ์ดจอใน Windows' },
+    { title: 'ไม่รู้ว่าตัวไหนเก่งภาษาไทย', body: 'เราทดสอบเองกับเอกสารภาษาไทยที่สร้างขึ้นเพื่อทดสอบ และให้ดูตัวอย่างคำตอบของแต่ละงาน' },
   ],
   en: [
     {
@@ -21,11 +21,11 @@ const PROBLEM_TEXT: Record<Lang, { title: string; body: string }[]> = {
     },
     {
       title: 'Terms like 7B, Q4 and VRAM are confusing',
-      body: 'Answer with buttons, with pictures showing where to find each spec in Windows.',
+      body: 'Answer with buttons, with pictures showing where to find your RAM and graphics card in Windows.',
     },
     {
       title: "No idea which model is good at Thai",
-      body: 'We tested them on real Thai office documents, and you can read every answer.',
+      body: 'We tested them ourselves on Thai documents written for the test, and you can read sample answers for each task.',
     },
   ],
 };
