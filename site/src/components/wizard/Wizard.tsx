@@ -20,6 +20,7 @@ import {
   saveProgress,
   type Progress as Saved,
 } from '../../lib/progress';
+import { trackStep } from '../../lib/stats';
 import type { Lang } from '../../i18n';
 import { LangContext } from './lang';
 
@@ -117,6 +118,10 @@ export default function Wizard({ lang }: { lang: Lang }) {
     if (loaded && !resume) saveProgress({ answers, step: shown, doneModel });
   }, [loaded, resume, answers, shown, doneModel]);
 
+  useEffect(() => {
+    if (loaded && !resume) trackStep(shown as 1 | 2 | 3 | 4 | 5 | 6, lang);
+  }, [loaded, resume, shown, lang]);
+
   if (!loaded) return null;
   if (resume) {
     return (
@@ -170,7 +175,10 @@ export default function Wizard({ lang }: { lang: Lang }) {
           {shown === 5 && model && (
             <TryIt model={model} tasks={answers.tasks} onBack={() => go(4)} onNext={() => go(6)} />
           )}
-          {shown === 6 && model && <GoOffline done={done} onDone={() => setDoneModel(model.id)} onBack={() => go(5)} />}
+          {shown === 6 && model && <GoOffline done={done} onDone={() => {
+                setDoneModel(model.id);
+                trackStep('done', lang);
+              }} onBack={() => go(5)} />}
         </div>
       </div>
     </LangContext.Provider>

@@ -12,12 +12,14 @@ const T = {
     local: 'AI ประมวลผลบนเครื่องคุณ เว็บนี้แค่แนะนำ',
     disclaimer:
       'ข้อมูลในเว็บนี้ให้ไว้เพื่อแนะนำเท่านั้น ไม่รับประกันผลลัพธ์ ใช้ตามความเหมาะสมของคุณเอง ชื่อ บริษัท และตัวเลขในเอกสารตัวอย่างแต่งขึ้นทั้งหมด',
+    stats: 'เว็บนี้นับแค่ว่ามีกี่เครื่องที่เปิดถึงแต่ละขั้นและติดตั้งเสร็จ ไม่ใช้ cookie และไม่เก็บ IP',
   },
   en: {
     credit: 'AITidBaan (AIติดบ้าน) is a free site made by LunaDogZ',
     local: 'AI runs on your computer. This site only recommends',
     disclaimer:
       'Everything on this site is a recommendation only, with no guarantee of results. Use it at your own discretion. All names, companies and numbers in the example documents are made up.',
+    stats: 'This site only counts how many devices reach each step and finish setup. No cookies, no IP addresses stored.',
   },
 }[Astro.props.lang];
 ---
@@ -29,5 +31,6 @@ const T = {
       <p>{T.local}</p>
     </div>
     <p class="mt-3">{T.disclaimer}</p>
+    <p class="mt-1">{T.stats}</p>
   </div>
 </footer>
