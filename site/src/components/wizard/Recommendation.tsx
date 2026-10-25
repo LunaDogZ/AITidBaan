@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRightIcon, CheckCircleIcon, LightbulbIcon, PencilSimpleIcon, WarningCircleIcon, XCircleIcon } from '@phosphor-icons/react';
+import { ArrowRightIcon, CheckCircleIcon, InfoIcon, LightbulbIcon, PencilSimpleIcon, WarningCircleIcon, XCircleIcon } from '@phosphor-icons/react';
 import { machineTier, recommend, unsureUpgrades, type MachineAnswers, type Task } from '../../lib/recommend';
 import { MODELS, SAMPLE_DATA, SPEED_KIND, TASKS, TEST_DATE, TIER_LABEL } from '../../data/models';
 import examples from '../../data/examples.json';
@@ -28,6 +28,7 @@ const T = {
     recheck: { ram: 'เช็ก RAM อีกครั้ง', gpu: 'เช็กการ์ดจออีกครั้ง' },
     fits: 'โมเดลที่เหมาะกับคุณ',
     beforeUse: 'ก่อนใช้งาน',
+    expectation: 'โดยทั่วไปตอบช้ากว่าและแม่นน้อยกว่า ChatGPT แต่ข้อมูลไม่ออกจากเครื่องเลย เหมาะกับเอกสารที่ส่งขึ้น cloud ไม่ได้',
     trapWarn: 'ตรวจตัวเลขกับเอกสารต้นฉบับก่อนส่งต่อ เพราะในการทดสอบเคยใส่ตัวเลขที่ไม่มีในเอกสาร',
     ramWarn: 'ปิดเบราว์เซอร์และโปรแกรมอื่นก่อนเปิดโมเดล เพราะใช้ RAM เกือบเต็มเครื่อง 8GB และอาจตอบช้ากว่าเครื่องแรง',
     fileSize: 'ขนาดไฟล์',
@@ -76,6 +77,7 @@ const T = {
     recheck: { ram: 'Check RAM again', gpu: 'Check graphics card again' },
     fits: 'The model that fits you',
     beforeUse: 'Before you use it',
+    expectation: 'It is generally slower and less accurate than ChatGPT, but your data never leaves your computer. Use it for documents you cannot send to the cloud.',
     trapWarn: 'Check numbers against the original before passing the answer on. In our tests it sometimes added numbers that were not in the document.',
     ramWarn: 'Close your browser and other programs before opening the model. It uses almost all of an 8GB computer\'s RAM and may answer more slowly.',
     fileSize: 'File size',
@@ -137,7 +139,7 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
     const r = model.ratings[t];
     return n + (r ? r.good + r.minor + r.bad : 0);
   }, 0);
-  const tips = [...(model.trapFail ? [t.trapWarn] : []), ...(tier === 'small' && model.tightOnSmall ? [t.ramWarn] : [])];
+  const warnings = [...(model.trapFail ? [t.trapWarn] : []), ...(tier === 'small' && model.tightOnSmall ? [t.ramWarn] : [])];
 
   return (
     <section aria-labelledby="rec-title">
@@ -218,18 +220,17 @@ export function Recommendation({ machine, tasks, onEdit, onEditQuestion, onNext 
           })}
         </ul>
 
-        {tips.length > 0 && (
-          <>
-            <h2 className="mt-8 font-semibold">{t.beforeUse}</h2>
-            <ul className="mt-2 space-y-2">
-              {tips.map((tip) => (
-                <li key={tip} className="flex items-start gap-2">
-                  <WarningCircleIcon size={20} weight="fill" className="mt-0.5 shrink-0 text-minor" aria-hidden="true" /> {tip}
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+        <h2 className="mt-8 font-semibold">{t.beforeUse}</h2>
+        <ul className="mt-2 space-y-2">
+          <li className="flex items-start gap-2">
+            <InfoIcon size={20} weight="fill" className="mt-0.5 shrink-0 text-accent" aria-hidden="true" /> {t.expectation}
+          </li>
+          {warnings.map((w) => (
+            <li key={w} className="flex items-start gap-2">
+              <WarningCircleIcon size={20} weight="fill" className="mt-0.5 shrink-0 text-minor" aria-hidden="true" /> {w}
+            </li>
+          ))}
+        </ul>
 
         <Example task={exampleTask} prompt={prompt} answer={answer} />
 

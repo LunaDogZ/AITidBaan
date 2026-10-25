@@ -36,4 +36,5 @@ it.each([
   const text = render(ram);
   expect(text).toContain('Gemma 4 E4B');
   expect(text.includes('ใช้ RAM เกือบเต็มเครื่อง 8GB')).toBe(warn);
+  expect(text).toContain('แม่นน้อยกว่า ChatGPT');
 });
